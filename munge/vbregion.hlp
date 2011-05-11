@@ -1,0 +1,19 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vbregion (v%1%)
+summary: region info
+usage:
+  vbregion [<flags>] <cube> ...
+flags:
+  -t <thresh>  include voxels where value > threshold
+  -a <thresh>  include voxels where abs(value) > thresh
+  -m <mask>
+notes:
+  The default threshold is -t 0 (include all positive voxels).
+
+  vbregion has been deprecated and is no longer actively maintained.
+  please use vbim instead, e.g.:
+
+    vbim foo.nii -thresh 2.5 -regioninfo
+

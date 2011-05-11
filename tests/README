@@ -1,0 +1,62 @@
+
+This file contains some brief info about how to run various simple
+VoxBo tests.  Over time, it will grow into a genuine testsuite.  Each
+separate test is in its own directory.  In each directory, do the
+following:
+  sh runtestX.sh     # actually run the test, there may be several of these
+  sh clean.sh        # clean up when you're done
+
+----------------------------------------------
+ITEMS TO ADD
+----------------------------------------------
+--> big messy GLM with all kinds of filtering, mixed tes/nifti, etc.
+--> several simple glms
+
+--> lots of command line stuff on the GLMs -- extraction of various
+    timeseries stuff, etc.  also, if we can see vbsim, we can make
+    sure we know the answers in advance!
+
+--> use vbimagemunge with test data to show that manipulations of raw
+    data have expected effect on results
+--> script that invokes darned near every image processing algo on
+    certain files
+--> use vbconv/vbcmp/vbimagemunge to make sure file formats work as
+    expected, including flip-flopping endianness
+
+----------------------------------------------
+TEST THE NEW SCRIPTING SYSTEM
+----------------------------------------------
+# edit testscript.ssd, change the working directory
+submit-sequence -s testscript.sss -d testscript.ssd:test1
+
+
+----------------------------------------------
+TEST VBPREP
+----------------------------------------------
+# vbpreptest.vbp should touch files called a.cub and b.cub
+# in the specified directory
+vbprep vbpreptest.vbp
+
+----------------------------------------------
+VBREGION
+----------------------------------------------
+vbsim -d 53 63 46 0 -n 0 50 8 -o region.cub
+vbregion -t 3 region.cub
+
+
+----------------------------------------------
+MISC
+----------------------------------------------
+# make a mask with a bunch of blobs and an anat with just snow
+vbim -newvol 64 64 64 1 float -addnoise 100 20 -smoothvox2 8 8 0 -thresh 102 -quantize 1 -convert byte -write mask.cub.gz -mult 0 -addnoise 500 20 -write ana
+t.nii.gz
+vbhdr -a "vb_maskspec: 1 255 0 0 testmask" mask.cub.gz
+vbview2 anat.nii.gz -m mask.cub.gz
+
+# make an anat/mask combo, with an empty mask
+vbim -newvol 128 128 3 1 float -write mask.nii.gz -addnoise 100 12 -smoothvox2 20 20 0 -write anat.nii.gz
+vbview/vbview2 anat.nii.gz -m mask.nii.gz
+
+
+----------------------------------------------
+----------------------------------------------

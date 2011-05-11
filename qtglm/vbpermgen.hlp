@@ -1,0 +1,32 @@
+
+VoxBo vbpermgen (v%1%)
+summary: creates permutations on data from a specified glm directory.
+usage:
+  vbpermgen [flags]
+example (GUI):
+  vbpermgen
+example (command line):
+  vbpermgen -m glm -d perm -t 1 -c "mycontrast" -n 10 -b 2
+flags:
+  -h help
+  -m <name>     the matrix stem name (required)
+  -d            permutation directory name (required)
+  -t            permutation type (required)
+                0 means no permutation
+                1 means order permutation.
+                2 means sign permutation
+  -c            contrast specification (required)
+  -p            pseudo-t smoothing kernel, in quotes
+  -n            number of permutations
+  -s <seed>     set seed for random number generator
+  -a            sequence name for the scheduler
+  -b            priority
+  -v            print version
+  -h            print help
+notes:
+  If you use the -s flag to set the RNG seed, you can get the program
+  to produce predictable output (perhaps useful for testing purposes
+  and for repeatable resampling tests).  Any integer in the 0-2^32
+  range is fine.  If -s isn't provided, the value is taken from
+  /dev/urandom (system permitting).
+

@@ -1,0 +1,6 @@
+
+VoxBo fillmask (v%1%)
+summary: create a mask based on a 3D image and some criterion
+usage:
+  fillmask <3D image> <out image> <first slice> <interval>
+

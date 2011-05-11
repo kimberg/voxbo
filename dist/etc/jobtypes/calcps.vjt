@@ -1,0 +1,19 @@
+
+shortname calcps
+description Calculate power spectrum for a 4D volume
+invocation commandline
+
+argument
+ name=infile
+ type=string
+ argdesc=4D data file for which we'd like the power spectrum calculated
+ type=string
+end
+argument
+ name=notused
+ argdesc=unused argument
+ type=string
+end
+
+command calcps -i $(infile)
+requires cpu

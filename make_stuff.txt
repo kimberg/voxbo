@@ -1,0 +1,104 @@
+
+# root and binary directories
+
+VB_PREFIX ?= /usr/local/VoxBo
+VB_BINDIR ?= $(VB_PREFIX)/bin
+VB_LIBDIR ?= $(VB_PREFIX)/lib
+VB_FFDIR ?= $(VB_PREFIX)/etc/fileformats
+VB_TARGET ?= all
+CLEANME=a.out *.o *.so *~ *.exe *.a core.[0-9]* *.hlp.h *.moc.h moc_*.cpp rsrc.cpp
+
+# common lib stuff
+
+VPATH=../lib
+ifdef VB_SHARED
+  LIBSUFFIX=so
+  VBLIBS=libvbutil.so libvbio.so libvbprefs.so
+  VBQTLIBS=libvbwidgets.so
+  VBLIBSDB=libvbutil.so libvbio.so libvbprefs.so libdbutil.so
+  VBLIBS2=libvbutil.so libvbio.so libvbprefs.so libvbglm.so
+  VBLIBS3=libvbutil.so libvbio.so libvbprefs.so libvbglm.so libvbscripts.so
+else
+  LIBSUFFIX=a
+  VBLIBS=libvbutil.a libvbio.a libvbprefs.a
+  VBQTLIBS=libvbwidgets.a
+  VBLIBSDB=libvbutil.a libvbio.a libvbprefs.a libdbutil.a
+  VBLIBS2=libvbutil.a libvbio.a libvbprefs.a libvbglm.a
+  VBLIBS3=libvbutil.a libvbio.a libvbprefs.a libvbglm.a libvbscripts.a
+endif
+
+# GSL-related
+GSL_LIBS=$(shell gsl-config --libs)
+GSL_VERSION=$(shell gsl-config --version)
+GSL_PREFIX=$(shell gsl-config --prefix)
+GSL_CFLAGS=$(shell gsl-config --cflags)
+# currently we can get better results hardcoding this a bit
+GSL_CFLAGS=
+GSL_LIBS=-lgsl -lgslcblas -lm
+
+# build tools
+CXX ?= g++
+CC ?= g++
+#OPT ?= -Werror
+OPT ?= -O2
+DEBUG ?=
+PICFLAG ?= -fPIC
+# consider more warnings, like -Weffc++ and -Wold-style-cast
+WARNINGS = -Wall -Wextra -Wstrict-null-sentinel
+WARNINGS = -Wall -Wextra
+CFLAGS ?= $(DEBUG) $(OPT) $(WARNINGS) $(GSL_CFLAGS)
+CXXFLAGS?=$(DEBUG) $(OPT) $(WARNINGS) $(GSL_CFLAGS)
+LIBDIRS=-L/usr/local/lib -L../lib
+INCDIRS=-I/usr/local/include -I../lib
+VBRC ?= python ../lib/vbrc.py
+
+# random additional variables
+DLLIB=-ldl
+FORTLIB=-lgfortran
+SHAREDFLAG=-shared
+ARCH=LINUX
+
+# QT paths, now all for QT4
+QTDIR = /usr/local/qt4
+# QTLIBDIR ?= $(QTDIR)/lib:$(QTDIR)/plugins/imageformats
+#QTINCDIR ?= $(QTDIR)/include:$(QTDIR)/include/QtCore:$(QTDIR)/include/QtGui:$(QTDIR)/include/Qt3Support
+QTBINDIR ?= $(QTDIR)/bin
+MOC = $(QTBINDIR)/moc
+RCC = $(QTBINDIR)/rcc
+
+QTLIBS ?= -lvbwidgets -lQt3Support -lQtNetwork -lQtGui -lQtCore -lXi -lXext -lX11 -lXrender -lfontconfig -lz -lm -ldl -lpng -lpthread -lrt -lfreetype
+QTLIBDIRS=-L$(QTDIR)/lib -L../vbwidgets
+QTBASEINCDIR=$(QTDIR)/include
+QTINCDIRS=-I$(QTBASEINCDIR) -I$(QTBASEINCDIR)/QtCore -I$(QTBASEINCDIR)/QtGui -I$(QTBASEINCDIR)/Qt3Support -I../vbwidgets
+
+# some platform-specific overrides
+
+ifeq ($(shell uname),Linux)
+  LDFLAGS ?= -Wl,--no-undefined
+endif
+
+ifeq ($(shell uname),Darwin)
+  DLLIB=
+  FORTLIB=
+  SHAREDFLAG=-bundle
+  ARCH=DARWIN
+  QTLIBS = -lQt3Support -lQtNetwork -lQtGui -lQtCore -lz -lm -ldl -lpng -lpthread -lvbwidgets -framework Carbon -framework AppKit -framework ApplicationServices
+endif
+
+ifeq ($(shell uname),CYGWIN_NT-5.1)
+  OPT=
+  CXXFLAGS += -enable-auto-import
+  DLLIB=
+  PICFLAG=
+  FORTLIB=-lg2c
+  ARCH=CYGWIN
+  QTLIBS ?=  -lQt3Support -lQtNetwork -lQtGui -lQtCore -lz -lm -ldl -lpng -lpthread -lqgif -lqjpeg -lqtiff
+endif
+
+ifdef VB_SHARED
+  QTLIBS+=-lqgif -lqjpeg -lqtiff
+  QTLIBDIRS+=-L$(QTDIR)/plugins/imageformats -L$(QTDIR)/lib/qt4/plugins/imageformats
+endif
+
+# now that we're set with platform-specific stuff, adjust cxxflags
+CXXFLAGS+=-D$(ARCH) $(INCDIRS)

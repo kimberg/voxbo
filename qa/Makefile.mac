@@ -1,0 +1,62 @@
+
+# Makfile for qa, mac version
+
+include ../make_stuff.txt
+
+# place to search for includes and targets
+VPATH = ../lib:../vbwidgets
+# voxbo libs that might be important here
+VBLIBS=libvbutil.a libvbio.a libvbprefs.a
+DEL_FILE = rm -f  
+CPLUS_INCLUDE_PATH=../lib:$(QTINCDIR):../vbwidgets:/sw/include
+LIBRARY_PATH=:../lib:$(QTLIBDIR):/usr/X11R6/lib:/sw/lib
+export CPLUS_INCLUDE_PATH LIBRARY_PATH
+OBJECTS=vbqa.o ../vbwidgets/display.o ../vbwidgets/moc_display.o
+XLIBS=-lX11 -lXext -lXrender -lpthread -lSM -lGL
+LIBS=-lvbio -lvbprefs -lvbutil $(QTLIBNAME) -lgsl -lgslcblas -lz $(XLIBS) -framework Carbon
+
+all: vbqa.app/Contents/MacOS/../PkgInfo vbqa.app/Contents/MacOS/../Info.plist vbqa
+
+install:
+	cp vbqa $(BINDIR)
+
+vbqa: $(OBJECTS) $(VBLIBS)
+	$(CXX) -o vbqa.app/Contents/MacOS/vbqa $(OBJECTS) $(LIBS) $(RPATHS)
+
+vbqa.app/Contents/MacOS/../PkgInfo:
+	@test -d vbqa.app/Contents/MacOS/ || mkdir -p vbqa.app/Contents/MacOS/
+	@$(DEL_FILE) vbqa.app/Contents/MacOS/../PkgInfo
+	@echo "APPL????" >vbqa.app/Contents/MacOS/../PkgInfo
+vbqa.app/Contents/MacOS/../Info.plist:
+	@test -d vbqa.app/Contents/MacOS/ || mkdir -p vbqa.app/Contents/MacOS/
+	@$(DEL_FILE) vbqa.app/Contents/MacOS/../Info.plist
+	@sed -e "s,@ICON@,application.icns,g" -e "s,@EXECUTABLE@,vbqa,g" "/usr/local/qt/mkspecs/macx-g++/Info.plist.app" >"vbqa.app/Contents/MacOS/../Info.plist"
+
+# the objects
+
+vbqa.o: ../vbwidgets/display.h vbqa.cpp
+	$(CXX) -c vbqa.cpp -Wall $(CFLAGS)
+
+testx.o: testx.cpp
+	$(CXX) -c testx.cpp -Wall $(CFLAGS)
+
+# display code
+
+../vbwidgets/display.o: ../vbwidgets/display.cpp ../vbwidgets/display.h
+	make -C ../vbwidgets display.o
+
+../vbwidgets/moc_display.o: ../vbwidgets/moc_display.cpp ../vbwidgets/display.h 
+	make -C ../vbwidgets moc_display.o
+
+../vbwidgets/moc_display.cpp: $(MOC) ../vbwidgets/display.h ../vbwidgets/display.cpp 
+	$(MOC) ../vbwidgets/display.h -o moc_display.cpp
+
+# clean!
+
+clean:
+	rm -f *.o *~ *.moc.h vbqa qatest
+	rm -r -f vbqa.app
+
+# rule to build the libvoxbo libraries
+$(VBLIBS):
+	make -C ../lib $@

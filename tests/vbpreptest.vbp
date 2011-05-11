@@ -1,0 +1,18 @@
+
+DIR /home/kimberg
+
+#The line below creates and assigns a value to a variable.
+GLOBALS myValue=LAS
+
+#The next two lines create and assign values to file variable names.
+FILE name=aaa
+FILE name=bbb
+
+PRIORITY 1
+SEQUENCENAME vbpreptest
+EMAIL kimberg@mail.med.upenn.edu
+
+
+shellcommand "touch $name
+shellcommand "touch $name2
+#lalala

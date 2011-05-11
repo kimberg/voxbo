@@ -1,0 +1,104 @@
+
+You can now use a cluster size criterion with a permutation test.
+That is, you can set a cluster size criterion, and identify a
+threshold at which the probability of observing clusters of that sizer
+or greater is controlled.  If you have already run permutation tests
+and you still have the data around, you can do this without re-running
+the whole permutation.  See the help for vbperminfo for more
+information.
+
+Numerous changes to the regression code should make it all more robust
+and slightly faster, and lay the groundwork for using your image data
+as an independent measure (as in lesion analysis).
+
+Linear detrending is now an option in your GLM design (via glm or
+vbmakeglm).  Like mean scaling, the detrending is done at the time of
+regression.
+
+Numerous improvements to file format support, including NIfTI-1
+support, slightly improved DICOM support, and the executables
+analyzeinfo and dicominfo.
+
+vbconv is a new executable that converts between arbitrary file
+formats.  It guesses the right format on the basis of extensions, so
+it's easier to use than vb2tes, vb2img, etc.  All of these file format
+conversion programs now support the -n flag to remove NaNs and Infs,
+and the -f flag to convert to floating point.
+
+vbmaskmunge, an executable for thresholding, quantizing, and otherwise
+manipulating cubes, has more features.  Some of these are useful for
+non-mask manipulation.
+
+IDL-dependence in VoxBo has been reduced to two components: the audit
+job in the GLM sequence, and the voxel surfer.  The audit job is
+optional, we're hoping to have a much more functional and helpful
+audit job written in c soon.  You can do some voxel surfing in vbview,
+and we will be releasing periodic updates to make it much more
+functional over the next few months.
+
+vbview: numerous changes.  F5-F9 can now be used to hide/show various
+panels.  mask copy/paste lets you copy/paste slices.  GLM viewing is
+much more capable than previously.
+
+contrasts files: A GLM folder can now have a "contrasts" file -- if
+the other files in the directory are called "myglm.xxx," the contrasts
+file is called "myglm.contrasts".  You can list all your contrasts of
+interest here, give them simple names, and thereafter just use the
+names instead of ugly strings of numbers.  The format is:
+  <name> <scale> <type> <values...>
+e.g., 
+  my_t_contrast t vec 0 0 1 1 -1 -1 0 0
+If the number of weights isn't the same as the number of covariates of
+interest, the contrast will be ignored silently.
+
+Most of the file format converters, including vbconv, vb2tes, vb2cub,
+vb2img, and vb2imgs, now take the -f option to convert to floating
+point (single-precision) and the -n option to remove NaNs and Infs
+(replace with 0's).  Conversion to floating point may be useful to
+avoid quantization when the volumes are subsequently resliced (e.g.,
+in motion correction or normalization).  Removing NaNs may be useful
+because some software has difficulty dealing with non-finite values.
+Be careful when using -n on files where 0 is a legitimate and
+meaningful value.
+
+vbhdr will now replace {DATE} with the current date and {HOST} with
+the short version of the name of the host it's running on.  This is
+probably most useful in scripts.  Suggestions for other such tags are
+welcomed, and will be implemented quickly.
+
+--> updated spm realign and norm jobtypes and sample scripts, more robust
+--> binaries for OSX panther now available for most command line utils
+--> fixes to analyze format to improve compatibility with other programs
+--> numerous minor bug fixes
+--> -f and -n options in vb2xxx
+--> glm file in glm dir is no longer just a copy of your original,
+    it's exactly the parameters used to run your analysis
+
+--> fsl script docs
+--> gds, and gdw generating gds scripts
+--> fdr with f-tests working now!
+--> vbpermmat generates perm matrices and does nothing else
+--> vbts will count the unique voxels in your 4D volume
+--> new vbdumpstats program does useful stuff!
+--> vbcmp replaces cmp3d, compares 3d and 4d volumes (not with each other)
+--> new executable: vbse creates smoothness estimates
+--> new exec vbvec2hdr turns vectors into headers
+--> vbbatch can now take an IND tag
+--> vbmakeglm now understands "pieces"
+--> vbmaskinfo (or vbmaskcompare)
+--> vbconv sort of replaces vb2tes vb2cub etc.
+--> dicom image shift problem fixed
+--> vbinterpolate
+
+
+SCHEDULER
+--> errors mid-stream cause the whole thing to stop
+--> more robust catching of matlab license failures
+--> server files are used for local config
+--> loglevel is totally gone, all logs are kept with the sequence
+--> pri zero means don't run automatically, 5 is a new high priority
+--> server file (root/etc/servers/foo) is accessed only from the
+    server end, and has a name that matches either all or part of the
+    hostname (which may be set via serveralias).  that file in turn
+    has the shortname by which the server is known as well as the
+    "hostname" which is how the scheduler is to contact it.

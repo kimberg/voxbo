@@ -1,0 +1,107 @@
+
+# Makefile for vbview
+
+include ../make_stuff.txt
+
+# voxbo libs that might be important here
+VBLIBS=libvbutil.a libvbio.a libvbprefs.a
+
+CPLUS_INCLUDE_PATH=../lib:$(QTINCDIR):../vbwidgets:/usr/local/include:../qtglm:../utils
+LIBRARY_PATH=/usr/X11R6/lib:$(QTLIBDIR):../lib:/usr/local/lib
+export CPLUS_INCLUDE_PATH LIBRARY_PATH
+
+O_DISPLAY=../vbwidgets/display.o ../vbwidgets/moc_display.o
+O_FILEVIEW=../vbwidgets/fileview.o ../vbwidgets/moc_fileview.o
+O_DIR=../vbwidgets/dir.o ../vbwidgets/moc_dir.o
+O_CONTRAST=../vbwidgets/vbcontrast.o ../vbwidgets/moc_vbcontrast.o ../vbwidgets/qdecimalspinbox.o ../vbwidgets/moc_qdecimalspinbox.o ../vbwidgets/covariates.o ../vbwidgets/moc_covariates.o
+OBJECTS=vbviewmain.o vbview.o vbview_ts.o vbqt_masker.o vbqt_canvas.o vbqt_glmselect.o vbqt_scalewidget.o $(O_DISPLAY) $(O_FILEVIEW) $(O_DIR) $(O_CONTRAST)
+XLIBS=-lX11 -lXext -lpthread
+LIBS=$(QTLIBNAME) $(XLIBS) -lvbglm -lvbprefs -lvbio -lvbutil -lvbglm -lz -lgsl -lgslcblas $(DLLIB)
+
+all: vbrender vbview
+
+install:
+	cp vbview $(BINDIR)
+	cp vbrender $(BINDIR)
+
+# executables
+
+test: test.o
+	$(CXX) -o test test.o $(LIBS)
+
+test.o: test.cpp test.h
+	$(MOC) test.h -o test.moc.h
+	$(CXX) -c test.cpp $(CXXFLAGS)
+
+vbview: $(OBJECTS)
+	$(CXX) -o vbview $(OBJECTS) $(LIBS) $(RPATHS)
+
+vbrender: vb_render.o vbrender.o
+	$(CXX) -o vbrender vbrender.o vb_render.o $(LIBS) $(RPATHS)
+
+# the objects
+
+vbrender.o: vbrender.cpp
+	$(CXX) -c vbrender.cpp $(CXXFLAGS)
+
+vb_render.o: vb_render.cpp
+	$(CXX) -c vb_render.cpp $(CXXFLAGS)
+
+vbview.o: vbview.moc.h vbview.cpp
+	$(CXX) -c vbview.cpp $(CXXFLAGS)
+
+vbviewmain.o: vbview.moc.h vbviewmain.cpp
+	$(CXX) -c vbviewmain.cpp $(CXXFLAGS)
+
+vbview_ts.o: vbview.moc.h vbview_ts.cpp
+	$(CXX) -c vbview_ts.cpp $(CXXFLAGS)
+
+qtmask.o: vbview.moc.h qtmask.cpp
+	$(CXX) -c qtmask.cpp $(CXXFLAGS)
+
+# custom qt widgets
+
+vbqt_canvas.o: vbqt_canvas.moc.h vbqt_canvas.cpp
+	$(CXX) -c vbqt_canvas.cpp $(CXXFLAGS)
+
+vbqt_masker.o: vbqt_masker.moc.h vbqt_masker.cpp
+	$(CXX) -c vbqt_masker.cpp $(CXXFLAGS)
+
+vbqt_glmselect.o: vbqt_glmselect.moc.h vbqt_glmselect.cpp
+	$(CXX) -c vbqt_glmselect.cpp $(CXXFLAGS)
+
+vbqt_scalewidget.o: vbqt_scalewidget.moc.h vbqt_scalewidget.cpp
+	$(CXX) -c vbqt_scalewidget.cpp $(CXXFLAGS)
+
+# moc's
+
+vbview.moc.h: vbview.h
+	$(MOC) vbview.h -o vbview.moc.h
+
+vbqt_canvas.moc.h: vbqt_canvas.h
+	$(MOC) vbqt_canvas.h -o vbqt_canvas.moc.h
+
+vbqt_masker.moc.h: vbqt_masker.h
+	$(MOC) vbqt_masker.h -o vbqt_masker.moc.h
+
+vbqt_glmselect.moc.h: vbqt_glmselect.h
+	$(MOC) vbqt_glmselect.h -o vbqt_glmselect.moc.h
+
+vbqt_scalewidget.moc.h: vbqt_scalewidget.h
+	$(MOC) vbqt_scalewidget.h -o vbqt_scalewidget.moc.h
+
+# display code
+
+../vbwidgets/display.o: ../vbwidgets/display.cpp ../vbwidgets/display.h
+	make -C ../vbwidgets display.o
+
+../vbwidgets/moc_display.o: ../vbwidgets/moc_display.cpp ../vbwidgets/display.h 
+	make -C ../vbwidgets moc_display.o
+
+../vbwidgets/moc_display.cpp: $(MOC) ../vbwidgets/display.h ../vbwidgets/display.cpp 
+	$(MOC) ../vbwidgets/display.h -o moc_display.cpp
+
+# clean!
+
+clean:
+	rm -f *.o *~ *.moc.h vbview vbview vbrender *.exe moc_*

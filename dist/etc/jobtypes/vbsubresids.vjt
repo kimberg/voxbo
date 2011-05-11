@@ -1,0 +1,13 @@
+
+shortname vbsubresids
+description create 64(max) element subset of residuals
+invocation commandline
+requires cpu
+
+argument
+ name=stem
+ argdesc=stem name for parameter estimate file (.prm)
+ type=string
+end
+
+command vbmakeresid $(stem) $(stem).res -n 64

@@ -1,0 +1,20 @@
+
+VoxBo vecview (v%1%)
+usage:
+  vecview <ref> ...         view vector file(s)
+  vecview -a <file> ...     view vector files concatenated
+  vecview <mat>             view columns of matrix file
+  vecview -m <ref>          view movement parameter file
+  vecview -h                show help
+  vecview -v                show version
+notes:
+  Movement parameter files are assumed to be sets of six parameters
+  for each volume, stored as a 1-dimensional vector, in this order:
+  x,y,z,pitch,roll,yaw.
+
+  The following keys are recognized by the grapher. The up and down
+  arrows let you zoom in or out.  The tab key lets you switch between
+  vectors when more than one is displayed.  The shift key lets you see
+  interpolated values (otherwise, clicking on the graph snaps to the
+  nearest point).  F1 through F4 select view modes.
+

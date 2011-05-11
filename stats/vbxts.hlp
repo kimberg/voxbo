@@ -1,0 +1,31 @@
+
+VoxBo vbxts (v%1%)
+summary: extract the time series from 4D data
+usage:
+  vbxts [<flags>]
+flags:
+  -g <glmdir>      glm directory to use
+  -t <file>        4D file to use (-t can be used multiple times)
+  -a <averaging>   see below
+  -m <maskfile>    mask file for region
+  -p <x> <y> <z>   position (coordinate)
+  -d               drift correct data (default off)
+  -xd              don't drift correct data
+  -n               mean norm data (default off)
+  -xn              don't mean norm data
+  -f               apply filtering
+  -x               remove covariates of no interest
+  -k               power spectrum
+  -t               tab-delimited output
+  -o <filename>    set output filename
+  -h               help
+  -v               version
+notes:
+  You must specify either a GLM (using -g) or a 4D file (using -t)
+  from which to extract the time series.  You must also specify either
+  a region (using -m) or a voxel (using -p).
+
+  For trial averaging or other kinds of temporal averaging, make sure
+  the averaging method you want is specified in your averages.txt file
+  and use the -a option.
+

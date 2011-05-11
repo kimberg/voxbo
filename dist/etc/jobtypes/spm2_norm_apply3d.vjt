@@ -1,0 +1,99 @@
+shortname spm2_norm_apply3d
+
+description SPM2 Normalization
+invocation script
+requires cpu
+requires matlab
+retry_tag Try again later
+setenv MATLABPATH=$(SPM2_PATH)
+setenv HOME=/tmp
+
+argument
+ name=dir
+ argdesc=directory 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=paramfile
+ argdesc=file containing params 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=infile
+ argdesc=input cub file name 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=outfile
+ argdesc=output cub file name 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=vox_x
+ argdesc=vox_x size
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=vox_y
+ argdesc=vox_y size 
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=vox_z
+ argdesc=vox_z size 
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=bb
+ argdesc=bounding box 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command cp -v $(dir)/$(infile) $(dir)/$(infile)_hdrsave.cub
+command mkdir -p $(dir)/$(infile)_imgdir
+command vb2img $(dir)/$(infile) $(dir)/$(infile)_imgdir/$(infile)_tmp.img
+command $(SPM2_MATLAB_CMD)
+| cd $(dir)
+| spm_defaults;
+| global defaults;
+| defaults.normalise.write.vox=[$(vox_x) $(vox_y) $(vox_z)];
+| defaults.normalise.write.interp=7;
+| defaults.normalise.write.wrap=[0 0 0];
+| defaults.normalise.write.bb=$(bb);
+| P=spm_get('Files','$(infile)_imgdir','$(infile)_tmp.img')
+| V=spm_vol(P);
+| for i=1:length(V)
+|   spm_write_sn(V(i),'$(paramfile)',defaults.normalise.write)
+| end;
+| exit
+command /bin/rm -f $(dir)/$(outfile)
+command vb2cub -n $(dir)/$(infile)_imgdir/w$(infile)_tmp.img $(dir)/$(outfile)
+command vbhdr -c $(dir)/$(infile)_hdrsave.cub $(dir)/$(outfile)
+command /bin/rm -rf $(dir)/$(infile)_imgdir
+command /bin/rm $(dir)/$(infile)_hdrsave.cub
+command vbhdr -a "spm2_norm_date: {DATE}" $(dir)/$(outfile)
+command test -e $(dir)/$(outfile)

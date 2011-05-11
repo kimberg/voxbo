@@ -1,0 +1,9 @@
+
+VoxBo glm (v%1%)
+summary: glm construction graphical interface
+usage:
+  glm <flags>
+flags:
+  -h                     show help
+  -v                     show version
+

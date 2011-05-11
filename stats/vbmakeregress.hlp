@@ -1,0 +1,31 @@
+
+VoxBo vbmakeregress (v%1%)
+usage:
+  vbmakeregress <flags>
+flags:
+  -d <dir>           directory for all results
+  -dv <file>         dependent variable
+  -iv <file>         independent variable
+  -m <mask>          mask file
+  -gv <...>          generate group covariates (see below)
+  -int               include an intercept
+  -c <contrast>      desired contrast
+  -sp <mat> <ind>    sign permutation
+  -op <mat> <ind>    order permutation
+  -h                 show help
+  -v                 show version
+
+notes:
+  both independent and dependent variables can be either vectors (same
+  for each voxel in the volume) or 4D volumes (different vector for each
+  voxel in the volume.
+
+  for group covariates, specify the number of groups followed by the size
+  of each group.  n-1 covariates will be generated.  so if you have two
+  groups of sizes 12 and 14, you would specify -gv 2 12 14, and a single
+  covariate will be generated.
+
+  because the command-line options are a little involved, we recommend
+  first running the program with the -x option, to make sure you know
+  what covariates are in your model.  then run it again without -x,
+  specifying an appropriate contrast.

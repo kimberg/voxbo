@@ -1,0 +1,18 @@
+
+set SEQUENCENAME=test
+set templatedir=/jet/kimberg/lesions/registration/templates
+
+
+set DIRECTORY=/fff
+set DIR=/fff
+DIR=/fff
+DIRECTORY=/fff
+
+x_shellcommand cmd="a"
+
+block
+  x_shellcommand nowait cmd="b"
+  x_shellcommand nowait cmd="c"
+end
+
+x_shellcommand cmd="d"

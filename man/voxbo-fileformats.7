@@ -1,0 +1,67 @@
+.TH voxbo-fileformats 7 "January, 2011 (v1.8.5)" "VoxBo" "The VoxBo Manual"
+.SH NAME
+voxbo-fileformats - general information about file format support in VoxBo
+.SH DESCRIPTION
+The VoxBo suite of tools for brain image analysis supports a variety
+of formats for 1D (vector), 2D (matrix), 3D (volume) and 4D (volume
+time series) data.
+.P
+File format support in VoxBo is modular - most of the tools can read
+and write any supported file format transparently, with output file
+formats usually determined by the file extension.
+.P
+The i/o library supports several special access methods.  For 4D
+files, filename:mask is used to access the inclusion mask of a 4D
+file.  The mask is treated as a 3D volume.  Similarly, filename:n
+accesses the nth volume of the 4D series in filename, where n is an
+integer and the first volume is numbered 0.
+.P
+When writing, VoxBo honors filename tags that can be used to specify
+the fileformat or byteorder.  Tags are specified in square brackets at
+the end of the filename, and multiple tags can be separated within the
+brackets by commas.  For example, foo[imgdir] can be used to specify
+the imgdir file format (useful because imgdir format doesn't have a
+standard extension).  foo.nii[little] forces little-endian storage for
+file formats that allow it.
+.SS "VoxBo native file formats"
+VoxBo's native file formats, all supported for read and write,
+include .ref (1D), .mat (2D), .cub (3D), and .tes (4D).  Although
+these formats are not widely supported in external software, they
+offer some useful features, including user-editable text headers.
+gzip-compressed cub and tes files are supported transparently.
+.SS "NIfTI"
+VoxBo supports 3D and 4D NIfTI files (compressed or not) for read and
+write.  VoxBo does not currently make intelligent use of the
+qform/sform orientation information.
+.SS "Analyze"
+VoxBo supports SPM-style Analyze(TM) files, including 3D and 4D files,
+as well as 4D time series composed of directories containing 3D files,
+for read/write.  All individual files are stored in .img/.hdr pairs.
+.SS "DICOM"
+VoxBo supports DICOM (as well as some DICOM-like files in the older
+ACR/NEMA format) for reading only.  VoxBo supports a corner of the
+DICOM standard frequently encountered in brain imaging research,
+including mosaic format volumes.  Files containing single slice data
+are read as 3D volumes.  Directories containing multiple files are
+generally parsed as 3D or 4D data, as appropriate, as long as no
+extraneous files are in the directory.
+.SS "Text Matrices and Vectors"
+Plain text files containing just numbers (or comment lines beginning
+with #, %, or ;), can be parsed as matrix or vector data.
+.SH EXAMPLES
+.SH AVAILABILITY
+Pre-built VoxBo binaries are available for Linux, OSX, and Cygwin, and
+via the NeuroDebian project (neuro.debian.net) for Debian derivatives.
+.SH CAVEATS
+VoxBo is provided with no warranty whatsoever.
+.SH AUTHOR
+For an historical roster of the VoxBo development team, visit
+www.voxbo.org.
+.SH SEE ALSO
+For detailed help on any VoxBo command-line program, run it with no
+arguments.  For graphical programs, use the -h flag.  For more help
+with VoxBo, for information about the mailing list, or to report bugs,
+visit the web site at www.voxbo.org.
+.P
+For general information about VoxBo, see
+.BR voxbo (7).

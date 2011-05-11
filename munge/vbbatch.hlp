@@ -1,0 +1,72 @@
+
+VoxBo vbbatch (v%1%)
+usage:
+  vbbatch -c <command> [<file> ...]
+flags:
+  -c "command"   command line to execute (should be in quotes)
+  -p <pri>       set job priority
+  -xfile <str>   use str instead of FILE
+  -xind <str>    use str instead of IND
+  -xbase <str>   use str instead of BASE
+  -m <maxjobs>   maximum number of concurrent jobs at full priority
+  -r             really run it, don't just show the commands
+  -req <req>     add a requirement (you'll know if you need it)
+  -i             interactive mode (ask for each file)
+  -d <n>         add a bunch of dummy files (see below)
+  -sn <seqname>  sequence name visible in queue
+  -jn <jobname>  job names visible in queue (can use FILE, IND)
+  -f <seq>       flush private sequence
+  -a <seq>       append to private sequence
+  -s <seq>       submit private sequence
+  -l <dir>       directory for storing log files (will be created
+                 if necessary)
+  -e <email>     address for notification, use -- for no email
+  --run=<n>      don't queue, run now on n cores
+#  -g             use graphical progress monitor
+  -h             show help
+  -v             show version
+notes:
+
+  In your command, the token FILE will be replaced with each file you
+  specify.  The token BASE will be replaced with each filename, but
+  with the extension stripped off.  The token IND will be replaced
+  with an index, starting from 000.  If you actually need the tokens
+  FILE, IND, or BASE in your command, you can change what vbbatch
+  replaces using the -xfile, -xind, and -xbase flags.
+  
+  maxjobs defaults to 10
+  
+  The -f, -a, and -s options allow you to build a compound
+  batch job in pieces, and then to submit the whole thing as
+  one sequence.  Use -f to first flush it (just in case), then
+  call vbbatch as you normally would, but use -a to append the
+  jobs to your private sequence, and finally use -s to submit
+  the whole thing.
+  
+  The -r flag is there to encourage you to check the generated command
+  lines before you really submit.  Run vbbatch without it, and you'll
+  see all the commands that will be run.  If you like what you see,
+  run it again with -r.
+  
+  The -p flag can take a numeric priority from 0 to 5 or a scheduling
+  policy (run vbtool pri for more info).
+
+  If --run is specified without =n, the default is the total number of
+  available cores minus 1 (or 1, if that would be 0).  Note that even
+  if you use --run, you still have to include the -r flag to indicate
+  you really want to run the jobs, not just see them.
+
+  The -d flag lets you create "dummy" files, with the filenames just
+  being the numbers from 0 to n-1.  Usually you would use it with IND,
+  not FILE.
+
+examples:
+  Run myscript.sh on all your subjects' Anatomy directories:
+
+    vbbatch -c "myscript.sh FILE" study*/sub*/Anatomy -r
+
+  Run myperms.sh 1000 times at low priority, with different output
+  files:
+
+    vbbatch -c "myperms.sh results_IND.nii.gz" -d 1000 -r -p xnice
+

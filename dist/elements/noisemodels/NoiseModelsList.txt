@@ -1,0 +1,22 @@
+;VB98
+;TXT1
+;
+; This list provides the names and paths of the noise models available in the
+;  noise models folder. If you wish to add models to the matrix design program
+;  simply add the file to this folder and update this file.
+;
+; For each model, the menu name and file name are listed
+;
+
+
+unsmooth, no GSCV
+unsmooth_params.ref
+
+smooth, no GSCV
+smooth_params.ref
+
+unsmooth, with GSCV
+unsmooth__GCV_params.ref
+
+smooth, with GSCV
+smooth__GCV_params.ref

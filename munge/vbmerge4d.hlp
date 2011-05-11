@@ -1,0 +1,7 @@
+
+VoxBo vbmerge4d (v%1%)
+usage:
+  vbmerge4d  [<4D volume> ...] -o <outfile>
+flags:
+  -h       show help
+  -v       show version

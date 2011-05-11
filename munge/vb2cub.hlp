@@ -1,0 +1,17 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vb2cub (v%1%)
+usage:
+  vb2cub  [<flags>] <3D file/dir> <cubname>
+flags:
+  -f             convert to floating point
+  -n             replace NaNs and Infs with zeros
+  -h             show help
+  -v             show version
+notes:
+  vb2cub has been deprecated and is no longer actively maintained.
+  please use vbconv or vbim instead, e.g.:
+
+    vbconv foo.nii foo.cub
+

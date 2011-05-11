@@ -1,0 +1,16 @@
+
+shortname makematkg
+description Make the KG matrix.
+invocation commandline
+
+argument
+ name=stem
+ argdesc=directory containing glm information
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command makematkg -m $(stem)
+requires cpu

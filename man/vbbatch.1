@@ -1,0 +1,43 @@
+.TH vbbatch 1 "January, 2011 (v1.8.5)" "VoxBo" "The VoxBo Manual"
+.SH NAME
+vbbatch - run a command line multiple times with variable substitution
+.SH SYNOPSIS
+.B vbbatch
+<flag> ...
+.SH DESCRIPTION
+.B vbbatch
+is part of the VoxBo suite of tools for brain image analysis.
+.P
+.B vbbatch
+allows you to run a command multiple times with some variable
+substitutions (typically replacing the token FILE with each of a set
+of filenames).  The commands are then run in parallel.  If a VoxBo
+cluster is detected, the jobs will be submitted to the cluster.
+.SH OPTIONS
+.SH EXAMPLES
+To run myscript.sh on all your subjects' Anatomy directories:
+.IP ""
+vbbatch -c "myscript.sh FILE" study*/sub*/Anatomy -r
+.P
+To run myperms.sh 1000 times at low priority, with different output
+files:
+.IP ""
+vbbatch -c "myperms.sh results_IND.nii.gz" -d 1000 -r -p xnice
+.SH AVAILABILITY
+Pre-built VoxBo binaries are available for Linux, OSX, and Cygwin, and
+via the NeuroDebian project (neuro.debian.net) for Debian derivatives.
+.SH CAVEATS
+VoxBo is provided with no warranty whatsoever.
+.SH AUTHOR
+For an historical roster of the VoxBo development team, visit
+www.voxbo.org.
+.SH SEE ALSO
+For detailed help on any VoxBo command-line program, run it with no
+arguments.  For graphical programs, use the -h flag.  For more help
+with VoxBo, for information about the mailing list, or to report bugs,
+visit the web site at www.voxbo.org.
+.P
+For information about file format support in VoxBo, see
+.BR voxbo-fileformats (7).
+For general information about VoxBo, see
+.BR voxbo (7).

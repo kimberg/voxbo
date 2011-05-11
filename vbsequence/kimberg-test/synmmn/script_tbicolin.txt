@@ -1,0 +1,32 @@
+
+set NAME=tbicb2
+set DIR=$(wdir)
+set PRIORITY=3
+set templatedir=/jet/kimberg/lesions/registration/templates
+set templatestem=tbitemplate
+set colinstem=ch2
+set synmmn_iterations=1x1x1x1
+#set synmmn_iterations=30x90x90x1
+
+x_shellcommand cmd="mkdir -p $(wdir)"
+
+block name initstuff_parallel
+  x_shellcommand nowait cmd="cp -rf $(templatedir)/* $(wdir)"
+  x_shellcommand nowait cmd="cp -rf $(rawdir)/$(nativestem)* $(rawdir)/$(nativemaskstem)* ."
+  voxbo_growmask infile=$(nativemaskstem).img outfile=$(nativemaskstem).img
+  voxbo_invertmask infile=$(nativemaskstem).img outfile=$(nativemaskstem).img
+end
+
+avants_synmmn_masked name warp forwardwarp=fwd inversewarp=inv
+
+block waitfor warp
+  avants_compose firstmap=fwd secondmap=fullCHinversewarp newmap=TONATIVE
+  avants_warp instem=$(colinstem) map=TONATIVE outstem=warpedcolin
+end
+
+block waitfor warp
+  avants_compose firstmap=fullCHwarp secondmap=inv newmap=TOCOLIN
+  avants_warp instem=$(nativestem) map=TOCOLIN outstem=warpedsubject
+end
+
+x_shellcommand nowait cmd="ls /xxx/yyy/zzz"

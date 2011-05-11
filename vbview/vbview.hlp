@@ -1,0 +1,14 @@
+
+VoxBo vbview (v%1%)
+summary:
+  VoxBo's image viewer
+usage:
+  vbview [<image> [<flags>...]]...
+flags:
+  -m <vol>          load mask
+  -a <vol>          load auxiliary volume
+  -s <vol>          load stat map
+  -g <dir>          load glm
+  -h                show help
+  -v                show version
+

@@ -1,0 +1,26 @@
+
+Here you will soon find help on setting VoxBo scheduler priorities.
+
+Note that priorities are only relevant in cluster mode.
+
+A priority can be specified in one of several ways.  The simplest is
+just a single integer from 0 to 5, which specifies a single priority.
+But you can also use a more complicated specification to get more
+control over how your jobs run, including the maximum number of jobs
+that can run at a time and the maximum number of jobs that can run on
+one machine.  Note that jobs at priority 0 will not run at all, no
+matter what.  Here are some examples:
+
+    3            run an unlimited number of jobs at priority 3
+    2 3          run no more than 2 jobs at a time, at priority 3
+    2 3 0 1      run 2 jobs at pri 3, then unlimited additional
+                 jobs at priority 1 (zero means unlimited)
+    2 3 0 1 2    same as the above, but no more than 2 per server
+
+The following shortcuts can also be used:
+
+    default      set to current default
+    offhours     set to configuration for off-hours processing
+    nice         set to colleague-friendly policy
+    xnice        set to very colleague-friendly policy
+    hold         set not to run until further notice

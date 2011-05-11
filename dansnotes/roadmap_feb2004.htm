@@ -1,0 +1,197 @@
+
+<html>
+<body bgcolor=white>
+
+<h2>VoxBo Roadmap, February 2004</h2>
+
+<p>
+Welcome to the VoxBo Roadmap, February 2004 Edition.  The purpose of
+this document is twofold: to let VoxBo users know what's in the works
+and to make sure VoxBo developers are all on the same page.  I'd be
+grateful for any feedback (by email or via discussion on
+voxbo-general), but bear in mind that this not an exhaustive list of
+our plans, and many feature requests and outstanding issues are not
+listed here.  This is just an overview of the big picture stuff in the
+short- and medium term future of VoxBo, as I see it at the moment.
+</p>
+
+<h3>Recent and Imminent New Stuff</h3>
+
+<p>
+(These are things we have some concrete reason to be happy about.)
+</p>
+
+<p>
+<ul>
+
+<li>
+QT-based GLM designer - Dongbo Hu's first major contribution to VoxBo
+has been available since 1.4, and as of 1.6 should have all the
+functionality of the old IDL-based program.  We're now ready to turn
+our attention to new functionality and feature requests.
+
+<li>
+IDL-free GLM - Kosh Banerjee has ported a bunch of IDL-based GLM
+components to c, eliminating a big drain on IDL licenses.  For labs on
+a budget, this might be a good time to think about how many of those
+IDL licenses you really want to renew.
+
+<li>
+vbview - Most VoxBo users are by now familiar with vbview, the
+replacement for voxsurf and maybe someday an alternative to the voxel
+surfer.  vbview is the best way to edit multiple masks simultaneously
+in VoxBo right now, and has been getting new features at a good rate,
+including multiple views, statistical overlays, etc.
+
+<li>
+Unified, modular I/O - Kosh's IDLI code and my modular file format
+plug-ins together provide some powerful new tools for handling
+different file formats in VoxBo.  If there's a format you'd like to
+see supported, please let us know.
+
+<li>
+Permutation Testing - Geoff's tools for permutation testing put VoxBo
+at (or at least near) the forefront of fMRI analysis packages for
+doing permutation-based analyses.  We consider the availability of
+permutation testing a major (and positive) shift in the direction of
+statistical analyses supported by VoxBo.  If you aren't using
+permutation-based methods to threshold your maps, you may not be
+getting the most out of your data.
+
+<li>
+Quality Assurance - vbqa is a new(ish) program that goes through your
+data, finds things to warn you about (or things that you might want to
+check), and puts them all on one big web page.  Although we can
+imagine lots of additional functionality that might be useful, the
+current incarnation is good enough to save you some grief.  If you're
+not using it, give it a shot.
+
+<li>
+The mailing lists have been generally active and we hope helpful.
+
+<li>
+OS compatibility - VoxBo hasn't compiled under Solaris for quite a
+while now, but we hope that will change by this summer.  OSX
+compatibility is also on the horizon (we've had a few promising builds
+already), which we expect will really help some labs take advantage of
+idle hardware.  We're also hoping to have a more flexible scheduling
+system that's a little smarter about figuring out when your machine is
+available for jobs.
+
+<li>
+A VoxBo article, finally - it makes us happy when people cite the web
+page, but it will make us even happier when people cite the article.
+If all goes well, it will be in a Medline-indexed journal sometime
+this year.
+
+<li>
+We continue to close in on some dramatically improved tools for
+structural methods.  Expect an announcement soon!
+
+<li>
+VoxBo has a home - the newly formed <a
+href="http://cfn.upenn.edu/">Center for Functional Neuroimaging</a> at
+Penn is the home of VoxBo development.
+
+<li>
+The VoxBo manual is now available in DocBook format.  This means that
+in the future it will be easy for us to produce synchronized HTML,
+pdf, and rtf (Word) versions of the manual.  The actual content of the
+manual is unfortunately still pretty out of date, but we're finally in
+a good position to start working on it again.  Of course,
+contributions are always welcome.
+
+<li>
+The automation system we released last year, centered around the
+vbmakeprep script processor, turned out to be too much of a pain for
+most folks to use.  Luckily Tom King has come aboard Team VoxBo, and
+one of his first contributions was vbprep (and an accompanying GUI,
+vbprepform).  It's easier to use, and should help you automate
+complicated analysis sequences.
+
+<h3>Recent VoxBo Appearances</h3>
+
+<p>
+I presented a brief VoxBo talk at the The Human Brain Project Spring
+meeting last year, which is archived <a
+href="http://videocast.nih.gov/ram/brain051203.ram">here</a>.  There's
+other interesting stuff in the stream of course, but if you want to
+find my talk, it's towards the end of the day (unfortunately, the
+whole day's talks are in one long stream).
+</p>
+
+<h3>VoxBo Installation Service</h3>
+
+<p>
+We've occasionally installed VoxBo for other labs, either at Penn or
+elsewhere.  Since 
+I've been thinking about formalizing this slightly, just
+by advertising that we're willing to help get it installed for anyone
+who needs help (and is willing to loan us their root password).  This
+would be a good incentive for us to make the software easier to
+install, and might make other folks more comfortable trying it out.
+</p>
+
+<h3>Completely Free VoxBo Update</h3>
+
+<p>
+Yes, VoxBo still depends on IDL.  We didn't even come close to getting
+rid of IDL by the end of last year, and this year looks improbable.
+But we have made a tremendous amount of progress.  Here's an updated
+list of the big pieces that need replacement.  Note that the list has
+shrunk dramatically, and is actually fairly short.
+</p>
+
+<p>
+<ul>
+
+<li>
+The voxel surfer.  This is still the largest piece that hasn't been
+addressed.  A lot of the functionality can be mimicked once we have a
+more modular system for generating statistical maps, but some pieces
+will take some more concerted effort.
+
+<li>
+The G matrix designer.  Some functionality still hasn't been ported
+over from the IDL version, including some of the covariate
+transformations and the evaluation functions.  Dongbo is working on
+these things (and more).
+
+<li>
+Smaller tools.  I believe the three tools we're most desperate to have
+outside of IDL are close to reality.  Dongbo has been working on a
+vector browser that will handle regular vectors (e.g., ref files) as
+well as movement parameters, replacing graphmoveparams.  He's also
+working on new code to handle the 1/f parameter estimation and
+graphing.  We should soon have a stand-alone smoothing tool, one way
+or another.
+
+</ul>
+</p>
+
+<h3>Relevant Links</h3>
+<p>
+<ul>
+<li><a href="http://www.voxbo.org/">VoxBo</a>
+<li><a href="http://cfn.upenn.edu/">CfN</a>
+<li><a href="http://www.nimh.nih.gov/neuroinformatics/index.cfm">Human Brain Project</a>
+</ul>
+<p>
+
+
+<p>
+<i>
+Rev. 2.0, prepared by Dan Kimberg with the input of the VoxBo
+development team.
+</u>
+</p>
+<p>
+VoxBo development is funded by the National Institute on Drug Abuse
+and the NIMH's Office on Neuroinformatics via the Human Brain Project
+(R01DA14418).  VoxBo is also supported by NINDS via P30NS045839, and
+through the departments of Radiology and Neurology at the University
+of Pennsylvania, via the Center for Functional Neuroimaging.
+</p>
+
+</body>
+</html>

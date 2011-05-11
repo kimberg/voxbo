@@ -1,0 +1,54 @@
+
+VoxBo vbmaskinfo (v%1%)
+summary: mask/lesion summary utility for VoxBo
+usage:
+  vbmaskinfo <flags> <img> [<img> ...]
+flags:
+  -m <mask>      inclusion mask (include voxels with non-zero values)
+  -n <num>       minimum lesions for a voxel to be included (default 1)
+  -u <file>      write unique-voxel volume
+  -s <file> <n>  select n random distinct in-mask voxels, write as matrix
+  -r             see below
+  -h             show help
+  -v             show version
+notes:
+  vbmaskinfo treats all the passed 3D and 4D volumes as one
+  large series of masks, typically lesion masks, and produces
+  a summary of the number of total and distinct voxels in the
+  combined volume.
+
+  The -u option creates a volume with only unique voxels.  For every
+  set of n identical voxels (voxels that have the same value at every
+  point in the series), only one will be included.
+
+  The -r flag is used to extract matrices of feature vectors
+  heuristically from a 4D mask set.  Each feature vector contains the
+  data from a single voxel, as a column in the matrix.  E.g., if you
+  have 20 masks and you extract 50 features, your feature matrix will
+  be 20x50.  The -r flag must be followed by five arguments, as
+  follows:
+
+    -r <mfile> <map> <nfeatures> <maxrmul> <countweight>
+
+  mfile is the name of the matrix output file (something.mtx for a
+  text matrix).  map is the name of the 3D file to be used as output
+  (use "none" to suppress).  nvoxels is the maximum number of features
+  you'd like to extract.  maxrmul is the maximum R value for a model
+  of the candidate vector, with the already-included vectors as the
+  IVs (the higher the maxrmul, the less the multicollinearity among
+  the features).  if maxrmul is 1.0 or greater, then all voxels will
+  be included (this is useful if you want to create a "district" map
+  of identical voxels).  countweight is the amount of weight given to
+  the number of voxels containing the pattern to be considered.
+  countweight can be given either in the 0-1 range or in the 0-100
+  range.  the remaining weight is given to the feature's variance.  if
+  both weighting parameters are non-zero, then the numbers used are
+  scaled to the 0-1 range, so that they're at least roughly
+  comparable.
+
+  Note that when writing matrix files using -s or -r, the .mat
+  extension will get you a VoxBo matrix (MAT1) file, while the .mtx
+  extension will get you a text format matrix file with features in
+  columns and subjects (volumes) in rows.  Lines beginning with # are
+  comments.
+

@@ -1,0 +1,20 @@
+
+VoxBo vborient (v%1%)
+summary:
+  change orientation of a 3D or 4D volume
+usage:
+  vborient  <infile> <outfile> <new orientation> [flag]
+flags:
+  -from <orient>   specify orientation of input volume
+  -i               data should be interleaved
+notes:
+  Orientation codes are three-letter codes, with the letters
+  specifying orientation of the x, y, and z axes, respectively.  The
+  letter codes are: (R)ight, (L)eft, (I)nferior, (S)uperior,
+  (A)nterior, and (P)osterior.  So an axial image in radiological
+  orientation is RPI.
+
+  If the -from flag is not present, the orientation must be indicated
+    in the file.
+
+  If the -i flag is specified, the volume will be de-interleaved.

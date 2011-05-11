@@ -1,0 +1,92 @@
+"boldfaced rows just make it easier to find completely new regions",,,,,
+"remove _R from all structure names",,,,,
+"????? indicates things i didn't know what to do with",,,,,
+"rows with equivalent nn names shouldn't generally have other relationships",,,,,
+,,,,,
+"AAL Region #","AAL Name","Gray","Code","Equivalent NN Name","Other relationships"
+,,,,,
+2,"Precentral",2002,,,"child of precentral gyrus"
+58,"Postcentral",6002,,,"child of postcentral gyrus"
+18,"Rolandic_Oper",2332,,"?????","overlaps Frontal_Inf, overlaps supramarginal gyrus"
+,,,,,
+,"Frontal_Sup",,,"superior frontal gyrus",
+4,"Frontal_Sup_Dorso",2102,,,"child of Frontal_Sup"
+6,"Frontal_Sup_Orb",2112,,,"child of Frontal_Sup"
+24,"Frontal_Sup_Medial",2602,,,"child of Frontal_Sup"
+,,,,,
+,"Frontal_Mid",,,"middle frontal gyrus",
+8,"Frontal_Mid_Lat",2202,,,"child of Frontal_Mid"
+10,"Frontal_Mid_Orb",2212,,,"child of Frontal_Mid"
+,,,,,
+,"Frontal_Inf",,,"inferior frontal gyrus",
+12,"Frontal_Inf_Oper",2302,,,"child of Frontal_Inf"
+14,"Frontal_Inf_Tri",2312,,,"child of Frontal_Inf"
+16,"Frontal_Inf_Orb",2322,,,"child of Frontal_Inf"
+,,,,,
+,,,,,
+20,"Supp_Motor_Area",2402,,,"child of Frontal_Sup"
+26,"Frontal_Med_Orb",2612,,"?????","child of Frontal_Sup"
+,,,,,
+22,"Olfactory",2502,,"anterior perforated substance",
+,,,,,
+28,"Rectus",2702,,"gyrus rectus",
+30,"Insula",3002,,"insula",
+,,,,,
+44,"Calcarine",5002,,"calcarine sulcus",
+46,"Cuneus",5012,,"cuneus",
+48,"Lingual",5022,,"lingual gyrus",
+,,,,,
+,,,,,
+50,"Occipital_Sup",5102,,"superior occipital gyrus",
+52,"Occipital_Mid",5202,,,"child of occipital lobe"
+54,"Occipital_Inf",5302,,,"child of occipital lobe"
+56,"Fusiform",5402,,"fusiform gyrus",
+,,,,,
+60,"Parietal_Sup",6102,,"superior parietal lobule",
+62,"Parietal_Inf",6202,,,"child of inferior parietal lobule"
+64,"SupraMarginal",6212,,"supramarginal gyrus",
+66,"Angular",6222,,"angular gyrus",
+68,"Precuneus",6302,,"precuneus",
+,,,,,
+70,"Paracentral_Lobule",6402,,,"child of precentral gyrus"
+,,,,,
+80,"Heschl",8102,,"anterior transverse temporal gyrus",
+82,"Temporal_Sup",8112,,,"child of superior temporal gyrus"
+84,"Temporal_Pole_Sup",8122,,,"child of superior temporal gyrus"
+86,"Temporal_Mid",8202,,,"child of middle temporal gyrus"
+88,"Temporal_Pole_Mid",8212,,,"child of middle temporal gyrus"
+90,"Temporal_Inf",8302,,"inferior temporal gyrus",
+,,,,,
+"LIMBIC",,,,,
+32,"Cingulum_Ant",4002,,"anterior cingulate gyrus",
+34,"Cingulum_Mid",4012,,,"child of cingulate gyrus"
+36,"Cingulum_Post",4022,,"posterior cingulate gyrus",
+38,"Hippocampus",4102,,"hippocampus",
+40,"ParaHippocampal",4112,,"parahippocampal gyrus",
+,,,,,
+"SUBCORTICAL",,,,,
+42,"Amygdala",4202,,"amygdala",
+72,"Caudate",7002,,"caudate nucleus",
+74,"Putamen",7012,,"putamen",
+76,"Pallidum",7022,,"globus pallidus",
+78,"Thalamus",7102,,"thalamus",
+,,,,,
+,,,,,
+92,"Cerebellum_Crus1",9002,,,"child of cerebellum"
+94,"Cerebellum_Crus2",9012,,,"child of cerebellum"
+96,"Cerebellum_3",9022,,,"child of cerebellum"
+98,"Cerebellum_4_5",9032,,,"child of cerebellum"
+100,"Cerebellum_6",9042,,,"child of cerebellum"
+102,"Cerebellum_7b",9052,,,"child of cerebellum"
+104,"Cerebellum_8",9062,,,"child of cerebellum"
+106,"Cerebellum_9",9072,,,"child of cerebellum"
+108,"Cerebellum_10",9082,,,"child of cerebellum"
+,,,,,
+109,"Vermis_1_2",9100,,,"child of cerebellar cortex"
+110,"Vermis_3",9110,,,"child of cerebellar cortex"
+111,"Vermis_4_5",9120,,,"child of cerebellar cortex"
+112,"Vermis_6",9130,,,"child of cerebellar cortex"
+113,"Vermis_7",9140,,,"child of cerebellar cortex"
+114,"Vermis_8",9150,,,"child of cerebellar cortex"
+115,"Vermis_9",9160,,,"child of cerebellar cortex"
+116,"Vermis_10",9170,,,"child of cerebellar cortex"

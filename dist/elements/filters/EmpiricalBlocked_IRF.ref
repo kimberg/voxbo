@@ -1,0 +1,27 @@
+;VB98
+;REF1
+;
+;  This vector is the putative impulse response function estimated by
+;    Zarahn et al (1997). The function was obtained by a shift-and-subtract
+;    approach performed the fMRI signal obtained from the Parietal cortex
+;    across subjects in a blocked "mentral rotation" experiment.
+;
+;  See:
+;
+;    Zarahn, E., Aguirre, G.K., D'Esposito, M. 1997. A trial-based
+;       experimental design for fMRI. NeuroImage 6: 122-138.
+;
+;  The values are spaced at a TR=2000 msecs. Thus, the response spans
+;    20 seconds
+;
+
+      0.00000
+     0.332627
+     0.800392
+     0.998362
+     0.705407
+     0.167560
+    -0.178821
+    -0.184444
+   -0.0724648
+      0.00000

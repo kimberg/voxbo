@@ -1,0 +1,12 @@
+
+# testscript.ssd
+# test dataset for submit-sequence
+
+# globals -- same for all subjects
+:stem=aaa
+
+test1
+:ext=foo
+
+test2
+:ext=bar

@@ -1,0 +1,23 @@
+shortname orient
+description Orient data
+invocation commandline
+requires cpu
+
+argument
+ name=infile
+ argdesc=input cub or tes
+ type=string
+end
+
+argument
+ name=outfile
+ argdesc=output re-oriented file name
+ type=string
+end
+argument
+ name=orientation
+ argdesc=orientation of output cub/tes file
+ type=string
+end
+
+command vborient $(infile) $(outfile) $(orientation)

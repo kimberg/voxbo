@@ -1,0 +1,69 @@
+
+# Jobtype information
+
+shortname voxbo_growmask
+description grow a mask
+invocation script
+requires cpu
+
+# Argument section
+
+argument
+ name=infile
+ argdesc=input file
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output file
+ type=string
+end
+argument
+ name=voxx
+ argdesc=kernel in voxels
+ type=string
+end
+argument
+ name=voxy
+ argdesc=kernel in voxels
+ type=string
+end
+argument
+ name=voxz
+ argdesc=kernel in voxels
+ type=string
+end
+
+# File section
+
+# Command section
+
+command vbconv -f $(infile) tmp_$(infile)
+command vbsmooth tmp_$(infile) -vox $(voxx) $(voxy) $(voxz) -o tmp_$(infile)
+command vbmaskmunge tmp_$(infile) -t 0.8 -q -o tmp_$(infile)
+command vbconv tmp_$(infile) $(outfile)
+command /bin/rm tmp_$(infile)
+
+
+# Argument section
+argument
+  name infile
+  description Some input file name
+  default 5
+end
+
+# File section
+file
+  fileid $(infile)
+  input $(infile)
+  informats xxx yyy
+  
+  xxx:output $(infile).xxx
+  xxx:set outfile=$(infile).xxx
+  
+  yyy:output $(infile).yyy
+  yyy:set outfile=$(infile).yyy
+end
+
+# Command section
+command cat $(infile) > $(outfile)

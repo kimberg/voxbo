@@ -1,0 +1,24 @@
+
+shortname tesregstart
+description Initiates GLM analysis
+invocation commandline
+
+argument
+ name=stem
+ argdesc=matrix stem name
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=flags
+ argdesc=exclude error norm flag
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command tesregstart -m $(stem) $(flags)
+requires cpu

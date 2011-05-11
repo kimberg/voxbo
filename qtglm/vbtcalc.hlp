@@ -1,0 +1,20 @@
+
+VoxBo vbtcalc (v%1%)
+summary:
+  calculates Bonferroni and Gaussian t or F threshold values
+usage for gui:
+  vbtcalc
+usage for command line:
+  vbtcalc [flags]
+flags:
+  -n <n>           total voxels
+  -s <xyz>         fwhm smoothness in mm (average xyz)
+  -z <x> <y> <z>   voxel sizes
+  -tdf <df>        df for t test
+  -fdf <d1> <d2>   df for f test
+  -a <alpha>       alpha criterion
+  -h               show help
+  -v               show version
+notes:
+  If you specify -fdf with a d2 of 0, you'll just get a t threshold.
+

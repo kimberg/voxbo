@@ -1,0 +1,8 @@
+
+vbsim -d 100 100 100 0 -n 1000 2 0
+vbim data.cub -thresh 1000 -write high.cub
+vbim data.cub -cutoff 1000 -write low.cub
+vbim high.cub -quantize 1 -convert byte -write highmask.cub
+vbim low.cub -quantize 1 -convert byte -write lowmask.cub
+vbim data.cub -regioninfo highmask.cub
+vbim data.cub -regioninfo lowmask.cub

@@ -1,0 +1,17 @@
+shortname extractref
+description Extract Reference Cube
+invocation commandline
+
+argument
+ name=tesname
+ argdesc=tes file name for inout data 
+ type=string
+end
+argument
+ name=cubname
+ argdesc=output cub file name 
+ type=string
+end
+
+command tes2cub $(tesname) $(cubname)
+requires cpu

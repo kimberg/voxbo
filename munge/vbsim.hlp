@@ -1,0 +1,29 @@
+
+VoxBo vbsim (v%1%)
+usage: vbsim [flags] file
+flags:
+  -d <x> <y> <z> <t>    set dimensions
+  -c <vol>              "anatomy" file (added to image)
+  -s <seed>             seed for random number generator
+  -n <u> <v> <fwhm>     noise mean,variance,and smoothness
+  -z <x> <y> <z> <t>    set voxel sizes (t is usually TR in ms)
+  -o <filename>         output filename (default \"data.tes\"
+  -h                    help
+  -v                    version
+notes:
+  FWHM is in voxels, although voxel sizes default to 1x1x1mm anyway.
+
+  noise defaults to 10,5,0 if -n isn't specified.
+
+  If y, z, and t dimensions are 0, a 1D vector file is created.  If
+  just t is 0, a 3D volume is created.  In the former case, the fwhm
+  is ignored, but you still have to provide it.
+
+  vbsim uses GSL's pseudo random number generator, specifically
+  gsl_rng_mt19927, and uses gsl_ran_gaussian() to generate random
+  variates with a Gaussian distribution.  If you use the -s flag to
+  set the seed, you can get the program to produce predictable output
+  (perhaps useful for testing purposes and for repeatable resampling
+  tests).  Any integer in the 0-2^32 range is fine.  If -s isn't
+  provided, the value is taken from /dev/urandom (system permitting).
+

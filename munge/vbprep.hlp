@@ -1,0 +1,21 @@
+
+VoxBo vbprep (v%1%)
+usage: vbprep [flags] file [file ...]
+flags:
+  -h              i'm lazy, show me a sample script file
+  -x <filename>   i'm really lazy, make me a sample script file
+  -n <study name> processes only study name data set
+  -p <opts>       set priority options, see below
+  -s              keep sequences separate
+  --run=<n>       don't queue, run now on n cores
+notes:
+  -p can take priority 0-5, or various presets.  See voxq help for
+   more info.
+
+  If --run is specified without =n, the default is the total number of
+  available cores minus 1 (or 1, if that would be 0).
+
+  log files for vbprep jobs are created in a subdirectory of the
+  working directory called logs, which is created if needed.  log
+  files are generally not overwritten.
+

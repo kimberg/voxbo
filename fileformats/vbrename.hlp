@@ -1,0 +1,35 @@
+
+VoxBo vbrename (v%1%)
+summary:
+  sorts DICOM files into separate directories
+usage:
+  vbrename [flags] <file/dir> [<file/dir> ...]
+flags:
+  -n       don't remove identifying fields
+#  -f       change permissions to 775 if needed
+  -h       show help
+  -v       show version
+notes:
+
+  vbrename will take a heap of mixed DICOM files and sort them into
+  directories based on the series and protocol, and rename the files
+  according to instance, date, and time, as in the following:
+
+    0001_localizer/0001_20101019_091004.170008
+
+  By default, vbrename de-identifies each file in the process, using
+  the default behavior of dcmsplit, removing:
+
+    all of groups 0010, 0012, 0032, and 0038
+    any element with value representation of PN (person name)
+
+  Note that elements embedded inside SQ (sequence) elements are not
+  stripped, unless the SQ itself is stripped.
+
+  If you don't want to de-identify your data, use the -n flag -- the
+  files will be sorted and renamed, but not modified in any way.  If
+  you want more control over how files are stripped, use dcmsplit.
+
+  Note that vbrename will also attempt to make the file and its
+  containing directory user-readable and user-writable if possible.
+

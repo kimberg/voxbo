@@ -1,0 +1,47 @@
+.TH vbrename 1 "January, 2011 (v1.8.5)" "VoxBo" "The VoxBo Manual"
+.SH NAME
+vbrename - rename/sort DICOM files heuristically
+.SH SYNOPSIS
+.B vbrename
+<dir>
+.SH DESCRIPTION
+.B vbrename
+is part of the VoxBo suite of tools for brain image analysis.
+.P
+.B vbrename
+takes a directory containing DICOM files and sorts the files into
+separate directories for each series.  The directories are renamed
+using the series and protocol, while the files are renamed using the
+instance, date, and time.
+.P
+By default, vbrename tries to remove identifying data from each file
+by wiping out various fields, including all of groups 0010, 0012,
+0032, and 0038, and any element with a VR of PN (person name).  This
+is not guaranteed to be helpful or complete.  For more de-identifying
+options, see
+.BR dcmsplit (1).
+You can disable this behavior using the -n flag, in which case the
+files are renamed and moved around, but not otherwise modified.
+.P
+To get a complete list of available flags, run the program with no
+arguments.
+.SH AVAILABILITY
+Pre-built VoxBo binaries are available for Linux, OSX, and Cygwin, and
+via the NeuroDebian project (neuro.debian.net) for Debian derivatives.
+.SH CAVEATS
+VoxBo is provided with no warranty whatsoever.
+.SH AUTHOR
+For an historical roster of the VoxBo development team, visit
+www.voxbo.org.
+.SH SEE ALSO
+For detailed help on any VoxBo command-line program, run it with no
+arguments.  For graphical programs, use the -h flag.  For more help
+with VoxBo, for information about the mailing list, or to report bugs,
+visit the web site at www.voxbo.org.
+.P
+For information about file format support in VoxBo, see
+.BR voxbo-fileformats (7).
+For general information about VoxBo, see
+.BR voxbo (7).
+See also
+.BR dcmsplit (1).

@@ -1,0 +1,42 @@
+shortname spm2_import_dicom
+
+description SPM2 convert dicom to analyze with pose matrix
+invocation script
+requires cpu
+requires matlab
+retry_tag Try again later
+setenv MATLABPATH=$(SPM2_PATH)
+setenv HOME=/tmp
+
+argument
+ name=sdir
+ argdesc=study root directory
+ type=string
+ default=none
+end
+argument
+ name=dicomdir
+ argdesc=input dicom from here
+ type=string
+ default=none
+end
+argument
+ name=outdir
+ argdesc=output analyze to here
+ type=string
+ default=none
+end
+
+
+command /bin/sh -c "echo sdir=$(sdir)"
+command /bin/sh -c "echo dicomdir=$(dicomdir)"
+command /bin/sh -c "echo outdir=$(outdir)"
+
+command $(SPM2_MATLAB_CMD)
+| cd $(sdir)
+| path('/home/jasmuth/scripts/spm',path)
+| path('/home/jasmuth/matlab',path)
+| import_dicom_4d('$(dicomdir)','$(outdir)')
+| exit
+
+

@@ -1,0 +1,31 @@
+shortname vb_makenoisemodel
+description create noise model file
+invocation commandline
+
+argument
+ name=outfile
+ argdesc=noise model file name
+ type=string
+ default="/tmp/my.noisemodel"
+end
+argument
+ name=noisemodelflag
+ argdesc=flag for noise model to include, e.g., -n /path/to/noisemodel.ref
+ type=string
+ default=""
+end
+argument
+ name=ndata
+ argdesc=number of data points
+ type=integer
+ default=100
+end
+argument
+ name=tr
+ argdesc=TR in milliseconds
+ type=integer
+ default=3000
+end
+
+command vbmakefilter -i $(outfile) $(noisemodelflag) -t $(ndata) $(tr)
+requires cpu

@@ -1,0 +1,1597 @@
+
+--> finish the function to calculate region stats, make sure it's used
+    by vbview and vbim
+--> vbview and vbim region info: min non-zero; count of non-zero;
+    aggregate region should be included in vbview
+
+--> load 4D overlay?  useful in lesion maps.  should be okay as long
+    as all 4d overlays have same dimt
+--> vbbatch apparently doesn't work if there's no notify jobtype
+--> outlineregions -- create an outline layer in the base layer
+    resolution.  map all voxels to stat map space, and decide if
+    they're supra- or sub-thresh.  possibly we can link the two
+    layers, so that if we adjust the stat map layer, this layer gets
+    re-rendered!  when rendering a cube, bit 24 can be used for
+    whether or not the pixel is to be rendered, bit 25 can be used for
+    whether or not it's supra-threshold.
+
+
+grep [^f]abs */*.cpp | more
+
+
+use vcoord to implement origin-corrected coordinates in regioninfo etc.
+
+vbio feature similar to foo.nii:1 -- foo.nii?1 should pick out voxels
+  with value==1; foo.nii??mask.nii should pick out voxels in mask.
+
+think a little about how single user voxbo (as well as vboverlap)
+  should find templates.  default maps.txt?  same dir as executable?
+
+pre-1.8.5
+--> some kind of install script included with the distribution
+    archive.  install in first writeable dir from /usr/local to
+    HOME/voxbo.  vbinstall?
+--> vbview2: when we just have one mask color, it should be the one
+    selected!  when none, don't draw
+--> vbview2: create mask layer, copy/paste/clear slice (when in draw mode!)
+--> vbview2: right click layer info
+--> vbview2: region/mask stuff: nvoxels in region
+--> vbview2: menu option to set origin and voxel sizes to canonical origin given dimensions
+--> vbview2: contrasts should save to contrasts.txt
+--> vbview2: make help nicer
+--> vbview2: ctrl-i should honor coordinate frame of reference
+--> vbview2: -h/-v should work without an X server
+--> vbview2: build order issues w/osx
+--> brainbrowser!
+
+POST-1.8.5 in general
+--> more const correctness, more assertions
+--> more tests
+--> all voxbo commands should print version info before running
+--> move some tests dir to dist tree
+--> specify contrasts in glm files, and in glm GUI, and using
+    stand-alone vbcontrast
+--> make sure glm gui is nice and smooth
+--> more vbim examples
+--> vbrc should *always* include a special stamp that includes date
+    and time of build, and maybe svn number if available.
+--> if perminfo.txt timestamp is correct, then we can just parse the
+    contrast and compare to current.  perhaps we should allow some/all
+    filetypes to have a kind of timestamp or uuid, so that we can
+    match up things that belong to the same run.
+--> get rid of PrintErrorMessage!
+--> get rid of makestatcub()?  depends on if perms work with calc_stat_cub
+--> perhaps permstep could proceed in batches of 10 (100 jobs for 1000 perms)
+--> restore norm and realign to the build?  or not.
+--> is stat_threshold very slightly off for bonferroni thresholds?
+    code could probably be a lot simpler using GSL
+--> permStep() is a horrible mess and unnecessarily slow; also, check
+    to see if do_factr in perm.cpp can be replaced with existing code
+--> we can now vbforeach over tokenlists!
+--> vbview2 segfaults on wustl/siemens/SMS000009/ and SMS000023
+--> write my own assert(int,string) for small allocations, etc.
+--> proper support for more nifti datatypes, including INT8, UINT64, etc.
+--> make vbri more usable
+--> all programs including guis support -h, -v, --help and --version
+--> replace gethostbyname with getaddrinfo
+--> update maps.txt for more neurodebian templates?
+--> heuristic for glm pieces is broken, partly because we need a
+    different number of pieces for matrix stuff (depends on size of
+    design) and regression (should depend on size of volume)
+--> dicom anonymization just punts on SQ's.  this is potentially a
+    problem, because we may need to dissect SQs to see if there's a PN
+    inside
+--> parallel build fails on macs due to pkginfo dep problems
+
+prefsets in USERDIR/vbview/name.cfg (also default.cfg) save/load
+dialog lets you pick or type a name, also delete.  one problem is that
+within a single view, different layers could have different color
+settings.  maybe use the first stat layer, first base layer, etc.?
+
+vbview2 (post-1.8.5)
+--> when we load/create a mask layer, init a layer::tcolor.  use it
+    when we need a new color.
+--> more vbtool tip tips!  esp. for oft-neglected commands.
+--> time series display needs a status line that indicates where the
+    ts is from, and the number of plotted voxels if masked
+--> command line options for view/thresh/mag
+--> config file saving
+--> we have undo.  do we need redo?
+--> vbview needs to respond to drag-n-drop on all platforms
+--> it would be nice if tes/cub files could have a label for each time
+    point (optionally), so that we could identify the subject
+    associated with a time point in an rfx or lesion analysis.  this
+    would be a header thing.
+--> detect common mni dimensions, and adjust when the origin=0,0,0
+    menu options should be "from corner" "from origin in file" "from
+    canonical mni origin"
+
+grep -L "version 3" */*.cpp */*.h
+grep -L "part of VoxBo" */*.cpp */*.h
+grep int\ .*\(int\).\*size\(\) */*.cpp
+
+vbim orient from to or just to
+regioninfo should optionally show origin-adjusted coordinates for everything
+vbim should know how to load volumes from a tes file deferredly
+vbim: little hack for arbitrary affine transformations
+vbim: combine into multi-mask; prefix for filenames; apply mask to file
+vbim: quantize should also convert to byte or something like that
+
+--> submit_sequence -- needs a new name, and needs to know the node
+    name as a var
+
+--> loadcombinedmask() is slow for nifti files.  are we happy with this?
+
+DICOM: separate routines to read, anonymize, and print headers.  yuck.
+
+use bash scripts instead of jobtype files?
+
+--> rewrite testvalue so that it's always safe when used with xyz,
+     unsafe when used with an index.  always uses ==0 with ints,
+     <FLT_MIN with floats
+--> vb2tes needs to go cube by cube sometimes when it can
+--> vb2tes should handle a cub as input
+
+separate out some of the windows-unfriendly stuff, like vglob and vbx
+  (fork()), and write non-functional windows versions
+
+consider making the vbp library store some stuff statically.  that
+  would also eliminate the need to declare it all over the place.
+
+VoxBo etc dir contains the defaults file used by the scheduler, as
+well as the servers dir used by each server.  When installed as a
+package, you can set up cluster mode by creating the appropriate
+server file on each machine and adding the server to the defaults
+file.  Then run the scheduler.  The queue and drop dirs still need to
+be common across machines, so that would need to be a link somehow.
+Also, the severpid file is in etc, so that also needs to be in a
+common dir.  We should probably move logs and scheduler.pid out of
+etc.
+
+since the scheduler makes the first contact with the server, can we
+set it up so that every time a server is contacted, it updates
+/var/run/voxbo.pid?  This would allow users on that machine to find
+the scheduler, but just one scheduler.  It also requires that all
+machines know the scheduler machine by the same name it knows itself
+(or at least IP address).
+
+it's up to the submitting application to decide where to put the logs,
+create that directory, and clear it (or not).  here are the current
+policies:
+ submit_sequence: each dataset's wd, never clear
+ vbprep: wd/logs or DIR/logs, never clear
+ glms: glmdir/logs, always clear
+ vbbatch: wd/vbbatch_logs, never clear
+ vbpermgen: permdir/logs, always clear
+
+
+NOTE: replace all gsl_rng_taus with ?
+
+--> rae: draw ROIs on high-res volumes and have them resampled automatically
+--> rae: table of peak coordinates and stat values
+--> VBMatrix: read/write matlab files
+--> VBMatrix: read/write text matrices
+--> does vbmm2 -zeros fail silently when there's a permission issue?
+
+# the below is okay
+astyle --indent=spaces=2 --brackets=stroustrup --indent-switches --indent-cases\
+       --indent-col1-comments --unpad-paren --break-closing-brackets\
+       --keep-one-line-blocks --keep-one-line-statements
+
+vbinstall script should have a clearer mission
+
+vbmakefilter crashes horribly if TR=0
+
+VBSequence::Submit() sets umask to 0 for the drop dir.  this is terrible.
+
+class VBcoord {
+public:
+  // set methods try to keep int/double coords in sync
+  void set(double xx,double yy,double zz,double tt);
+  void set(int32 xx,int32 yy,int32 zz,int32 tt);
+  int32 &operator[](int32 ind);       // return int coord 0/1/2, else throw exception
+  double &operator()(int32 ind);      // return double coord 0/1/2, else throw exception
+  string str();              // x,y,z or x,y,z from corner
+  string strx(VBImage &im);  // x,y,z or x,y,z from origin
+private:
+  double dx,dy,dz,dt;
+  int32 ix,iy,iz,it;
+};
+
+what to do about large (>2GB) files???  possibly will get fixed
+  automagically by adding -D_FILE_OFFSET_BITS=64 to gcc flags.  test
+  with and without by using vbsim to write a nifti/tes file >2gb
+
+makevlsm script needs to check that dimt and vec length are equal
+
+the way to do a multi-part color scale would be to set up the scale as
+  a lookup table and construct a mapping from image values to indices
+  into that table
+
+vbview2: if we include 0's when plotting ns voxels, then we're
+  plotting stuff outside the brain.  if we don't then we have a
+  discontinuity between pos and neg.
+
+vbview2: a button to bring up the coloring dialog, that allows us to
+  define color ranges that are either symmetric or not
+
+use vb_colorspecs to map value ranges to color ranges?
+
+
+environment variables (stored in a MAP?) in etc/defaults, jobtypes,
+  sequence files, and server files.  when we run a job, first we get
+  the main defaults if available, then override with server file env,
+  then what's in the jobtype, and then the sequence/jobs.  and finally
+  we do variable substitution.
+
+use Cube::copycube(cb,1) to mirror a cube.  inherently dangerous, but
+  saves a lot of space, potentially.  add functions to vbview to set
+  the cube to a mirrored cube.  possibly we should unmirror
+  automatically on certain operations, like converting type.
+
+for vbqa, make a list of all the properties we want to check (e.g.,
+  smooth_vox), set by the user.  then create all the sets.
+
+swap(int*) is ambiguous, we could overload it and switch on sizeof(int)
+
+ps axo  user,pid,ppid,pgrp,cmd | grep vbsrvd
+
+glm scripts should allow pre-specified contrasts and overlay pngs.
+   "contrast foo t vec ..."  will add that contrast to the
+   contrasts.txt file and also add a job to pre-calculate that
+   contrast as a cub file.  separate keywords for specifying the
+   anatomy file and for creating the overlay.
+
+--> exofilt issue
+--> rfx volumes should list the subjects and contrasts, etc.
+--> use R for some graphing things -- to generate a graph file from
+    within code, we can actually build an rgraph jobspec and call
+    fork_voxbo_job (vbx.cpp)
+--> startedtime, finishedtime, etc. should also print human-readable
+    time on the same line, for us humans
+--> fill VBImage::filelist with either img/hdr names, indiv file
+    names, etc.  for img/hdr pairs, it should be image/hdr.
+--> get rid of kosh's abominable vbtime() function
+--> look into openmp, which is now supported by gcc
+--> VBMatrix: more basic matrix manipulation operations
+--> handle waitfor all (wait for all previous)
+--> use access() instead of stat to check for existence of a file
+--> vb_vector operator== appears to be totally broken, does a byte
+    compare of gsl vector struct
+--> vbdumpstats segfaults when the tes files are missing
+
+FDR thresholds, for vbvolregress (non-autocorrelated), effdf
+  calculated on the fly
+
+--> note that all current uses of cube::quantize() are suspect due to
+    the imprecision of floating point.  need to fix this.  when we
+    quantize, we should use FLT_EPSILON.
+
+NITRC: QT interface for carrying out regressions.  give it a
+  directory, it divides up all the ref and image files into groups
+  sorted by the length.  then you can create a model, specify a
+  permutation method (or none), and let fly.
+
+more downsampling: take a voxel and a region: find all the voxels
+  within a neighborhood, and then mask with an anatomical ROI; take a
+  radius, make it into a VBRegion cube, including only voxels within
+  that cube, zero out anything not in the mask or (in case of sphere)
+  farther than n euclidean.  perhaps also zero voxels outside group
+  lesion mask
+
+implement nearest-voxel search using priority_queues, with the compare
+  operator < defined to actually mean >.  keep expanding the cube.
+
+lesion analysis tools: tool to create an overlap matrix for tes files
+  or cube collections, to catch duplicates or near duplicates; also
+  rate each image for left-ness and right-ness; preprocess structurals
+  with susan in addition to n3; create a map of the number of maps for
+  which a given voxel is on/near a border
+
+make vbcmp faster using gcd type comparisons
+
+--> vbim: document the multi-phase feature.  first we carry
+    out as many operations as possible that can be done independently
+    for each volume.  this makes it possible to defer loading each
+    cube until it's really needed.  subsequent combining operations
+    are broken down into a setup phase, a processing phase, and a
+    cleanup phase.  often the cubes can be discarded as soon as
+    they're processed, which allows us to minimize the memory
+    footprint.
+
+note that in voxbo, we use uint8, int16, and int32.  i.e., shorts and
+  longs are signed.
+
+how can we find the nearest voxel to a given coordinate?  create a
+mask to keep track of where we've been.  start with a list of
+immediate neighbors, sorted by distance.  check each voxel, and after
+the check, zero it out and add its neighbors to the list, sorted by
+distance.
+
+DICOM NOTES:
+0018,1310      has the actual slice matrix for mosaics
+0028,0010/11   has the full image size (larger than slice matrix iff mosaiced)
+
+convert more Cube functions to iterate by index instead of xyz, and to
+  use the new getValue/setValue where possible.  also use testValue()
+  instead of getValue()==0.0, everywhere.
+
+use getValue<T> in more places, especially where we really need
+  integer data.
+
+create a big include file that has all our strings #defined.
+
+double-check on performance of vbsequence::renumber
+
+SINGLE LOW FREQUENCY REMOVAL IN VOXBO
+  exofilt is 1 0 0 0 0 0 (an impulse)
+  fft it
+  remove frequencies
+  ifft it
+  mean center the filtered impulse
+  remove phase component [???]
+  normalize the magnitude
+
+--> vbdumpstats: restrictregion for some reason looks at the tes
+    files, not the prm.  also, should provide some helpful info on
+    size-0 regions instead of just segfaulting.
+
+--> uncorrelated (vbvolregress) case, to get more t values from prm,
+    we just need G matrix to calculate "fact."  to get more f values,
+    we pretty much still just need the G matrix, but it's a tiny bit
+    more of a hassle to calculate.  in either case, we suffer when the
+    g matrix varies from voxel to voxel (image independent measures).
+
+--> voxq option to sort jobs in a sequence by start time, and dump the
+    commands and associated script lines as executed
+    [C] xxxx
+        [S] xxxx
+        [S] xxxx
+    [C] xxxx
+    [C] xxxx
+
+--> voxq option to show you total time since earliest job started,
+    since whole thing submitted, total run time consumed
+
+--> vbmakeglm glm spec, dataset version:
+:contrast=
+:lows=
+:highs=
+:kernel=
+:noisemodel=
+:scanXX=
+:scanXX=
+:glmname=
+
+
+--> PAIN: constructing dataset file
+--> PAIN: constructing glm file, which I should be able to do from dataset
+
+--> vbvolregress writes stat maps as doubles, which probably is overkill
+--> submit_sequence seems to have an issue when a variable is assigned
+    a value that depends on a variable with the same name (e.g.,
+    xxx=$(xxx)) and that variable is undefined.
+--> submit_sequence flakes out on the waitfors when we use -d foo:*
+
+--> merge the various variable-substitution functions, make sure they
+    can all take syntax to set/replace/remove suffixes
+--> submit_sequence: parallel keyword as shorthand within a block?
+    checkpoint feature status?  makefile issues, move tree.  blockdefs
+    should take variable assignments.
+
+--> need tool to browse jobtypes (and maybe scripts)
+    vbjt find align
+    vbjt info x_shellcommand
+
+--> often in jobtypes we do something like tmp_$(infile).cub when what
+    we'd really like to do is this: uniquename.cub.  the problem is
+    that uniquename needs to be unique across all of the sequences you
+    may have submitted.  use vbrandom_filename() (vbutil.cpp).
+    vbrandom_filename should also hash in a call to rand(), things
+    like the pid, userid, and time, to get some small protection from
+    /dev/random failures.
+
+--> submit_sequence feature -- checkpoints.  queue just up to a
+    certain point, just past a certain point, or have it pause when it
+    reaches that point.
+--> WriteSequence() should automatically renumber all the jobs.
+    perhaps mjumbe wrote code for this already?
+--> when a job is flagged as sticky, it should remain in the queue
+    when completed.
+
+--> write a timeout'ing send by... using getsockopt to check on the
+    socket buffer size (should be at least 64k).  use a timeouting
+    select to make sure we can send without blocking, and then do it.
+    if we have more than the buffer size, send it in pieces, but bear
+    in mind that safe_recv uses an overall timeout.
+    to send a whole file, send the first buffer:
+      I <filesize> <filename>
+    then actual blocks of data
+      D<data>
+    then the EOF
+      EOF\n
+    each send should be prepended with the length of the data sent, or
+    something like that.  we can't use nulls, because there may be
+    nulls in the data.
+
+--> vbregion: add local maxima, minima, weighted COM
+--> perm cubes should be floats, not doubles, because insignificant
+    errors won't be compounded.  convert before writing if need be.
+
+--> add new resample options
+--> fold resample code into vbview for resampling cubes and statmaps
+
+--> consider the meta-scripting extension for submit_sequence
+--> make sure vbmakeregress works, and organizes its files more intuitively
+--> make sure stand-alone mode works -- any other socket-based comm need to be replaced?
+
+vbim should allow initfn() with non-combining operations, so that we
+  can, for example, load mask cubes just once, parse arguments just
+  once, print informative messages about what we're doing just once,
+  etc.  will require some ad-hoc stuff in the op structure.  is this
+  even possible?  what happens when we do vbim */*.nii -mask x.nii
+  -mask y.nii?
+
+
+
+=====1.8.5====================================================================
+XXXDONE: vbstatmap with masks was broken, now it works
+XXXDONE: crashing bug fixed when including voxels in a mask that aren't
+      in the GLM mask
+XXXDONE: vbmm2 slightly faster, now doesn't need write access all the time
+XXXDONE: vbmm2 adds -compare function
+XXXDONE: more dicom fixes allow reading of images previously rejected
+XXXDONE: greatly improved DICOM handling, now handles some older ACR/NEMA
+      formats as well
+XXXDONE: vbview fitted responses much more stable, now just includes I covariates
+XXXDONE: much improved default windowing in vbview, and overall performance
+XXXDONE: vbview file selection dialog
+XXXDONE: [almost done: PCA in vbview and vbdumpstats]
+XXXDONE: all image-related programs now support MRIcro roi files (with caveat)
+XXXDONE: glminfo and related functions no longer require write access to glm dir
+XXXDONE: changing masks should work better
+XXXDONE: can now load multiple masks at once
+XXXDONE: fixed some but not all scalability issues with scheduler
+XXXDONE: plotscreen fixes and new features
+XXXDONE: in vbview, fitted values are now averaged and/or power spectrumed if you ask for it
+XXXDONE: vbconv no longer removes nans/infs if you don't explicitly say so
+XXXDONE: vbconv now takes a volume range for tes files
+XXXDONE: vbperminfo now understands tes files, the -pm option is more clever
+XXXDONE: new contrasts: hyp and phase
+XXXDONE: scheduler now sorting on rank, then random, and that's it; also, load average is being used, and there's pressure to distribute more evenly (?)
+XXXDONE: scheduler less wasteful of CPU, a little more responsive
+XXXDONE: scheduler handles large numbers of jobs/sequences better
+XXXDONE: GE MR format restored (legacy data)
+XXXDONE: scheduler slightly cleverer about deading and undeading servers
+XXXDONE: vbconv more intuitive to use now
+XXXDONE: vbregion now handy for finding out information about cub files
+XXXDONE: vbi now handles mat files, can also print correlation matrix for G matrices?
+XXXDONE: vbmaskinfo is useful for things like lesion masks
+XXXDONE: glminfo replaces auditglm job
+XXXDONE: file format plug-ins are out for now
+XXXDONE: voxq --queue on/off to shut down queueing
+XXXDONE: elapsed time for running jobs should be more accurate now
+XXXDONE: vb2tes now includes input filenames in header
+XXXDONE: vb2tes is now more informative and fails more when things go wrong, esp. bad vols in dirs.  also now honors extension for output file format.  new args too.
+XXXDONE: vbconv args redone, see -i, -e, and -x
+XXXDONE: scheduler has a new benchmarking feature, syntax:
+      benchmark realign 20 cp /jet/admin/run.tes /tmp;realign /tmp/run.tes
+XXXDONE: vbbatch now has the -a, -f, and -s flags.  see autodocs.  also -v is now -x
+XXXDONE: vbbatch now sends email notification properly, i think
+XXXDONE: vbbatch maxjobs now defaults to 10
+XXXDONE: vbbatch IND fixed, -sn and -jn flags added
+XXXDONE: scheduler better at dealing with machines that go down between restarts
+XXXDONE: 3 is now the default priority, new semantics are 1(night) 2(low) 3(normal) 4/5(jump)
+XXXDONE: vboverlap (a hack, but useful)
+XXXDONE: scheduler is much better about killing/halting jobs
+XXXDONE: vbbatch -e flag
+XXXDONE: voxq -s <num> works, and it returns codes for sequence status
+XXXDONE: vbsubmit, which caused various problems, gone
+XXXDONE: we now support gzip-compressed nifti, cub, and tes files
+XXXDONE: first release of vbim(agemunge), with many features
+XXXDONE: various performance improvements here and there
+XXXDONE: vbsim now produces cubs if dimt=0, and defaults to 10/5/1 mean/var/smooth, also has -z flag
+XXXDONE: vbconv help fixed up
+XXXDONE: ranges can be better abbreviated, as in: 94572-6
+XXXDONE: new executable: vbtmap
+XXXDONE: all programs that use 3D data now recognize mricon voi files (really nii.gz) files
+XXXDONE: vbmaskcompare is now faster, reports dice overlap
+XXXDONE: many performance improvements, some major
+XXXDONE: general improvements to vbregion
+XXXDONE: advise people to compress large tes/cub files for win-win storage and performance savings
+XXXDONE: vbstatmap -s flag removed, scripts will have to be modified
+XXXDONE: vbim(agemunge) also does rotation in pitch, roll, yaw, and lots more new stuff
+XXXDONE: some dumb bugs in analyze4d support fixed
+XXXDONE: using foo[imgdir] works again
+XXXDONE: vbtmap now calculates regular t-test, welch's, z maps, and inverts, plus other options
+XXXDONE: more consistent handling of scl_slope and scl_inter
+XXXDONE: merge3d retired in favor of vbim(agemunge), scantype retired
+XXXDONE: vbpermmat now accepts tes/ref for ndata
+XXXDONE: vbfdr
+XXXDONE: vbperminfo -u calculates a p/stat/z map
+XXXDONE: vbscale
+XXXDONE: better portability of files across osx/win (end of line issue resolved)
+XXXDONE: makevlsm(.sh) script runs or queues vbtmap-based vlsm permutation tests
+XXXDONE: new executable dcmsplit is useful for anonymizing dicom files reversibly
+XXXDONE: defaults file can use uid or name for voxbouser
+
+DONE: scheduler/vbprep/vbbatch now support new policy options (pri2 max2 maxperhost)
+DONE: resource system simplified (details below?) note that you can't have idl require more licenses on some machines than others anymore, probably
+DONE: vbtmap allows us to exclude duplicates for FDR purposes using the -nodup flag
+DONE?: you can now specify contrasts in glm files
+DEPRECATED: vb2xxx vbmakerfx vbmaskmunge vbmunge extractmask realign norm vbregion
+XXXDONE: if you use 0 as an fdr thresh, you get a range of thresholds
+
+since pre7
+----------
+XXXDONE: innumerable small bug fixes
+XXXDONE: scheduler bugs causing lost servers fixed
+XXXDONE: scheduler priority system overhauled
+XXXDONE: scale/slope handling fixed, should be better/faster
+DONE: new spm8 scripts are useful already
+DONE: fdr graphing script uses matplotlib to show FDR graph(s)
+XXXDONE: vbim -regioninfo gives a lot of info
+XXXDONE: checkdir setting allows you to make sure servers see the directories they need to
+DONE: new scheduling params
+XXXDONE: vbbatch can now be given requirements
+XXXDONE: vbpermvec
+DONE: vbperminfo -d/-dr
+XXXDONE: vbsim can now create random vecs
+XXXDONE: new vbim features including maskselect, separatemasks, union/intersect with arguments, nonans, probably many more
+XXXDONE: q value of 0 in vbtmap/vbstatmap/vbvolregress gives multi-q, and values tucked in header for voxbo file formats
+XXXDONE: many vbview2 improvements, including command line args
+XXXDONE: filename:mask gets the mask for 4D data  filename:4 gets vol 7
+XXXDONE: analyzeinfo now prints nifti headers, niftiinfo and imginfo are aliases, BUT:
+XXXDONE: vbi -f replaces dicominfo/analyzeinfo (now deprecated)
+XXXDONE: matrices can be text files
+XXXDONE: vbvolregress more flexible, and handles vector-only regression better
+
+since pre8
+----------
+XXXDONE: vbview2 masks, command line, layer swap, templates, etc.
+XXXDONE: vbview2 thresholding, auto glm loading, glm in general, time series
+XXXDONE: dcmsplit improvement including -m and -r modes
+XXXDONE: vbrename anonymization
+XXXDONE: various vbim additions, including nonans
+XXXDONE: single-user more reliable, i hope (PATH fix)
+XXXDONE: new utility vbtool, barely useful
+XXXDONE: text file matrix support
+DONE: build improvements, configure.py script
+XXXDONE: voxq doesn't show "idle" (2 days) jobs
+XXXDONE: F-->p bug fixed
+XXXDONE: eliminated the useless vbthreshcalc
+XXXDONE: numerous performance improvements, large and small
+XXXDONE: more dicom improvements, also dicominfo
+XXXDONE: some programs are now more picky about numeric input
+XXXDONE: vbsim and vbim now seed-settable
+XXXDONE: improvements to vbpermgen and vbtcalc, including cmd-line, gui for contrasts
+XXXDONE: super-cool tips function!
+XXXDONE: text files can now be read/written as matrices (mtx format)
+XXXDONE: servers now embedded in defaults file, serverlist file not used
+XXXDONE: idlfree is gone.  if needed, replace with a shell or python script
+DONE: sortmvpm deprecated in favor of vbmm2 -reshape; vecsplit deprecated as useless
+XXXDONE: gdw add single covariate is now "add covariates(s) from file" and takes either vectors or matrices
+XXXDONE: graphical runseq
+XXXDONE: exofilt fix
+XXXDONE: vecview defaults to snapping
+XXXDONE: dcmsplit now anonymizes rather than just omitting identifying fields
+DONE: vbmaskinfo -r option for feature extraction
+XXXDONE: most, perhaps all, job sequences will now store their logs with the data
+XXXDONE: cluster mode less vulnerable to stray env vars
+DONE: vbim smoothmm working, and new smoothmm2 and smoothvox2 avoid edge effects
+DONE: vbcmp now works for vectors and matrices as well
+DONE: correction to diagnostic colinearity calculation for no-intercept models
+DONE: maps.txt can take "map" keyword
+DONE: vbim new things include -zero, -signflip, -randomvoxel/-drawsphere
+DONE: vbi -q flag
+DONE: vbview mask drawing features and improvements, etc.
+DONE: vbcmp can take masking, do correlations in 3D, and do more than 2 files
+DONE: VOXBO_CORES sets number (or all if nonnumeric) of processors to use right now
+
+WIKI: page on conjunctions
+WIKI: R tutorials organized and indexed
+WIKI: group (second tier) analysis
+WIKI: document GLMs in vbview
+WIKI: document vbprep better
+WIKI: better explanation of interpolation
+WIKI: how to derive a subject HRF
+WIKI: page on bounding boxes, including the table of historical bounding boxes
+voxbo wiki vlsm faq: i ran the same analysis and got different results in NPM and voxbo, what gives?
+voxbo wiki vlsm faq: make sure you use 0/1 in lesion maps, esp if you're trying vbvolregress!
+voxbo wiki vlsm faq: how many patients do i need per voxel?
+voxbo wiki vlsm faq: what statistical test should i use?
+voxbo wiki vlsm faq: why are values repeated in my permutation distribution?  or in my permutation thresholds?
+==============================================================================
+
+
+==SCHEDULER===================================================================
+improve logging incl who did what when, and when a job completes, log
+  its total time to execute as well as the sum of time spent in jobs.
+  for jobs that got interrupted, the former will be higher.  for jobs
+  that got good parallelization, the latter will be.
+
+to submit a job, ask the scheduler-aide for an id and then drop it in
+  the drop directory.  if the scheduler-aide isn't running, we'll just
+  leave it in our home directory, and resubmit later via an
+  interactive program:
+
+SCHED: drucker's ONERROR/ONSUCCESS hook request
+SCHED: job return code disposition testing
+SCHED: a secondary outcome for a job (in addition to status D): raise a text flag, something like "Subject 4 done"
+
+scheduler needs to keep all its state info (including hostlist etc) in
+a structure:
+
+class VBScheduler {
+  time_t dayreset,weekreset,monthreset;
+  int jobs_today,jobs_thisweek,jobs_thismonth;
+  int seqs_today,seqs_thisweek,seqs_thismonth;
+  bool schedulingon;
+  class gim {public:  string user; time_t deadline;};
+  list<gim> gimmelist;
+  list<VBHost> hostlist;
+
+  writestate(string &fname);     // also write host statuses
+  restorestate(string &fname);
+};
+
+--> right now processes locate the server by looking at
+    rootdir/etc/scheduler.pid.  to make plans for future installations
+    where scheduler doesn't see the same filesystem, we should also
+    check and env var and /etc/voxbo.conf (although in those cases,
+    clients wouldn't immediately know when the scheduler moved)
+
+--> gethostent and related code can be replaced with inet_pton calls
+
+--> voxq needs a scheduler query function to print a summary of
+    sequences, hosts, whether queueing is on or off, etc.
+
+--> allow benchmarks to "require"
+==============================================================================
+
+vbvolregress permutations
+  convert rois to cub (vbconv), then tes (vbconv), optionally mask and/or smooth
+  put behavioral measure in a ref file
+  run vbvolregress to get unpermuted stat map
+  run some kind of special separate script to do the permuted versions
+  run vbperminfo to get permutation distribution
+  threshold
+  profit!
+
+vbvolregress:
+   -x should show you the weightings
+   should use the contrast name for the stem
+   should check contrasts more effectively
+
+--> submit_sequence: use "name" tag to name jobs
+
+TODO: PCA option in vbxts
+TODO: make sure the perm code uses my code.  double-check with known perms.
+      get rid of the crufty old stuff
+TODO: vbmm tool for sub-matrix operations (including inversion?)
+TODO: does vbmakeresid do detrending and mean scaling???
+TODO: glm setting for how many residuals to keep
+TODO: charan: scaling for fits and raw data
+TODO: charan: scale selections missing for trial-averaged data
+
+=====VBVIEW===================================================================
+
+right now, when needed we update the entire drawing area, so that
+  scrolling can be instantaneous.  but unirender() can now restrict
+  itself to rects, opening up the possibility of only rendering
+  visible parts.  it would slow down scrolling a bit, but speed up
+  everything else.
+
+vbview: to speed rendering of anatomical images, pre-scale to an
+  int16-ish range and do the brightness/contrast adjustment in the
+  render function (maybe).
+
+vbview: don't draw the whole damn image on moving crosshairs!
+vbview: all uses of statLayer() maskLayer() etc. are laziness
+
+QTableWidgetItem::setData() can be used to hook a table cell up with its stuff
+
+fix to use non-integer origins if they're available.  make sure
+  integer origins will still be used properly
+
+vbview: find max voxel, find nans buttons (maybe creating a mask!)
+
+--> vbview implementation note: each layer has a rendercube that has
+    the rgb value (or 0) in each voxel and a 0/1 in the top byte to
+    indicate whether or not there's data there
+
+--> vbview should calculate min/maxes when loading up a volume, as
+    well as min/max nonzero, nonzero count, others
+
+--> vbview icons for snapshot and printing
+
+--> from charan: On vbview, you can see fitted responses and covariate
+    fits.  However, the fitted response does not trial-average. The
+    fits for single covariates do trial-average. Hwoever, if you
+    shift-click to overlay these covariate fits with the
+    trial-averaged time course, you can see that the two are on
+    totally different scales. That's weird because in the old voxel
+    surfer, the covariate fits and time courses appeared to be on the
+    same scale, provided that you viewed in in terms of % change or
+    raw signal.
+
+TODO: vbview: add mask, flatten masks, load multiple masks, load tes mask
+      use fileview
+      if 1 3d, load it as mask (if non-discrete values, offer to quantize)
+      if 1 4d, choose: load its mask, load as multi-mask
+      if multiple 3d, choose: flatten, merge (a+b), or combine (load values)
+--> vbview: if mean scaled, we should multiply by mean signal value in raw
+    time series?
+--> vbview: cool feature for the future: movie of the evolution of the
+    stat map as you lower the threshold from the max value to 0
+--> vbview: add 0 as a fixed mask color, for left-click erasing and
+    fill erasing
+
+--> vbview: key combo to move mouse over a slice w/same x/y
+--> vbview: when selecting multiple files, option to concatenate
+--> export mask as avants landmark file
+
+--> vbview: save config to prefsdir, apply settings to all windows,
+    buttom for multi-slice
+
+vbview needs to be able to do ROIs with the GLM options and/or with
+the display options for detrending and mean scaling.  filtering should
+always do whatever was done in the GLM.
+
++---------------------------------+
+| VBVIEW VOXEL SURFING PRIMITIVES |
++---------------------------------+
+- extract time series (averaged if needed)
+- detrend and/or mean norm
+- apply time series filter
+- remove covariates of no interest
+- trial average
+- plot residuals
+- plot standard error
+- plot power spectrum of any of the above
+
+OTHER MISSING FEATURES:
+- find region
+- find all supra-threshold
+- threshold calculator
+- save region cube, time series, parameter
+- save local maxima
+- cluster criterion
+- scale time series by intercept, %change from zero, S/N, "IRF Style"
+- SD and SEM plots
+- drift correct
+- improved windowing
+- when loading a mask with discrepant dimensions, nn_resample if needed
+
+- mask list should have: MASKS, REGIONS, and LANDMARKS in separate
+  sections
+
+- TS display options
+  time series
+  each covariate
+  SD
+  SEM
+- TS checkboxes:
+  apply filtering
+  apply custom filtering
+  remove covariates of no interest
+  scale covariates using beta
+  show power spectrum
+- TS radio buttons
+  show voxel under mouse
+  show selected mask region
+  graph voxel at crosshairs
+  graph supra-threshold voxels
+- TS action buttons
+  save time series
+  save supra-threshold stat map
+  save complete stat map
+  save mask
+  save separate masks
+  stat of series
+--> vbview flip mask across an axis
+--> add stat of series
+--> vbview: mask delete menu item, other signals
+--> vbview: stat region adding
+--> vbview: contrast for current region
+--> vbview: small functions to calculate individual stats from time series
+
+--> find region button to create a bunch of "region" regions (non-mask
+    regions).  as before, regions should be in purple.  the selected
+    region should be in a slightly different purple.  coordinates and
+    other stats should be available through a mouse menu option.  we
+    should be able to get stats for all regions and all contrasts
+    relatively easily, using the region labels if available.
+--> CR: "estimated response"
+
+--> exit and closebox need to check each pane
+--> add some image/mask munging: rotate, reslice, invert, nudge, etc.
+--> set mask dimensions
+--> mask downsampling
+==============================================================================
+
+==SCHEDULER===================================================================
+--> most vbx files could be sent directly to the scheduler, for
+    immediate action.
+
+--> sequences should have a concept of "width" -- the maximum number
+    of concurrent jobs logically possible, ignoring maxjobs.  if a
+    sequence has width greater than the total available cpus and there
+    is a later sequence with narrow width (2-3 jobs) and pri>1, we
+    should let it through, perhaps probabilistically.
+
+--> when a sequence has a large number of jobs in the same "class," we
+    should be able to predict the time to execute a subsequent job
+    based on previous times.
+
+four scheduler processes -- one that farms out the jobs (JOBS), one
+  that talks to users (USERS), one that talks to hosts (HOSTS), and
+  one that mediates access to all the shared structures (DATA).  DATA
+  fields all requests to set or get queue or host info.  since these
+  requests aren't time-consuming, DATA can be very responsive.  HOSTS
+  should just continually get updates from whatever hosts will provide
+  them, and then send those updates to the schedular when possible.
+  JOBS should keep cycling through the queue, sending updates to USERS
+  to make sure everyone has the same information, and getting
+  information from.  is there some way to maintain the queue list in a
+  single shared memory structure?
+
+--> scheduler should reduce its check time whenever it submits a job
+    and gradually recover to full queue check time
+TODO: scheduler: make sure the triggers are working
+==============================================================================
+
+--> orthogonalize dialog wording
+--> new resample options
+--> mikolaj: anonymization of configurable DICOM elements
+--> mikolaj: thick+skip?
+--> BUG: glm stuff chokes with invalid sub file
+--> BUG: group analyses are tough
+--> don't strip mac executables, otherwise they won't run on some machines
+--> GLM: mean norm and drift correct should be on filtering page, probably
+--> vb_isfile() vb_isdir() check in ff_dicom4d, 3d, etc.
+--> ikan: permutation analysis within an ROI (or for univariate glm in
+    general).  vbdumpstats should honor a permutation flag.
+--> tesplit doesn't preserve headers
+
+--> make sure scheduler handles sequence dependencies, and that we can
+    create a sequence dependency with vbprep, mjumbe's prep,
+    vbmakeglm, and voxq.  a sequence dependency is satisfied when the
+    sequence completes successfully and not otherwise (although you
+    should be able to remove it with voxq).
+
+--> what's the difference in effdf between data collected with
+    TR=1500ms and TR=3000 with HRF with and without filtering (say for
+    a 42s blocked design).  we should have an easy way to calculate
+    effdf, which is (tracerv^2)/tracervrv
+
+--> VBMatrix: plug-ins for text and matlab formats
+
+--> performance issues with mask-based time series extraction in
+    vbview (and presumably elsewhere).  also can't read time series
+    directly from img files.  improve use of 4D formats, and time
+    series extraction.  note that just opening/closing files is really
+    fast, even on nfs.
+
+ISSUE WITH MASKS AND TRIAL AVERAGING
+
+does vbsim really need to pre-allocate space for the entire tes file?
+  it would be nice to write it out piecemeal if we can.
+
+when parsing a job, build a list of actions.  in talk2child, allow
+those actions to trigger.  vbprefs must read triggers
+
+====PIPELINE/DATASET NOTES====================================================
+
+by default, lines in the script files shouldn't need *any* arguments.
+  implicitly, role xa is filled with $xa (i.e., dataset default).  but
+  we can override each of a jobtype's arguments.  so the following
+  would be valid:
+
+spm2_realign [all defaults, assuming all variables filled]
+spm2_realign ref=/foo/bar [override ref]
+
+====SCHEDULER NOTES===========================================================
+use the following syntax in jobtype files.
+
+onreturn 0 requeue 0 [number of parent generations to include]
+onreturn 1 bad
+onreturn 2 good
+...plus
+onoutput "string here" bad
+setvarfromoutput SSCANFPAT varname [var should be sent to scheduler and appended to var file in seq dir]
+
+IN HOST CONF:
+usecpu load 0.75
+usecpu process startkde
+etc.
+
+--> vbdumpstats should be able to do (a) weighted averages (b) PCA (c) ICA
+--> make it possible to add contrasts to contrasts.txt in the GLM script
+--> vbdumpstats needs to be more communicative if it can't find the tes files for the GLM
+
+--> need a little hack for doing rfx GLMs: vbmakerfxglm <tes file> -c <covar>
+--> glm scripts and such with relative paths?  need to make glms relocatable
+--> hack vbsim to do what i need for test dataset
+
+--> version of smoothCube() that does weighted averaging around the edges
+
+--> vbstatmap/vbdumpstats should say what contrasts they allow
+--> move vbmm2 and vbmakeglm to other locations, also vbmakefilter
+
+html format output from vbdumpstats (with multiple regions, all contrasts)
+we should be able to save a masklist, multi-mask file, or mask tes in addition to a contrastlist with a glm
+
+--> when someone submits a job with a bad G matrix, an early audit
+    step should generate a pre-crash with an informative error
+--> use netcdf library to read minc files?
+
+--> our DICOM-analyze code sets origin to 0,0,0 which is considered
+    meaningful in spm.  should set -1,-1,-1, which isn't.  (conversion
+    adds 1)
+--> thresh and cluster criterion for continuous valued mask volume
+--> get stats on mask regions without first converting to "regions?"
+--> validate vbinterpolate
+--> voxq --summary (edit option) to show all jobs w/jobtype and status in a seq
+--> vbmakerfx add voxel sizes, origins, and sources
+--> vbbatch function to create a sequence with one job per machine in
+    the cluster, each with forcehost set.
+--> many more spm and fsl jobtypes, including coreg
+
+==============================================================================
+=====NEW SCHEDULER TECH NOTES=================================================
+==============================================================================
+--> new system: voxbo scheduler now only reads the whole queue once,
+    at startup.  subsequent changes go through the scheduler.
+
+--> new system: when pinging, scheduler tells each server about any
+    jobs that should be running.  if any of them are missing, the
+    server reports back to the scheduler.  when a scheduler receives
+    two missing reports for a job, it can send admin email and flag
+    the job W.
+
+--> new system: no more "responding" flag.  the lastresponse field is
+    set to zero for "dead" servers.
+
+--> safe_recv() is not non-blocking, but we call select (with timeout)
+    to make sure it won't.  it keeps reading until it gets a null.  if
+    it times out, it returns 0.
+
+--> voxbo scheduler now forks off a process to ping each host and tell
+    it what jobs it believes are running.  each host is thereby
+    requested to create a vbx file with status info, and to check on
+    running jobs.  so the server can remain responsive while the hosts
+    get back to it later.  the job check must come back bad three
+    times before action is taken, to avoid race conditions.
+
+--> vbsrvd doesn't modify job files, it creates vbx files in the queue
+    directory that provide the arguments for setseqinfo or setjobinfo.
+    all job changes go through the scheduler, except for vbsubmit and
+    the occasional sysadmin intervention.  we may someday need some
+    safeguard to help make sure vbx files are processed in order
+
+===============================================================================
+====OTHER TECH NOTES===========================================================
+===============================================================================
+
+--> In a prm header, DataScale: mean indicates mean scaling.  We also
+    have an "Option:" line, which can include "meanscale" and/or
+    "detrend" or "excludeerror".  The first two indicate operations
+    performed on the data in memory before regression, and are
+    detected by GLMInfo.
+
+--> In the old code (prior to the 1.8 release), the betas for the prm
+    file are not divided by trace[0] when the file is first written,
+    but instead later in tesregfinish.  In the new code, vbregress
+    does the right thing in one step.
+
+--> NEW VBFF DECISION: all our fileformats will be built-ins.
+    plug-ins will just have to have unique symbol names, but can still
+    override by using the same format code.
+
+===============================================================================
+====NIFTI SUPPORT NOTES========================================================
+===============================================================================
+
+double-check that nifti origins are preserved in some way for e.g. spm
+templates
+
+nifti standard header says we should check scl_slope and scl_inter to
+see if they're non-zero.  this can be dangerous with floats, but we do
+it.
+
+intent code is always 0, for now, but in the future we may honor a
+nifti_intent field in our header
+
+LIKE THE NIFTI EXAMPLE CODE, we make the dangerous (yet safe)
+assumption we can memcopy our header directly into a structure.
+
+all spatial dimensions are encoded as mm, time dimensions are assumed
+to be seconds.
+
+we don't set dim_info, which tells us which dim is phase, freq, and
+slice.
+
+we propagate qform/sform, but don't muck with them, same with many
+other fields.
+
+NIFTI MIN FIELDS:
+sizeof_hdr, dim, datatype, bitpix, pixdim, vox_offset, magic
+
+--> these notes to both manual and nifti web site
+
+==============================================================================
+
+--> new arg parsing code that just breaks the args into tokenlists
+    where the first is the flag
+--> test on smoothing at indiv or group level, using demo dataset
+--> tokenlist needs to (a) recurse; and (b) handle backslash escape.
+    for recursion, whenever we encounter an open-quote, we keep
+    reading until we encounter the relevant close-quote.
+--> "Xvfb :10 -screen 0 1024x768x24 -ac" *AND* set display to :10.
+    Xvfb exits with an error code when the screen already exists
+--> typedef various container types (seqlist, joblist, etc.) to clean
+    up constant vector<xxx> definitions.
+--> use doxygen for libvoxbo?
+--> make sure vbmakeresid observes the drift and detrend options
+    originally selected (not urgent, since it's out of the glm chain
+    now, and probably does fine anyway)
+--> add in 1-minute refraction
+--> run a GLM on demo data locally, see if I can browse it (augment
+    vbsim to generate a 4D timeseries and to take both a mask and a
+    ref function for the "signal" -- this will be helpful with the
+    evaluative tools as pilot data)
+--> env vars in prep scripts should be honored
+--> create a command-line IDL-based reference GLM generator, for
+    comparison with current GLM code
+--> calcps needs to generate output, and a warning when there are no voxels
+--> scheduler accounting
+--> vbperminfo should report percent done
+--> refraction doesn't work if the job can requeue once finished.
+    make it refract 2 minutes *only* if the scheduler re-marked it R.
+    do this by setting a refracttime to a time in the future.
+--> test getput (can i voxel surf with getput and the reduced idl code?)
+--> add "disposition" flag that can be "delete" or "keep"
+
+--> timeseries whitening
+
+--> vbprep should issue warnings when an empty variable is set
+--> make sure we can override globals in our datasets
+
+--> fix the whole contrast business:
+    "name"  look up name in contrasts lists
+    "spike" etc. execute macro
+    <num>... parse it is weights on covars of interest
+--> integrate tom's file dialog
+
++----------------+
+| NEW REGRESSION |
++----------------+
+===============================================================================
+--> vbmakeglm: non-autocorrelated data
+--> vbmakeglm: pre-calc contrasts
+
+--> vbstatmap needs to work for non-autocorrelated data
+--> vbregress should take a perm matrix and column and/or a perm vector
+--> move IDL-based makematrixFOO functions to an OLD dir
+--> vbprep example script sucks
+
+vbregress <glmdir> [-c <contrast>] [-p <permspec>]
+  if contrast is specified, don't write prm, just calculate the contrast
+
+--> tesregress should just fill out the prm, we can then either save
+    it or create a contrast volume.
+--> vbmm2 -imxy tries to run in core, but should go in parts instead
+
+REGRESSION: image ind or not; autocorrelated or not, files exist or not
+==) if image dep, matrices must exist already
+==) if image not dep, create the matrices in core
+==) when creating the matrices and doing the regression, separate
+    steps if autocorrelated or not
+==) one way or another, create a prm tes or vec
+==) in the permutation case, subsequently turn this into a stat map
+===============================================================================
+
+
+--> vbmakeglm: better heuristic for pieces?
+--> are the steps to create empty matrices in the GLM really needed
+    anymore, given the use of merge operations?
+--> when we [e]dit a log file, it should fork off so we can leave the editor open
+--> a job flag that indicates its disposition when done (keep, discard)
+--> vbx stand-alone should trap CTRL-C -- on first occurrence, decide to pause 
+    before the next job.  on second, quit.
+--> get rid of all calls to kosh's sincinterpolation function, replace with my
+    gsl-based cspline interpolation
+--> tes should always know the number of voxels stored
+--> check on rfx jobtypes
+--> vbmaskcompare performance issues with surface and discrepant functions
+--> custom cfn/voxbo login screen
+
+USEFUL COMMANDS
+  find . -name iterations -exec du -sm {} \;
+  diff -y --suppress-common-lines --width=200 Makefile.mac Makefile.linux
+  ls -ltru    # to list in access order instead of mod order
+  medcon -f *.dcm -c anlz -fmosaic=64x64x42 -fv -o medcon
+  ssh -ND 8080 voxbo@voxbo.org
+  rsync -a freshrpms.net::freshrpms/redhat /junk/tmp
+  cat xferlog* | grep voxbo    | cut -b26-50 | cut -f2 -d " " | sort | uniq  -c | sort -nr
+  cat xferlog* | grep alacarte | cut -b26-50 | cut -f2 -d " " | sort | uniq  -c | sort -nr
+  cat xferlog* | grep voxbo-1.8|grep gz| cut -b26-50 | cut -f2 -d " " | sort | uniq  -c | sort -nr
+  diff -r old new --exclude=.svn
+  emacs `grep -l stringofinterest */*.cpp`
+
+  vmware-vdiskmanager -r multipart.vmdk -t 0 flattened.vmdk
+  qemu-img convert foo.vmdk -O raw foo.raw
+  mount -o loop,offset=32256 foo.raw /mnt/point
+
+
+--> double-check that my t-stat calc stuff handles betas that are not
+    kept (in idl code, filled in with betas(keepbetas)) properly
+
+--> graphical tool for editing user config; all user config should be
+    in either HOME/.voxborc, HOME/.voxbo/defaults, or
+    HOME/VoxBo/defaults.
+
++----------------+
+| SCHEDULER UPD  |
++----------------+
+--> private queues
+    submit to private queue if VOXBO_QUEUE set
+    depends on existence of HOME/.voxbo/queue and HOME/.voxbo/logs
+    completed job log files should be saved in private queue
+--> sscanf patterns for extracting job-specific env vars
+--> user dir can be HOME/.voxbo or HOME/VoxBo
+
+--> check out FSL online tutorial
+
+if VBMatrix can read text matrix files, that will make life a lot
+easier for designing things.  give vbregress a -t (transpose) option
+for vars stored in rows instead of columns
+
+vbregress...
+
+if there's no dependent variable and there's image data (sub file), image is dependent
+if there is a dependent variable and image data (sub file), swap
+if there's a dependent variable and no image data, do a univariate regression
+
++--------------+
+| DATASET DEF  |
++--------------+--------------
+SOURCEDIR
+DESTDIR
+VOLUME (raw name, cooked name)
+VOLUME
+...
+[just variables we might want]
+ANATOMY=
+FUNCTIONAL=
+----------------------------???
+
+contrast spec:
+<name> <scale> allspikes
+<name> <scale> spikes 1,2,3,4-6
+<name> <scale> vec 0 0 1 2 3 0 0 ...
+<name> <scale> contrast 0-2 minus 3-5
+<name> <scale> contrast 
+
+--> given the contrast spec, we can now cache contrasts using the
+    contrast name as part of the filename (transformed to convert
+    whitespace to undescores, etc.  when we load a stat cube, we can
+    check to see if it's cached
+--> move towards shell scripting for iteration, etc.
+
++--------------+
+| resample     |
++--------------+
+--> resample options (same space using origin instead of corner)
+--> resample crashes if you're in the wrong directory?
+--> resample needs to use getcorner()
+--> resample --flipx --flipy --flipz -rm <vecfile> --cropx 40  --toresolution x y z
+--> does resample on a nonexistent file still segfault?
+--> resample segfaults if the arguments are in the wrong order
+--> resolve whether resample uses the beginning or the end of the last voxel
+--> resample should tag a file with info on what it did! (esp for shifting)
+--> resample handling of -rz is a little funny (halve voxsize, doesn't
+    double slices)
+--> resample doesn't seem to do the right thing with voxsizes and
+    doesn't preserve headers
+
+start voxel in xyz is 0/0/0, can be set to ref by origin or corner
+sampling in xyz is 1/total, can be set to ref or ref/n
+
+ref volume - some or none
+align - corner voxel, ref using origin, ref using corner
+align, alignx, aligny, alignz
+
+--> args: preserve order of flags and allow setargs to specify address
+    of destinations for shorts
+--> solution to plug-in files having common symbols
+--> get rid of kosh's string tokenizer, we just need one
+
++--------------+
+| MANUAL       |
++--------------+
+--> calcgs: are extra-mask voxels included?
+--> MANUAL: file format details, including how to build plug-ins
+    (w/stripped down sample code).  note that you can draw on the
+    library code in libvoxbo if you want to write a modified nifti
+    plug-in.  only the symbols in the plug-in file itself have to be
+    changed.
+--> document reparsefilename and general extension tricks
+--> if you're not slice timing correcting, is it still useful to
+    interpolate spikes if you're going to apply temporal filtering?
+--> MANUAL: how to test for linear effects
+--> MANUAL: modeling: orthogonalization and how it affects t and F
+    tests.  how mean centering affects parameter estimates and stat
+    values, with and without an intercept.  why you can't test for a
+    linear effect by specifying a linearly increasing contrast.
+    example commands in R to demonstrate these things.
+--> MANUAL: linux for voxbo
+--> MANUAL: smooth before thresholding, to make sure you get rid of
+    voxels that are only present in some volumes.
+--> get rid of mailagent, scheduler now sends all mail
+o  VOXBIN env var in anything that uses vbprefs
+o  nomail option for jobtypes
+o  note temporary security issues
+o  note umask policies
+
+--> affine transformations
+--> differential deficit
+--> multiple comparisons
+--> collinearity and what brain hemodynamics do to it
+--> annotated fmri bibliography
+--> other notes from trc meetings
+--> list of useful works-with-voxbo external tools, including mricro,
+    mri3dx, amide, xmedcon, etc.
+--> step-by-step html'ed voxbo tutorial
+--> univariate perm test
+--> perm test to get univariate p values, followed by FDR
+
+cluster permutations
+--------------------
+start with the median value
+binary search by re-collecting regions and seeing how many have size k or greater
+keep track of the highest threshold that gives us a non-zero number
+if 1, we stop
+if we never get to exactly one, use the best non-zero and choose the highest kth value
+
+conjunction permutations
+------------------------
+we have 1000 (m) sets of n cubs
+for each set, find the lowest value in each voxel
+find the highest lowest value across the volume
+[best with p-maps]
+
+ROI average permutations
+------------------------
+univariate test
+
+in masked region only, should do vb_gt, etc.
+
+--> vbxts residual volume
+--> command-line eval of G matrix
+--> vbmakeglm should take a displayfile argument
+--> vbsmooth tags should be smooth_date: and smooth_vox: or smooth_mm: 
+
+--> hacked up norm to do rigid body only and resampling to specified planes
+--> vbsmooth issues: remasking, diffs from idl smooth, consider edge effects
+--> use R for some graphing things -- to generate a graph file from
+    within code, we can actually build an rgraph jobspec and call
+    fork_voxbo_job (vbx.cpp)
+--> threshold calculator using the gsl distribution functions
+
+--> vbreports: build directory on start-up and on demand.  open
+    reports in local browser, but use external browser on request.
+--> consider forcing tagging of voxbo files on write
+
+*** check dims after calling eligiblefiletypes
+
+--> snr map
+--> voxsize option for vbsim (and snr)
+--> check out vbfit
+--> web site needs an index of studies reporting that they used voxbo
+--> it would be handy to assess temporal autcorrelation automatically
+    with durbin-watson scores as in geoff's perm code
+
+--> dicom conv needs to do pulse seq and prot name
+--> vbrename shouldn't quit when it finds directories
+--> simplest possible viewer, with no mask drawing, just a single
+    widget and keyboard controls
+--> generate SNR map -- meansignal/sdsignal, over each time series
+
+--> need extractmask again
+--> setorigin doesn't know about absolutecornerposition
+--> variance map calculator
+--> tesplit past the end of a file not generating an error?
+--> tag: AbsoluteCornerPosition: x y z
+
+--> use distfact to modify slice thickness
+
+--> vbmakeglm gives a GSL error when the G matrix file doesn't exist
+--> use 0020.1041 for tlhc slice location on mosaiced images.  for
+    other images, take it from the first image.
+
+if it's not mosaiced and it's 3D and we have more than the nominal
+number of slices by at least a factor of 2, then we're 4D.  grab a
+group of dimz into a cube and then smash it into the tes.
+
+
++-------------+
+| ORIENT CODE |
++-------------+
+
+identify start coordinates
+identify x/y/z extent
+identify x/y/z axes & direction
+
+--> use separate flags to indicate interleaved slices for purposes of
+    slice order correction and de-interleaving
+
+0018 1310 acquisition matrix should have dimensions
+  for slices: 0 256 192 0
+  for mosaics: 64 0 0 64
+  for oversampled images: ????
+
+--> for 3d directories, we can get the slice order from the time field
+--> for 4d directores, ???
+
+
++-------------+
+| MISC        |
++-------------+
+--> for programs requiring x, we can create a simple voxbo function
+    that checks for a usable display, if not forks, creates an xvfb,
+    and returns the display num just as soon as it's usable.  we can
+    call this in programs like vbqa that require X (under UNIX) but
+    don't open any windows.  if the program returns -1, we know we
+    couldn't get a display no way nohow.
+--> add statcub lines to glm job, jobtype voxbo-mkstatimg, args are
+    stem, contrast, scale, output stem (will end up .cub)
+--> for glm jobs run that way, we can use vbrender!
+--> solaris dlm issues
+--> sometimes we really want to just read the header to test the
+    filetype, then again to read the header (obviously) and again to
+    read the data.  even though it's fast, this seems like something
+    we could streamline.
+
++---------------------+
+| DIRECTORY STRUCTURE |
++---------------------+
+VoxBo/etc
+VoxBo/etc/jobtypes
+VoxBo/etc/servers
+VoxBo/etc/fileformats
+VoxBo/elements
+VoxBo/elements/logos
+VoxBo/elements/noisemodels
+VoxBo/elements/filters
+VoxBo/elements/templates
+VoxBo/queue
+VoxBo/scripts
+VoxBo/scripts/examples
+VoxBo/misc
+
++-------------------------+
+| SCRIPTING/SCHEDULING    |
++-------------------------+
+
+conditions that can be added to commands in jobtypes or to jobs in scripts:
+if[not] $2  [if $2 is set and non-null]
+if[not] $2=baz [if $2 is literally baz]
+
+--> environment variables in sequences
+--> env vars in vbmakeprep should use the third token, honoring
+    whitespace
+--> each sequence gets a directory, each job gets a file.  when a job
+    completes, it can create an env file (00001.env) with data to pass
+    to subsequent jobs as env vars.  when a job starts, the scheduler
+    reads all existing env vars and passes them.  we just need a
+    pattern-based way of sucking information out of text output.
+--> when sequence 00002 depends on sequence 00001, it should have a
+    waitfor.00001 file.  when sequence 00001 finishes, it should
+    delete all existing waitfor.00001 files in all sequences and copy
+    env vars to those sequences if needed.
+
+if steps had a common space of input/output arguments a job sequence
+could do something like the following:
+
+prepdirs
+recon
+orient RPI
+split   [input is just INFILE1, output is OUTFILE1 and OUTFILE2]
+realignodd 0.5 Anatomy/FirstEPI.cub
+realigneven 0.5 Anatomy/SecondEPI.cub
+join
+smooth 4 4 3
+smooth 2 2 1.5
+pause
+notify
+
++-------------------------+
+| DO                      |
++-------------------------+
+--> demo data and noise GLM; we really need a validation suite
+--> it would be nice to have a set of jobtypes for doing minor performance testing, perhaps using the demo data
+--> issues with tom's stuff: gray-white segmentation, vascular maps,
+    regional maps, perfprep in the recon script, etc.
+--> note that zrange gives us the bottom of the bottom slice and the
+    *bottom* of the top slice
+--> vbrender: auto-set dims, with options to change
+--> vbrender: auto-set range
+--> vbrender: twosided flag raises issue for vbmakeprep
+--> vbsrvd should somehow return warning information about hosts,
+    probably during the STAT function, including important filesystems
+    filling up, etc.
+--> special vbfront logo (VoxBo[control center])
+
++-------------------------+
+| VBVIEW                  |
++-------------------------+
+we can also save "regions" perhaps as a tes file if we need overlapping
+
+The image layer's space is the "right" space.
+
+when loading a mask, if the dimensions match, ignore voxel sizes.  if
+the dimensions don't match, figure out the relative corner positions
+and the voxel size that would be the nearest integer multiple, and
+resample the mask and/or stat map.
+
+when rendering, calculate maximum mm bounding box, based on alignment.
+for each layer, calculate a starting position (relative to left edge)
+and rendering interval.
+
+--> movie functions
+--> should indicate everything that's been done to a tes file
+
++-------------------------+
+| IMMEDIATE THINGIES      |
++-------------------------+
+--> web page needs screenshots
+--> user-private jobtypes in addition to scripts
+--> user-private job queues that we can run on the current machine
+
++------+
+| VBQA |
++------+
+--> things we want to sanity check:
+    ANATOMY DIRS
+    COLLECTIONS OF TES FILES
+    DATA SETS
+    GLMs
+
+--> vbqa should have an option to show (all,4,selected) slices from
+    images either matching a pattern or specified
+
+--> when we do a qa, each check should generate: test.html, test.txt
+    (summary line, indication of warnings), and pictures.  when we
+    build the index for this page, we should
+
+--> oddball image detector (calculate mean neighbor difference, find
+    3sd outliers)
+--> vbqa should show the specs for the report up top
+--> plug-ins
+--> Here are some things we should check for:
+    check for Inf and NaN in prm files
+    mean normalized perf or rfx GLMs
+    spikes or other patterned noise
+    excessive unpatterned noise
+    missing data
+    suspiciously smooth data
+    miscellaneous artifacts
+    subjects processed differently from other subjects in the same study
+    excessive head movement
+    poor coverage
+    poor spatial normalization
+    user or software error in model specification (e.g., inappropriate df)
+    highly collinear covariates included in GLMs
+    [see what tom nichols's code does]
+
+--> MAT2: rows x columns, stored like a vector (text)
+--> normalizing should automatically copy the origins when feasible
+--> norm should remask 4D files by default
+
+PERF
+----
+0.  convert Display.cub to Display.img
+1.  use BET to extract the Brain
+1.  use FAST to segment the Display.cub
+2.  mask out voxels that aren't CSF (1), reslice to resolution of
+    EPIs, and write out as cub
+4.  create mask of large regions of voxels that are really really
+    close to 1
+
+MATRIX OP DISTRIBUTION
+----------------------
+--> voxbo needs a general method for breaking up jobs into chunks at
+    run time -- e.g., having vbmm jobs decide at run time how much
+    they can handle
+--> the job preprocessorr should know how to decompose certain
+    jobtypes into smaller types.  this includes matrix ops in parts
+    and their reassembly; file format conversion; etc.
+--> when it encounters a matxy job, it should know how to generate
+    all the parts jobs, and the reassembly job.
+
+o  it would be nice to be able to have a different number of subjects in
+   each voxel
+o  web page on setting origins, need a better system anyway
+o  run the behavioral ts suppression study
+
+o  vbp.init() should check that the user has a key.  if not, it should
+   generate one from /dev/urandom, store it in ~/.voxbo/key, and try
+   to register it with the scheduler.  if the scheduler isn't running,
+   then you don't need the key anyway.
+
+===========================================================================
+
+SERVER for inetd
+----------------
+  // read password database, set flags including "local"
+  // on connection, ask for ID
+  // if there's a key already, authenticate
+  // if there isn't and no local, reject
+  // if there isn't and local, do keygen and authenticate
+  // if there's an expired key, do keygen and test authenticate
+
+CLIENT SIDE
+-----------
+// converse of above, use userid unless there's something in .voxborc
+
+o  programs that need to authenticate: voxq, vbsubmit, maybe a web
+   interface,...
+o  make the scheduler server thing useful, but with authentication
+o  get rid of case-sensitivity for header stuff
+
+o  vbmm should really do more rows/cols between writes
+
+MORE
+----
+o  note that rate of /dev/random was roughly 10 bytes/sec on a quiet PII/300,
+   but as low as 1/5s on the P3/500 SMP machine.  check again!
+
+o  "pause" and "gobad" jobtypes, maybe just checkboxes for test/timewaster
+
+Job Status Codes:
+R - running
+W - waiting
+B - bad
+D - done
+
+Sequence Status Codes:
+R - ready to go
+P - postponed
+K - in the process of being killed, but for some reason not quite dead yet
+
+MISC
+----
+o  vbsrvd security problems -- buffer overflows, complete lack of
+   authentication, bad input, etc.
+o  vbsrvd honors all SI requests -- a security problem!
+o  write a quick and dirty voxbo config checker, plug it into vbq
+
+MISC
+o  need a server config param for min load, and a standard way of handling
+   "non-load" jobs that just delete files or send mail -- perhaps specify
+   for each job the number of cpus it takes up, and also factor in the
+   number of cpus each server has.  forget about specifying multiple
+   servers and such, just go by whether or not we are taking up as much
+   as is available.
+o  vbsubmit needs better behavior if vb.num is missing
+o  vbq_cgi
+   - rewrite vbq to separate getting info and displaying info?
+   - base the web pages on html templates in VOXBODIR/etc/html
+   - arguments to vbq_cgi
+     link every seq number with vbq_cgi&J&#####
+     link every host name with vbq_cgq&H&foohost
+
+
+THINGS TO DO
+o  inform user of total time to completion - on queueing, compute time of
+   longest path through the data, assuming slowest and fastest machines
+o  add the "r" double mover easter egg
+
+SVN revision 605 corresponds to release 1.8
+SVN revision 615 corresponds to release 1.8.1
+SVN revision 676 corresponds to release 1.8.2
+SVN revision 693 corresponds to release 1.8.3
+SVN revision 736 corresponds to release 1.8.4
+SVN revision 1154 corresponds to release 1.8.5pre8

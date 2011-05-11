@@ -1,0 +1,20 @@
+shortname matident
+description Efficient Matrix Operations in c (create I)
+invocation commandline
+
+argument
+ name=name
+ argdesc=name of identity matrix to create 
+ type=string
+ default=none
+argument
+ name=size
+ argdesc=size of identity matrix to create 
+ type=long
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -ident $(name) $(size)
+requires cpu

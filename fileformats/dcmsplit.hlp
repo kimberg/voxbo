@@ -1,0 +1,63 @@
+
+VoxBo dcmsplit (v%1%)
+summary:
+  split a dicom file into identifying and non-identifying parts
+usage:
+  dcmsplit [<infile> ...] [<flags>]
+flags:
+  -g <group>       additional groups to strip
+  -e <group> <el>  additional elements to strip
+  -d               specific datatypes (VR's) to strip
+#  -m               multi-file mode
+  -o <fname>       output filename for stripped file -- the substring
+                   FILE will be replaced with the original filename,
+                   and BASE will be replaced with the original
+                   filename stripped of extensions.
+  -s               filename for storing the identifying data
+  -r               recursive mode
+  -dc              don't check first
+  -h               show help
+  -v               show version
+notes:
+
+  dcmsplit takes one or more DICOM files and strips it of elements
+  likely to contain identifying data.  The original file is left
+  untouched if you specify the output file with the -o flag.  The
+  identifying data can optionally be stored in a second file, using
+  the -s flag.
+
+  The following fields are always stripped:
+
+    all of groups 0010, 0012, 0032, and 0038
+    any element with value representation of PN (person name)
+
+  In addition, if you know what you're doing, you can strip additional
+  whole groups with -g, specific elements with -e, or specific VRs
+  with -d.  For example, if you want to strip all dates stored as
+  such, you could use -d DA.  Note that all groups and elements are
+  specified in hexadecimal, as is the convention.
+
+  Note that elements embedded inside SQ (sequence) elements are not
+  stripped, unless the SQ itself is stripped.
+
+  dcmsplit also creates a unique (30 alphanumeric character)
+  identifier for each file at runtime, and places it in group/element
+  1119.0002.  This is intended to be useful for matching up files
+  later.
+
+  If the -r flag is provided, and the argument is a directory, we
+  process all files in the directory recursively.
+
+  dcmsplit does not overwrite files that don't contain identifying
+  information.  However, it does write temporary files by default.
+  This can be inefficient when checking a large number of files, if
+  many of them may already be de-identified.  To avoid this problem,
+  it does a first-pass read to make sure the file has identifying
+  information.  To skip this check, use the -dc flag.
+
+  Note that dcmsplit also handles older-style ACR/NEMA files, which
+  are a lot like DICOM.
+
+  Finally, note that dcmsplit does not remove elements, but overwrites
+  them with zeros or the string "ANON", as appropriate.
+

@@ -1,0 +1,36 @@
+name=world
+description=a job with many arguments and resources
+
+argument
+  name=input_filename
+  description=the name of the file used for input
+  types=string
+end
+argument
+  name=count
+  description=the count
+  types=int
+end
+argument
+  name=contrast
+  description=a vector of data
+  types=vector
+end
+argument
+  name=image
+  description=this is an image
+  types=cube
+end
+
+resource
+  name=input_filename
+  types=string
+end
+resource
+  name=image
+  types=cube
+end
+resource
+  name=testing_1,2,3
+  types=string
+end

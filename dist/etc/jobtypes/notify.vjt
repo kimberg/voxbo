@@ -1,0 +1,4 @@
+shortname notify
+description Notify user of status of job
+invocation internal
+requires mailagent

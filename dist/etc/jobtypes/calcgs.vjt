@@ -1,0 +1,18 @@
+
+shortname calcgs
+description Calculate global signal of a 4D volume
+invocation commandline
+
+argument
+ name=infile
+ argdesc=4D data file for which we'd like global signal calculated
+ type=string
+end
+argument
+ name=notused
+ argdesc=unused argument
+ type=string
+end
+
+command calcgs -i $(infile)
+requires cpu

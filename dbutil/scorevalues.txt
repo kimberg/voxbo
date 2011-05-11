@@ -1,0 +1,15 @@
+# sample score value txt file
+# Each line includes four fields from left to right: patient_id, score_name, score_value
+# Note that this format is too simple to be used for any real socre value table.
+# It doesn't include score value parent ID, value index, setby and expiration date.
+# dateAdded field is always set to the current date, setby is set to user account "admin". 
+
+2217 demographics:firstname John
+2217 demographics:lastname Smith
+2217 demographics:phonenumber 215-662-4762
+
+2258 demographics:firstname David
+2258 demographics:lastname Smith
+2258 demographics:phonenumber 215-222-3532
+
+

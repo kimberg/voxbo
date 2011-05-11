@@ -1,0 +1,13 @@
+
+VoxBo vbtool (v%1%)
+summary:
+  vbtool is an all-purpose tool for getting information about VoxBo
+usage:
+  vbtool tip -n <n> -w  show n randomly selected VoxBo tips (default:1)
+                        -w adds a blank line before and after
+  vbtool conf           show various config settings
+  vbtool contrast       show help on specifying a statistical contrast
+  vbtool pri            show help on specifying job priorities
+  vbtool -h             see this help
+  vbtool -v             just get version
+

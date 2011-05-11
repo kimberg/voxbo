@@ -1,0 +1,257 @@
+MRN,
+VIQ
+No. Corr.
+Scaled
+Span
+A1
+A2
+A3
+A4
+A5
+A6 (retention)
+A7 (delay)
+Recog
+A1-A5 Tot
+"F"
+Animals
+No Cues
+Sem Cues
+Phon Cues
+Y/N
+2.5
+5.0
+10.0
+B1
+B2
+B3
+B4
+B5
+B6 Recog
+B7 Delay Recall
+B8 Delay Recog
+B9 Immed Rep
+B10 Copy + B9
+Categories
+Persev Err
+Loss of Set
+Part B
+BDI
+Hand Preference
+Left Eye
+Right Eye
+LO Score
+LO Categ
+Data Entry Date
+Notes
+Behavioral Testing Date
+Gender
+Age
+Handedness
+Date of History
+Date of History Copy
+Behavioral Testing Date Copy
+Handedness Copy
+Gender Copy
+Total Flags
+Record No.
+Observation of Pt
+Pt's Condition
+Count Backward (20)
+Recite Backward (Months)
+Speech
+Fluency
+Naming (High Freq)
+Naming (Low Freq)
+Naming (Total)
+Repetition
+Comprehension
+Reading
+Exception Words
+Regular Words
+Non-Words
+Pass/Fail
+Praxis
+Buccofacial Command
+Buccofacial Imitation
+Limb Imitation
+Limb Command
+List Attempts
+List Recall
+List Cues
+List Multiple Choice
+Digit Span Forward
+Write Name
+Write Sentence
+Draw Clock
+Copy Block Figure
+Copy Ramparts
+Copy 3 Squiggles
+Bisect Line
+Error
+Write name error
+Write sent error
+Draw clock error
+Copy block fig error
+Copy ramparts error
+Copy squiggles error
+Bisection error
+Oral Trail
+Written Trail-Part B
+Animal Fluency
+"F" Fluency
+"F" Fluency Repetitions
+"F" Fluency Rule Violations
+Animal Fluency Rule Violations
+Animal Fluency Repetitions
+Oral Trail Error
+Written Trail Error
+Referring Hospital
+Count Backward P/F
+Months Backward P/F
+Rating Scale
+Rating1
+Rating2
+Rating3
+Rating4
+Rating5
+Rating6
+Rating7
+Rating8
+Rating9
+Rating10
+Rating11
+Rating12
+Rating13
+Rating14
+Rating15
+Rating16
+Rating17
+Rating18
+Rating19
+Rating20
+Rating21
+Rating22
+Rating23
+Rating24
+Rating25
+Rating26
+Rating27
+Duration of Testing (hours)
+Tests Administered
+Pt Cooperative
+Family Cooperative
+Additional Comments
+Name of Examiner
+Alert1
+Hand Classification
+Pt Last Name
+Pt First Name
+Explanation of Ratings
+Albert Line Cancellation
+Line Canc Error
+Age at Screening
+Notes:  Counting/Months
+Screening Notes
+MRI Screening
+MRI checklist
+Praxis Notes
+Body-Part-As-Object Errors
+Buccofacial Command2
+Buccofacial Imitation2
+Limb Imitation2
+Limb Command2
+Pt Rec'd Feedback for BPO Errors
+WAIS-R, Multiple Choice
+Avg Age
+Stdev Age
+Avg VIQ
+Stdev VIQ
+Avg Counting
+Stdev Counting
+Stdev Months
+Avg Months
+Avg Naming
+Stdev Naming
+Avg Digit Span
+Stdev Digit Span
+Avg Animal Fluency
+Stdev Animal Fluency
+Avg F Fluency
+Stdev F Fluency
+Total Pts in Subset
+DMS-Attention
+DMS-Initiation/Perseveration
+DMS-Construction
+DMS-Conceptualization
+DMS-Memory
+DMS-Total
+DMS-Att-%tile
+DMS-Init/Per-%tile
+DMS-Const-%tile
+DMS-Concep-%tile
+DMS-Mem-%tile
+DMS-Tot-%tile
+A1.Forward Digit Span
+A2.Backward Digit Span
+B.Two Successive Commands
+C.Single Command
+D.Imitation
+AD.Counting Distraction 1
+AE.Counting Distraction 2
+AH.Vebal Recognition--Presentation
+AJ.Visual Matching
+E.Complex Verbal Initiation/Perseveration
+F.SimpleInitiation/Perseveration
+G.Consonant Perseveration
+H.Vowel Perseveration
+I.Double Alternating Movements
+J.Double Alternating Movements
+K.Alternate Tapping
+L.Graphomotor Design 1
+M.Graphomotor Design 2
+N.Graphomotor Design 3
+O.Graphomotor Design 4
+P.Construction Design 1
+Q.Construction Design 2
+R.Construction Design 3
+S.Construction Design 4
+T.Construction Design 5
+U.Construction Design 6
+V.Identities and Oddities
+W.Similarities
+X.Priming Inductive Reasoning
+Y.Differences
+Z.Similarties--Multiple Choice
+AA.Verbal Recall--Sentence Reading
+AB.Verbal Recall--Sentence Initiation
+AC.Orientation
+AF.Verbal Recall--Reading
+AG.Verbal Recall--Initiation
+AI.Verbal Recognition
+AK.Visual Memory
+Screening Exam Type
+AMSS Att
+AMSS Init/Pers
+AMSS Const
+AMSS Concept
+AMSS Memory
+AMSS Total
+AEMSS
+Total Misses
+Left Misses
+Right Misses
+Center Misses
+BDI-II
+Greyscales Task
+Foveated Reaching
+Non-Foveated Reaching
+LE1
+LE2
+LE3
+LE4
+RE1
+RE2
+RE3
+RE4
+Visual Fields
+viewexclude

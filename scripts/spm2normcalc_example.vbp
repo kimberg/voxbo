@@ -1,0 +1,23 @@
+
+script spm2_normcalc.vbp
+
+SEQUENCENAME "spm2 norm test"
+DIR /tmp
+PRIORITY 2
+LOGGING 1
+EMAIL nobody@nowhere.com
+globals xa=1
+globals ya=1
+globals za=1
+globals xf=3
+globals yf=3
+globals zf=3
+globals adir=/data/subject/Anatomy
+globals refvol=/usr/local/spm2/templates/T1.mnc
+globals paramfile=spm2_norm_params.mat
+globals anat=Anatomical.cub
+globals func=Functional.cub
+globals "bb_anat=[-79,-112,-51;79,76,86]"
+globals "bb_func=[-78,-111,-50;78,75,85]"
+globals "bb_disp=[-79,-112,-50;79,76,85]"
+globals email=$EMAIL

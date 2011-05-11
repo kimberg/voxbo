@@ -1,0 +1,58 @@
+
+# this is a test scorenames.txt file
+
+scan stub
+scan:type scan_type
+scan:date date
+scan:tech string
+scan:nicescan bool
+#scan:notes shortstring
+#scan:foobar stub
+#scan:foobar:xxx scan_type
+#scan:foobar:yyy scan_type
+#scan:foobar:zzz stub
+#scan:foobar:zzz:a shortstring
+#scan:foobar:zzz:b shortstring
+#scan:foobar:zzz:c shortstring
+scan:lesion stub
+scan:lesion:size integer
+scan:lesion:side side_type
+scan:lesion:location lesion_location
+
+
+
+demographics stub
+demographics:firstname shortstring
+demographics:lastname shortstring
+demographics:DOB date
+demographics:adefault shortstring default "your a default here"
+demographics:bdefault shortstring default "some b stuff"
+demographics:nodefault shortstring
+demographics:phonenumber shortstring
+demographics:sampletime time
+demographics:sampledate date
+demographics:sampledatetime datetime
+
+simpletest stub
+simpletest:datetime datetime repeating
+simpletest:combo scan_type
+simpletest:string string repeating
+simpletest:text text repeating
+simpletest:integer integer
+simpletest:float float
+simpletest:image image
+simpletest:brainimage brainimage
+
+
+
+forms stub forms
+forms:posttest repeating
+forms:posttest:notes_from_coordinator text default "please fill this out"
+forms:posttest:deadline date
+forms:posttest:experimenter string default "your name here"
+forms:posttest:date date
+forms:posttest:payment stub repeating
+forms:posttest:payment:for string
+forms:posttest:payment:amount string default "enter amount paid here"
+forms:posttest:tests test_type customizable repeating
+forms:posttest:payment_for_that string default "enter amount paid here"

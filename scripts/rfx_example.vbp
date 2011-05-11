@@ -1,0 +1,41 @@
+
+# for spm2norm
+script makerfx_spm2norm.vbp
+# for no normalization, use the following script line instead and
+# don't worry about voxel sizes, bounding box, or parameters
+# script makerfx_nonorm.vbp
+
+# data
+
+SEQUENCENAME "spm2 rfx test"
+DIR /data/my/rfx/directory
+PRIORITY 2
+LOGGING 1
+# voxel sizes for normalized data
+globals xf=3
+globals yf=3
+globals zf=3
+globals rfxdir=/data/my/rfx/directory
+globals paramfile=spm2_norm_params.mat
+globals func=Functional.cub
+globals "bb_func=[-78,-111,-50;78,75,85]"
+
+# the below variables specify the contrast.  if needed, they can be
+# specified on the FILE line (e.g., if need to vary the contrast by
+# subject)
+
+# contrast vector - the quotes are necessary if the contrast has multiple elements
+globals "contrast=1"
+# any scale supported by vbstatmap is okay
+globals scale=rb
+# root name for your tes file
+globals tesname=mytes
+
+# for the FILE lines, specify the glm directory and anatomy directory
+# for each subject.  each tag must be unique, and the alphabetic order
+# determines the order in your rfx tex file.  i know this is clumsy,
+# it will be fixed at some point.
+
+FILE tag=00 glmdir=/data/mystudy/myglm1 adir=/data/mystudy/data/sub1/Anatomy
+FILE tag=01 glmdir=/data/mystudy/myglm1 adir=/data/mystudy/data/sub1/Anatomy
+FILE tag=02 glmdir=/data/mystudy/myglm1 adir=/data/mystudy/data/sub1/Anatomy

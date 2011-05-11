@@ -1,0 +1,79 @@
+
+# If you're not running VoxBo in cluster mode, you can ignore this
+# file.  The defaults file sets variables and parameters that are used
+# by the scheduler, by the servers, and by voxq.
+
+# server -- nickname and fqdn for each server
+server server1 server1.myinstitution.edu
+
+# sendmail -- full path to sendmail or similar
+sendmail	/usr/sbin/sendmail
+
+# email address of sysadmin, in case of serious problem
+sysadmin	nobody@nowhere.com
+
+# login names of those who should have big privileges within voxbo
+superusers	root voxbo
+
+# how long should the scheduler sleep, in seconds, between checking the queue
+queuedelay 3
+
+# the server port is the port your server listens to (defaults to
+# 6004), as specified in your services file
+# serverport 6004
+
+# Each checkdir directive specifies a directory that *must* contain
+# something on each server for the machine to receive jobs.  This
+# helps insulate the scheduler from NFS problems and things like that.
+
+# checkdir /critical/dir1
+# checkdir /critical/dir2
+
+# Each jobtypes line specifies the name of a jobtype definition
+# directory from VOXBODIR/etc.  If you need machine-specific jobtypes
+# files (e.g., some executables have different paths on different
+# machines), you can do that here.  Just make sure each machine
+# handles all the jobtypes it might be sent.
+
+jobtypes jobtypes
+
+# username for the voxbo user, defaults to "voxbo"
+#voxbouser voxbo
+
+# benchmarks (undocumented, but pretty cool)
+benchmark realign 3600 cp /jet/admin/run.tes /tmp;realign /tmp/run.tes
+#benchmark lstmp 60 ls -lR /tmp
+
+# environment variables under which all jobs run
+
+setenv IDL_PATH=+/usr/local/rsi/idl/lib:/usr/local/VoxBo/pros:
+setenv IDL_UTILS=/usr/local/rsi/idl_utils
+#setenv LM_LICENSE_FILE=/usr/local/rsi/license/license.dat
+setenv PATH=/usr/local/VoxBo/bin:/bin:/usr/bin:/usr/local/bin
+
+setenv MATLABPATH=/usr/local/spm2
+
+# SPM2
+setenv SPM2_PATH=/usr/local/spm2
+setenv SPM2_MATLAB_CMD=/usr/local/bin/matlab12 -nodisplay -nojvm -c 27000@aleida.uphs.upenn.edu
+
+# SPM5
+setenv SPM5_PATH=/usr/local/spm5
+setenv SPM5_MATLAB_CMD=/usr/local/bin/matlab14sp3 -nodisplay -nojvm
+
+# FSL-related
+setenv FSLDIR=/usr/local/fsl
+setenv FSLOUTPUTTYPE=NIFTI_GZ
+setenv FSLMULTIFILEQUIT=TRUE
+setenv FSLTCLSH=/usr/local/fsl/bin/tclsh
+setenv FSLWISH=/usr/local/fsl/bin/wish
+setenv FSLGNUPLOT=/usr/local/fsl/bin/gnuplot
+setenv FSLDISPLAY=/usr/local/fsl/bin/display
+setenv FSLCONVERT=/usr/local/fsl/bin/convert
+setenv FSLBROWSER=$FSLDIR/tcl/fslwebbrowser
+
+# ITK-related
+setenv ITKBIN=/home/jasmuth/ITK/bin/
+
+# PERL-related
+setenv PERLLIB=/usr/local/lib/perl5/site_perl/5.8.8

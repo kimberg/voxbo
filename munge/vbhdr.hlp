@@ -1,0 +1,16 @@
+
+VoxBo vbhdr (v%1%)
+summary: perform various header-related manipulations
+usage:
+  vbhdr <flags> [<filename> ...]
+flags:
+  -s <hdrline>    set hdr line (replace or add)
+  -a <hdrline>    add hdrline
+  -d <hdr>        delete hdr
+  -c <src>        copy user headers
+  -o <orient>     change orientation
+  -x <x> <y> <z>  new origin
+  -z <x> <y> <z>  new voxel sizes
+  -t <TR>         new TR (in msec)
+  -h              show help
+  -v              print version

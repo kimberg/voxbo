@@ -1,0 +1,16 @@
+
+shortname makematk
+description Make the K matrix.
+invocation commandline
+
+argument
+ name=stem
+ argdesc=directory containing glm information
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command makematk -m $(stem)
+requires cpu

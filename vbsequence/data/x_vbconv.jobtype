@@ -1,0 +1,18 @@
+name=x_vbconv
+description=conversion job
+
+argument
+  name=infilename
+end
+argument
+  name=outfilename
+end
+argument
+  name=infiletype
+end
+argument
+  name=outfiletype
+end
+
+command vbconv $(infilename)[:$(infiletype)] $(outfilename)[:$(outfiletype)]
+

@@ -1,0 +1,1313 @@
+
+<chapter id="ch_admin">
+<title>Installation and Administration</title>
+
+<para>
+Dan Kimberg
+</para>
+
+<sect1><title>Overview and System Requirements</title>
+
+<para>
+VoxBo works great on our computers, and we hope it will work as well
+on yours.  This section is intended to help you through the
+installation process, and provide tips on other VoxBo-related system
+administration issues.  If you get stuck, your best bet is to post to
+the voxbo-general newsgroup.  If you get seriously stuck, and you're
+willing to let us log on to your machines, we can give you more
+personalized service.  We can't promise that level of service forever,
+but you, as an early adopter of VoxBo technology, deserve it!
+</para>
+
+<para>
+VoxBo can be configured either for cluster operation or for single
+user operation.  Cluster configuration requires root access for
+installation, but it gives you the power to do parallel processing
+across multiple machines.  Single user mode should be easy for anyone
+to install.
+</para>
+
+<para>
+In terms of system requirements, our goal has been to make VoxBo
+relatively accomodating.  For some thoughts on how to set up an image
+analysis cluster, visit <link linkend="misc_howto">here</link>.  Some
+more specific requirements are described below.
+</para>
+
+<sect2><title>Platforms</title>
+<para>
+As of release 1.8, VoxBo runs on Linux and OSX.  Solaris isn't
+supported at the moment, because no one has asked for it for a while,
+and we don't have any decent machines running Solaris.  If it's
+important to you, let us know.  We also don't support Windows,
+although a Cygwin version is mostly working.
+</para>
+
+<para>
+In terms of Linux distributions, the VoxBo distribution binaries are
+built on Redhat 7.3, using mostly static libraries, and should work on
+any relatively modern system.  Although our build box runs RedHat 7.3
+(actually under VMWare), our lab is currently a mix of Redhat9 and
+various Fedora Core releases.
+</para>
+</sect2>
+
+<sect2><title>Software Requirements</title>
+
+<para>
+As of release 1.8, VoxBo does still require the commercial package IDL
+for some bits of functionality.  We hope to be rid of this dependency
+soon.  IDL versions 5.x and later should be fine.
+</para>
+
+</sect2>
+</sect1>
+
+<sect1><title>Cluster Configuration</title>
+
+<para>
+Read this section only if you plan to install VoxBo on multiple
+machines so that they'll work together on the same jobs.  For single
+user installation, skip to the next section.
+</para>
+
+<para>
+A VoxBo cluster consists of a bunch of servers, each of which is
+willing to run VoxBo jobs.  One machine (perhaps one of the servers)
+should also serve as the scheduler &mdash; this means that in addition
+to running jobs when it can, the scheduler runs a scheduling process
+around the clock.  The scheduling process is a reasonably lightweight
+process that coordinates everything VoxBo does.
+</para>
+
+<para>
+VoxBo doesn't ship data to each machine that's running a job.  It
+assumes that any machine capable of running the job can access the
+data via the same path, typically via NFS.  So if the job specifies
+that a data file is in /data/mystudy/subject1, it needs to be
+accessible via that path on every machine.  As a practical matter,
+this is usually easy to arrange via symbolic links or careful
+decisions about mount points.
+</para>
+
+<para>
+The VoxBo configuration directory (by default /usr/local/VoxBo)
+contains configuration files, log files, templates, binaries, and a
+queue directory for pending jobs.  It's important that this directory
+be the same directory for all your machines.  Not just a copy, but the
+same actual directory.  If your machines don't already share
+/usr/local, then you can often do this by NFS mounting the VoxBo
+directory iteself, or by creating a symbolic link to an NFS mount.
+Note that if different machines require different executables (e.g.,
+if you're combining Linux, Solaris, and OSX machines in your cluster),
+then you probably want to install the binaries somewhere other the
+VoxBo/bin.  It's probably simplest to use /usr/local/bin.
+</para>
+
+<para>
+If your machines aren't connected by switched fast ethernet
+(100Base&ndash;T) or better, they should be.  VoxBo often needs to
+transfer large files back and forth among your machines.
+</para>
+
+<sect2><title>Cluster Installation Step-by-Step</title>
+
+<orderedlist>
+
+<listitem>
+<para>
+Download and unpack the VoxBo distribution into /usr/local/VoxBo.
+Make sure it's owned by user voxbo.
+</para>
+</listitem>
+
+<listitem>
+<para>
+On each VoxBo server machine, add vbsrvd to your inetd or xinetd
+configuration.  On most Linux systems, you can just copy
+VoxBo/misc/xinetd.voxbo to /etc/xinetd.d.  Also add vbsrvd to your
+/etc/services file.  Remember to restart inetd or xinetd if this is a
+new installation.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Edit the VoxBo/etc/defaults file.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Start the VoxBo scheduler by typing "voxbo" as user voxbo.
+</para>
+</listitem>
+
+<listitem>
+<para>
+If desired, add voxbo to the startup script in /etc/rc.d/rc.local.
+</para>
+</listitem>
+
+</orderedlist>
+</sect2>
+</sect1>
+
+
+
+<sect1><title>Single-User Configuration</title>
+
+<para>
+Read this section only if you plan to install VoxBo as a single user
+(e.g., for your personal use, or without root access).  If you want to
+install a VoxBo cluster so that multiple machines will work together
+on the same jobs, read the previous section.
+</para>
+
+<sect2><title>Step-by-Step</title>
+
+<para>
+The instructions below assume you're installing VoxBo for the first
+time.  If you have a previous VoxBo installation, we suggest you
+rename your old VoxBo directory, proceed as below, and then migrate
+your old settings.
+</para>
+
+<orderedlist>
+
+<listitem>
+<para>
+Download and unpack the VoxBo distribution into your home directory.
+The directory will be called "VoxBo", but we often rename it ".voxbo".
+</para>
+</listitem>
+
+<listitem>
+<para>
+Add the binary directory to your path.  This is typically done by
+editing a shell config file in your home directory.  In bash, you
+might do the following:
+</para>
+<para>
+PATH=$PATH:$HOME/VoxBo/bin
+</para>
+</listitem>
+
+</orderedlist>
+
+</sect2>
+</sect1>
+
+
+<sect2>
+<title>A VoxBo directory</title>
+
+<para>
+<emphasis>A VoxBo Directory</emphasis> &mdash; VoxBo needs to live
+somewhere.  We typically put it in /usr/local/VoxBo, and for
+conciseness we will assume that's where yours is too.
+</para>
+
+<para>
+<emphasis>A VoxBo user account</emphasis> &mdash;
+If you're running VoxBo in a multi&mdash;user environment, we recommend that VoxBo be
+given its own account, under which to run the scheduler and servers. This user
+will own the configuration and sequence files. If this is inconvenient, you can
+certainly use an existing (non&mdash;root) account, but note that the recommended
+security arrangement indirectly gives this user the equivalent of superuser
+access. The remainder of this chapter assumes that you are going to use the user
+"voxbo" for this purpose.
+</para>
+</sect2>
+</sect1>
+
+
+<sect1>
+<title>The VoxBo Distribution</title>
+
+<para>
+The VoxBo distribution includes a main distribution as well as a system&mdash;
+specific
+binaries (or you can compile your own).  Everything gets unpacked into a
+directory called VoxBo.  Within that directory, here are the subdirectories
+you'll find:
+</para>
+
+<table>
+<title>Directories and Contents</title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry>Directory Name</entry>
+<entry>Contents</entry>
+</row>
+</thead>
+<tbody>
+<row><entry>pros</entry><entry><emphasis>.pro files</emphasis> &mdash; the 
+source
+for IDL components <emphasis>IDL component startup scripts (vs and
+vsb)</emphasis></entry></row>
+<row><entry>etc</entry><entry><emphasis>defaults</emphasis> &mdash; sets system
+defaults <emphasis>job types&mdash;linux or jobtypes&mdash;solaris</emphasis> &mdash;
+ defines
+voxbo job types <emphasis>.log files</emphasis> &mdash; log files</entry></row>
+<row><entry>elements</entry><entry><emphasis>logos</emphasis> &mdash; a tiff file
+depiction of the noble voxbo throne <emphasis>templates</emphasis> &mdash; brain
+volumes used for normalization <emphasis>noisemodels</emphasis> &mdash; parameters
+that define 1/f curves <emphasis>filters</emphasis> &mdash; representations of
+hemodynamic responses</entry></row>
+<row><entry>queue</entry><entry><emphasis>.entry files</emphasis> &mdash; lists of
+jobs running or waiting to run <emphasis>host status files</emphasis> &mdash;
+information about the status of each server <emphasis>vb.num</emphasis> &mdash; how
+many voxbo jobs have been run so far?</entry></row>
+<row><entry>src</entry><entry><emphasis>source code</emphasis> &mdash; source for
+the c++ programs</entry></row>
+<row><entry>lib</entry><entry><emphasis>libraries</emphasis> &mdash; runtime
+libraries</entry></row>
+<row><entry>docs</entry><entry><emphasis>the voxbo
+manual</emphasis></entry></row
+<row><entry>bin&mdash;Linux and
+bin&mdash;SunOS</entry><entry><emphasis>executables</emphasis> &mdash; if you 
+choose to build
+your own binaries, this directory will be empty</entry></row>
+</tbody>
+</tgroup>
+</table>
+
+</sect1>
+
+
+<sect1>
+<title>Installing VoxBo for the First Time</title>
+
+<para>
+This section describes roughly what you need to do to install VoxBo for the
+first time. Some of this will require root access, and may be fairly involved if
+you need to compile anything. At this point, we remind you once again that VoxBo
+is entirely unsupported software, so you are on your own trying to get it to
+work. It can be made to work outside of our lab, and it becomes more portable
+with each new release, but we can't guarantee you will be able to make it work
+in yours. In case things go wrong, it will help if you're reasonably
+well&mdash;versed in UNIX system things, and it will help even more if you can do a
+little programming. Of course, if you do find an obvious bug or something
+clearly not portable, please let us know.
+</para>
+
+<para>
+We assume that if you want to use the IDL&mdash;based components, you already have or
+plan to install IDL on your system. For non&mdash;IDL software, if you can't use the
+precompiled executables, you will also need a c++ compiler and the octave and
+gtk libraries in order to build your own. A later section has the details.
+</para>
+
+<para>
+As the VoxBo binaries link these libraries dynamically, you will need to make
+sure they can be found.  Generally it's easiest to make sure the appropriate
+path is in the executable by playing with the &mdash;L lines in the makefile.  A
+useful step under Linux is adding the appropriate directories to /etc/ld.so.conf
+and running ldconfig.  Under Solaris, you may have to resort to adding them to a
+default LD_LIBRARY_PATH environment variable.  Or you can just install the
+libraries somewhere you know they'll be found, like /usr/local/lib.
+</para>
+
+<para>
+Once you have everything you need, here's how to proceed. Bear in mind that some
+of the details of the following procedure will probably have to be adapted
+slightly for your installation. We assume below that you have a user named voxbo
+who lives in a group called <emphasis>users</emphasis>. This is not strictly
+necessary, but you will need to designate some user the main voxbo user.
+</para>
+
+<para>
+Now you're ready to actually get busy installing stuff. Since these steps can be
+described more concisely by listing typical command lines, that's what I'll do.
+</para>
+
+<table>
+<title>  </title>
+<tgroup cols="2">
+<thead>
+<row><entry> </entry>
+<entry> </entry>
+</row>
+</thead>
+<tbody>
+<row><entry><emphasis>perform the following steps as
+root</emphasis></entry><entry>  </entry></row>
+<row><entry><literal>mkdir /usr/local/VoxBo</literal>
+</entry><entry>create the VoxBo dir</entry></row>
+<row><entry><programlisting>chown voxbo.users
+/usr/local/VoxBo</programlisting></entry><entry>give it to user
+voxbo</entry></row>
+<row><entry><emphasis>perform the following steps as user
+voxbo</emphasis></entry><entry>  </entry></row>
+<row><entry><programlisting>gunzip
+/tmp/*.gz</programlisting></entry><entry>unzip the distribution
+files</entry></row>
+<row><entry><programlisting>cd
+/usr/local/VoxBo</programlisting></entry><entry>or wherever you
+like</entry></row>
+<row><entry><programlisting>tar xf
+/tmp/voxbo.tar</programlisting></entry><entry>unpack the
+distribution</entry></row>
+<row><entry><programlisting>tar xf
+/tmp/voxbo&mdash;linux&mdash;bin.tar</programlisting></entry><entry>unpack
+ binaries if
+desired</entry></row>
+<row><entry><emphasis>if you're building your own
+binaries</emphasis></entry><entry> </entry></row>
+<row><entry><programlisting>cd /usr/local/VoxBo/src
+</programlisting></entry><entry>for the main binaries</entry></row>
+<row><entry><programlisting>emacs Makefile
+*/Makefile</programlisting></entry><entry>check all Makefiles</entry></row>
+<row><entry><programlisting>make</programlisting></entry><entry>make
+it</entry></row>
+<row><entry><emphasis>install your own or the pre&mdash;built
+binaries</emphasis></entry><entry> </entry></row>
+<row><entry><programlisting>cd
+/usr/local/VoxBo/src</programlisting></entry><entry>if you aren't there
+already</entry></row>
+<row><entry><programlisting>make
+install</programlisting></entry><entry>install binaries</entry></row>
+<row><entry><emphasis>on each voxbo server, as root</emphasis></entry><entry>
+</entry></row>
+<row><entry><programlisting>emacs
+/etc/inetd.conf</programlisting></entry><entry>add vbsrvd, see later
+section</entry></row>
+<row><entry><programlisting>emacs
+/etc/services</programlisting></entry><entry>add a service called
+vbsrvd</entry></row>
+<row><entry><programlisting>killall &mdash;HUP
+inetd</programlisting></entry><entry>tell inetd to re&mdash;read
+config</entry></row>
+<row><entry><emphasis>on the machine where scheduler will run, as user
+voxbo</emphasis></entry><entry> </entry></row>
+<row><entry><programlisting>emacs etc/defaults</programlisting></entry><entry>
+configure VoxBo</entry></row>
+<row><entry><programlisting>voxbo</programlisting></entry><entry>start the
+scheduler</entry></row>
+<row><entry><emphasis>as root</emphasis></entry><entry> </entry></row>
+<row><entry><programlisting>emacs
+/etc/rc.d/rc.local</programlisting></entry><entry>add voxbo to the startup
+script</entry></row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+The following steps might also be helpful.
+</para>
+
+<itemizedlist>
+<listitem><para>If the software isn't going to be installed in
+/usr/local/VoxBo/, create a file called /etc/voxbo.conf, and indicate the root
+directory there (see "Configuring VoxBo defaults" below).</para></listitem>
+<listitem><para>You will probably want to point each user's path at
+[voxbodir]/bin&mdash;Linux or bin&mdash;SunOS, so that the user voxbo components
+ can be
+found. Better yet, create links in /usr/local/bin (sorry, our install script
+doesn't do this yet).</para></listitem>
+<listitem><para>This is the basic outline of what you'll need.  Some of these
+steps are explained in a bit more detail below.</para></listitem>
+</itemizedlist>
+
+</sect1>
+
+
+<sect1>
+<title>Updating VoxBo</title>
+
+<para>
+If you're updating an existing VoxBo installation from a more recent
+distribution, your easiest path will probably be to rename your old VoxBo
+hierarchy, install the new one clean, and migrate your old settings (mainly the
+defaults file). In other words, something like:
+</para>
+
+<table>
+<title> </title>
+<tgroup cols="2">
+<thead>
+<row>
+<entry> </entry>
+<entry> </entry>
+</row>
+</thead>
+<tbody>
+<row><entry><emphasis>as user voxbo</emphasis></entry><entry>
+</entry></row>
+<row><entry><programlisting>gunzip *.gz</programlisting></entry><entry> unzip
+the distribution</entry></row>
+<row><entry><programlisting>voxq &mdash;d</programlisting></entry><entry>
+bring down
+scheduler</entry></row>
+<row><entry><programlisting>voxq &mdash;d</programlisting></entry><entry>should get
+error message</entry></row>
+<row><entry><emphasis>as root for a second</emphasis></entry><entry>
+</entry></row>
+<row><entry><programlisting>cd /usr/local</programlisting></entry><entry>or
+wherever you like</entry></row>
+<row><entry><programlisting>mv VoxBo oldVoxBo</programlisting></entry><entry>
+back up old distribution</entry></row>
+<row><entry><programlisting>mkdir VoxBo</programlisting></entry><entry>make
+the new dir</entry></row>
+<row><entry><programlisting>chown voxbo
+VoxBo</programlisting></entry><entry>give it to voxbo</entry></row>
+<row><entry><emphasis>back to user voxbo</emphasis></entry><entry>
+</entry></row>
+<row><entry><programlisting>cd
+/usr/local/VoxBo</programlisting></entry><entry> </entry></row>
+<row><entry><programlisting>tar xf
+/tmp/voxbo.tar</programlisting></entry><entry>unpack new
+distribution</entry></row>
+<row><entry><programlisting>tar xf
+/tmp/voxbo&mdash;linux&mdash;bin.tar</programlisting></entry><entry>unpack
+ binaries if
+desired</entry></row>
+<row><entry><programlisting>emacs
+etc/defaults</programlisting></entry><entry>migrate old settings</entry></row>
+<row><entry><programlisting>rm &mdash;rf
+../oldVoxBo</programlisting></entry><entry>do this a few weeks
+later!</entry></row>
+<row><entry><emphasis>if you want to build your own
+binaries</emphasis></entry><entry> </entry></row>
+<row><entry><programlisting>cd /usr/local/VoxBo/src
+</programlisting></entry><entry>for the main binaries</entry></row>
+<row><entry><programlisting>emacs
+*/Makefile</programlisting></entry><entry>check dirs and such</entry></row>
+<row><entry><programlisting>make</programlisting></entry><entry>make
+it</entry></row>
+<row><entry><emphasis>now install the binaries</emphasis></entry><entry>
+</entry></row>
+<row><entry><programlisting>cd
+/usr/local/VoxBo/src</programlisting></entry><entry>get in
+position</entry></row>
+<row><entry><programlisting>make
+install</programlisting></entry><entry>install everything</entry></row>
+<row><entry><emphasis>as root, if the location of vbsrvd has
+changed</emphasis></entry><entry> </entry></row>
+<row><entry><programlisting>emacs
+/etc/inetd.conf</programlisting></entry><entry>change path to
+vbsrvd</entry></row>
+<row><entry><programlisting>killall &mdash;HUP
+inetd</programlisting></entry><entry>tell inetd to re&mdash;read config</entry></row>
+<row><entry><emphasis>log on to machine where scheduler
+runs</emphasis></entry><entry> </entry></row>
+<row><entry><programlisting>voxbo</programlisting></entry><entry>restart
+scheduler</entry></row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+Of course you should only do all this when no jobs are running or pending,
+especially since the job file format can change between releases.
+</para>
+
+<para>
+Note that if <emphasis>vbsrvd</emphasis> is set to run as root (in inetd.conf),
+then users will need to be aware that all their data files need to be
+read/writeable by the user submitting the sequence, because all sequences will
+run under that user. If vbsrvd is set to run as some other user (e.g., voxbo),
+then that user must have the right permissions.
+</para>
+
+</sect1>
+
+
+<sect1>
+<title>Configuring VoxBo Defaults</title>
+
+<para>
+<emphasis role="green">This section is a bit out of date.  Read over the
+ next few paragraphs,
+and then refer to the sample defaults file included with the VoxBo distribution,
+which is reasonably well commented.</emphasis>
+</para>
+
+<para>
+VoxBo components read three different files to configure themselves, in this
+order:
+</para>
+
+<para>
+<programlisting>
+/etc/voxbo.conf
+[voxbodir]/etc/defaults
+[homedir]/.voxborc
+</programlisting>
+</para>
+
+<para>
+/etc/voxbo.conf is the only one of the three that is in a fixed location and is
+typically used for machine&mdash;specific configuration, or to override the default
+locations of the defaults file. So if you require any machine&mdash;specific
+configuration (e.g., environment variables) or if VoxBo is in a nonstandard
+location, you must use this file.
+</para>
+
+<para>
+[voxbodir]/etc/defaults should contain your site&mdash;specific configuration options.
+Note that &lt;voxbodir&gt; is either /usr/local/VoxBo/ (by default) or the rootdir
+specified in the file /etc/voxbo.conf.
+</para>
+
+<para>
+[homedir]/.voxborc is the configuration file specific to each user. If neither of
+the first two files can be found, VoxBo will only run in standalone mode, and
+must get all of its configuration options from the user's .voxborc file. If
+either of the first two files is found, users cannot specify system variables in
+their .voxborc files.
+</para>
+
+<para>
+Each file may contain a series of options, each on a single line. User options
+(labelled "user" below), like email address, may be specified in the system
+files, in which case they will serve as defaults.
+</para>
+
+<para>
+<emphasis>VoxBo system directory (system)</emphasis>
+</para>
+
+<para>
+With this option, you can indicate the location of the VoxBo hierarchy. This is
+only necessary if your files are not in the default location, /usr/local/VoxBo/.
+If you do need it, this option must be specified in the /etc/voxbo.conf file, as
+finding the rest of the software depends on it.
+<programlisting>rootdir /usr/local/VoxBo/</programlisting>
+</para>
+
+<para>
+<emphasis>Environmental variables &lt;system&gt;</emphasis>
+</para>
+
+<para>
+With this option, you can specify environment variables that will be set for
+scheduled VoxBo jobs. You may need to specify IDL&mdash;related environment variables
+(e.g., IDL_PATH) in this way if things are not in the usual places. Note that any
+machine&mdash;specific environment variables must be specified in /etc/voxbo.conf on
+each machine, as the other two configuration files should be the same for all
+your machines. We may find a more elegant way to do this in the future. Or we may
+convince ourselves that this is very elegant. Here's what might be in a typical
+defaults file:
+</para>
+
+<para>
+<programlisting>
+setenv  IDL_DIR=/pkg/rsi/idl_4
+setenv  IDL_STARTUP=/pkg/rsi/idl_4/startup
+setenv  IDL_PATH=/pkg/VoxBo/pros:+/pkg/rsi/idl_4/lib:
+</programlisting>
+</para>
+
+<para>
+<emphasis>Default directory (user)</emphasis>
+</para>
+
+<para>
+With this option you can specify the top&mdash;level directory where you tend to keep
+your files. This is just a convenience so that you can minimize how much you have
+to surf around your filesystem to find your files.
+<programlisting>defaultdir /data/jones/</programlisting>
+</para>
+
+<para>
+<emphasis>Email address to mail job results (user)</emphasis>
+</para>
+
+<para>
+With this option you can specify the email address to which VoxBo will send mail
+when your jobs are done or cause errors.
+<programlisting>email nobody@bitbucket.com</programlisting>
+</para>
+
+<para>
+<emphasis>VoxBo servers (system)</emphasis>
+</para>
+
+<para>
+The VoxBo scheduler needs to know what machines it should consider using as
+servers. Information about each host is in a "server" section, something like the
+following:
+</para>
+
+<para>
+<programlisting>
+server myserver
+hostname myserver.myuniversity.edu
+speed 500
+avail 1&mdash;5 8&mdash;17 2 2  ;; pri 2 weekdays
+avail 1&mdash;5 18&mdash;7 1 2  ;; pri 1 weeknights
+avail 6&mdash;0 0&mdash;23 1 2  ;; pri 1 weekends
+services all
+resource license&mdash;idl /usr/local/VoxBo/bin/idlfree
+depends idl license&mdash;idl
+endserver
+</programlisting>
+</para>
+
+<para>
+The server line just specifies an informal name for the server.
+</para>
+
+<para>
+The hostname line should specify the fully qualified domain name for the machine.
+</para>
+
+<para>
+The speed line is currently unused, but in the future may figure into the
+scheduling algorithm.  Using the CPU clock rate is reasonable.
+</para>
+
+<para>
+Each avail line specifies when the server provides some level of availability,
+and requires four fields.  The first field is a range of days (which can be from
+0 to 7, and can wrap around).  The second field is a range of hours (from 0 to 23
+and can wrap).  The third field is a priority threshold.  Jobs must meet this
+priority threshold to run on this machine.  The final field is the number of CPUs
+available.  Using multiple avail lines, you can specify different levels of
+availability for different times.
+</para>
+
+<para>
+The services line indicates which jobtypes the machine can handle.  These are the
+same jobtypes specified in the "jobtypes" file that also lives in VOXBODIR/etc/. 
+Use "all" to indicate that any job can be handled.
+</para>
+
+<para>
+The resource line describes a resource (e.g., a license) provided by this
+machine.  It takes an arbitrary name and a full path to an executable that tests
+that resource.  The executable can be a c program, perl script, or whatever.  It
+just has to return as its exit code an integer indicating the number of processes
+that should be able to take advantage of that resource.  So if four IDL licenses
+are left, it should return 4.
+</para>
+
+<para>
+The depends line describes a resource dependency.  The line indicates a type of
+resource (e.g., "idl") and a specific resource to which it's tied.  So in the
+above example, jobs that require idl will depend on the resource license&mdash;idl. 
+Which jobs depend on which resource types is defined in the "jobtypes" file.
+</para>
+
+<para>
+Note that in the above example, the same machine provides the resource and
+depends on it to run idl jobs.  This isn't always the case.  You might have a
+central license server, in which case only one server would have the resource
+line, but all the machines would have a depends line.  If that central license
+server isn't hosted on one of your machines, no problem &mdash; just pick one from
+which the availability of the resource can be tested.  If each machine has its
+own licenses, you might have resource lines for all your servers, and you'd want
+to name them something like idl1, idl2, etc.  On the other hand, if you have a
+bottomless license, you might not need to worry about this whole mechanism, at
+least not for IDL.
+</para>
+
+<para>
+And that's it.  Make sure you end each server section with the "endserver" line,
+or nothing will work.
+</para>
+
+<para>
+<emphasis>Email address of the sysadmin (system)</emphasis>
+</para>
+
+<para>
+Occasionally, VoxBo needs to let the system administrator know about some unusual
+or unexpected occurrence. Here's how you specify the email address to use for
+this email.
+<programlisting>sysadmin root@hostname.edu</programlisting>
+</para>
+
+<para>
+<emphasis>Userids of privileged users (system)</emphasis>
+</para>
+
+<para>
+Only certain users can modify jobs that don't belong to them, tell the scheduler
+to shut down, etc. Use the 'superusers' configuration to indicate which users
+should have these powers. These users are like superusers just within VoxBo, this
+option doesn't affect their privileges otherwise.
+<programlisting>superusers root voxbo kimberg aguirre</programlisting>
+</para>
+
+</sect1>
+
+
+<sect1>
+<title>Configuring inetd</title>
+<para>The voxbo server <emphasis>vbsrvd</emphasis> is invoked via the
+super&mdash;daemon <emphasis>inetd</emphasis> or one of its descendants like
+<emphasis>xinetd</emphasis>.  If you haven't used it before, you should be able
+to find most of what you need to know about configuring inetd just by typing
+"man inetd", "man inetd.conf", and "man services". But here are a few
+details on how we set up our servers.
+</para>
+
+<para>
+First, note that the VoxBo server <emphasis>vbsrvd</emphasis> likes to exist on
+port 6004. This was probably not a great selection, although it's configurable in
+the /usr/local/VoxBo/etc/defaults file.
+</para>
+
+<para>
+Configuring inetd to run the server requires three steps, for which you will need
+superuser privileges. These steps must be performed on each machine that is to be
+used as a server (unless you have a more automatic way of configuring things).
+</para>
+
+<para>
+First, you have to add vbsrvd to the services file in your system's /etc
+directory (or possibly /etc/inet), to indicate what port it uses. Here's what
+the line looks like in our services file:
+<programlisting>vbsrvd          6004/tcp                        #
+VoxBo</programlisting>
+</para>
+
+<para>
+Second, you have to add vbsrvd to the inetd.conf file in the same directory. Note
+that this line needs to indicate the account under which the server will run, and
+under which therefore all VoxBo analyses will run. Here's the line we added to
+ours (minus the comments, but you should probably comment yours too):
+</para>
+
+<para>
+<programlisting>vbsrvd stream tcp nowait root /usr/sbin/tcpd
+/usr/local/VoxBo/bin&mdash;</programlisting>
+<programlisting>Linux/vbsrvd</programlisting>
+</para>
+
+<para>
+This format invokes tcp&mdash;wrappers, which we strongly recommend.  If you don't want
+to do it that way, the line might look more like:
+<programlisting>vbsrvd stream tcp nowait root /usr/local/VoxBo/bin&mdash;Linux/vbsrvd
+vbsrvd</programlisting>
+</para>
+
+<para>
+We run ours under root so that VoxBo can impersonate the user who submitted each
+job. If you don't want to do this, the account you use here must have appropriate
+access to every file that any job needs to read or write.
+</para>
+
+<para>
+Once this is all set up, you need to ask the inetd server to re&mdash;read it's
+configuration files. Usually this involves sending the running server a SIGHUP.
+The UNIX kill command can probably do this for you (e.g., kill &mdash;HUP [pid]), or
+easier yet killall (e.g., killall &mdash;HUP inetd).
+</para>
+
+<para>
+In order to make sure everything's working, try voxq &mdash;c. If inetd is configured
+properly and your defaults file is set up correctly, you should see all your
+hosts listed.
+</para>
+
+<para>
+If you use <emphasis>xinetd</emphasis> instead of <emphasis>inetd</emphasis>, it
+should be obvious how to set it up by analogy.
+</para>
+
+</sect1>
+
+
+<sect1>
+<title>Getting Your Data Readable in VoxBo</title>
+
+<para>
+VoxBo processes data in its own file formats, chiefly TES files for
+four&mdash;dimensional data, and CUB files for three&mdash;dimensional data. This file format
+is described in detail in Appendix B. Your scanner and the pulse sequences you
+use produce data in their own file format. Since that file format is arbitrary,
+and may be proprietary, it is your responsibility to convert your data files into
+a format readable by VoxBo. In the future, we may include file format translators
+for a variety of scanners. If you happen to have the details of a file format
+you'd like us to include (and you can legally share these details), please send
+email to one of the addresses listed near the top of this manual. But for the
+moment, getting your data into VoxBo is your responsibility.
+</para>
+
+<para>
+In practice, this can be fairly simple. If you can get your data into IDL in the
+form of a four&mdash;dimensional array (time, x, y, z), you can save the data as a TES
+file using the <emphasis role="red">WriteFile</emphasis> command. It should only
+take a minimum of hacking to get your code patched into the conversion sequence.
+</para>
+
+<para>
+Note that all the VoxBo file formats are big&mdash;endian, meaning the most significant
+bytes come first. If you're running on a little&mdash;endian machine (e.g., an
+intel&mdash;based linux machine), make sure you write out all your integers
+byte&mdash;swapped, or nothing will work right. WriteFile takes care of this
+automatically. For more information on the endian issue, see Appendix B.
+</para>
+
+</sect1>
+
+
+<sect1>
+<title>gcc, gtk, octave, and the VoxBo binaries</title>
+
+<para>
+We used gcc 2.95.5 to compile the current binaries, although it's possible that
+other c++ compilers will work as well. If you want to get a copy of gcc, you can
+download it from
+<programlisting>http://gcc.gnu.org/</programlisting>
+</para>
+
+<para>
+We also use GNU development tools almost exclusively. We do this because they are
+free, and we like free things. They also work great for our purposes. To the
+extent that your tools are dissimilar from gcc, GNU make, etc., you will probably
+have to tweak the makefiles a bit, and possibly the source code.  If you're
+running under Linux, you should have few problems.
+</para>
+
+<para>
+There are a couple of libraries you will need to compile the code.  The octave
+library is used by the ported motion correction and normalization routines.  It's
+available from:
+
+<programlisting>http://www.che.wisc.edu/octave/</programlisting>
+</para>
+
+<para>
+octave is actually a free replacement for MATLAB, you might like to check it out.
+</para>
+
+<para>
+In order to compile <emphasis>voxprep</emphasis> and
+<emphasis>voxsurf</emphasis>, you will need the gtk library and header files,
+available at:
+<programlisting>http://www.gtk.org/</programlisting>
+</para>
+
+<para>
+In principle you should be able to compile both libraries with little difficulty
+(we've had good luck), but we can't guarantee that they'll work everywhere.
+We have noticed that the config.guess script (called by the configure script) can
+have trouble under linux with gcc 2.95.2 installed. If you run into trouble, you
+can specify the host type manually. The following worked for us:
+<programlisting>./configure i686&mdash;linux</programlisting>
+</para>
+
+<para>
+You need gtk+ 1.2.x &mdash; older versions will not work so well. With octave, we
+used to recommend that you just build the libraries you need, but it may be
+easiest to build the entire thing. As of this writing, we believe that versions
+2.0.16 and 2.1.31 (the latest stable and experimental versions respectively) will
+work fine. Both of these packages are freely redistributable. We will try to keep
+copies on our ftp site.
+</para>
+
+<para>
+The VoxBo binaries have now expanded to five or so subdirectories under src. 
+Once the libraries are in place, compiling the VoxBo binaries should be
+relatively straightforward, and shouldn't take more than a few minutes (just a
+few minutes on an antique 300MHz PII Linux machine, maybe a minute on more modern
+machines).
+</para>
+
+<para>
+Check over the included (and very simple) makefiles for anything that won't
+work on your system, especially the path for the VoxBo directory and the list of
+library directories to search. Type <emphasis role="blue">make</emphasis>, and if
+all works well you should have all the binaries in short order. If not, you may
+have to do some programming. Once you have the binaries, <emphasis
+role="blue">make install</emphasis> should put them in the right place with the
+right permissions.  Make sure to perform this latter step as user voxbo.
+</para>
+
+<para>
+At present, the only types of systems we're reasonably sure it can be made to
+work on are Linux (RedHat 6.x or later, kernels 2.0 through 2.4) and Solaris
+2.5.1 through 8. But we've made an effort to keep things simple and to be
+moderately POSIX compliant, so we suspect it will work just fine on a variety of
+UNIX&mdash;like systems, present and future. Please let us know if you're successful
+or compiling it on any other system, especially if you would be willing to
+provide precompiled binaries. Also please let us know about any unusual
+difficulties or incompatibilities.
+</para>
+
+</sect1>
+
+
+<sect1>
+<title>Starting and Re&mdash;starting the Scheduler</title>
+
+<para>
+The central executive component of VoxBo, so to speak, is <emphasis>voxbo</>, the scheduler.
+It can run under the account of any user listed as a superuser in the system
+configuration files, as long as that user has write access to the VoxBo hierarchy
+(if you want it always to run as a specific user, make sure that user owns the
+executable and set the setuid permission bit manually). It can be started just by
+typing "voxbo" at the command line. The scheduler will detach itself and run
+in the background like a daemon process. Note that only one scheduler can run at
+a time. If you try to start it and it&mdash;s already running, it will look like it
+started, but you'll see a message in the voxbo.log file. It doesn't really
+matter what machine it runs on &mdash; the scheduler imposes a pretty minimal load.
+</para>
+
+<para>
+Once you're confident in your VoxBo installation, you may want to add it to
+your system startup scripts so that the scheduler will always get started on
+reboot.  In our system, we took the easy way out and tacked it onto
+/etc/rc.d/init.local.
+</para>
+
+<para>
+You can cause a running voxbo scheduler to die by typing voxq &mdash;d. Ordinarily, you
+should let the scheduler run forever, and use voxq commands to restrict the
+queueing of jobs. We have had no problems letting it run for months on end.
+However, voxq &mdash;d is useful if you want to install a new version or if something
+has gone horribly wrong. Also, there's currently no better way to get it to
+re&mdash;read its configuration files (just our oversight, it's not a technical
+challenge). At some future point, we will hack it to restart itself or
+re&mdash;configure when appropriate.
+</para>
+
+</sect1>
+
+
+<sect1>
+<title>NFS Configuration</title>
+
+<para>
+VoxBo currently depends heavily on NFS, or whatever network filesystem you have. 
+We hope to change that in the future, but in the meantime, NFS can cause
+tremendous headaches if it's not working right.  Alas, this is frequently the
+case.  In brief, here are our recommendations under Linux.
+</para>
+
+<itemizedlist>
+<listitem><para>Make sure you're running kernel 2.2.18 or
+newer.</para></listitem>
+<listitem><para>Make sure support for NFSv3 is compiled into the kernel on
+your file server.  You can check this with rpcinfo &mdash;p.</para></listitem>
+<listitem><para>Make sure all your clients have a recent version of mount,
+which is included in the util&mdash;linux package, and all your machines should have
+the latest nfs&mdash;utils.</para></listitem>
+<listitem><para>Make sure the system clocks of your machines never get more
+then a second or so out of sync.  Use xntpd or something equivalent to do
+this.</para></listitem>
+<listitem><para>Make sure the nfs lock daemon is running on your
+server</para></listitem>
+</itemizedlist>
+
+</sect1>
+
+
+<sect1>
+<title>Security and Permissions</title>
+
+<para>
+Prior to the March 1999 release of VoxBo, the system was a big gaping security
+hole. We didn't care, we trusted all of our users, and didn't think anyone
+would bother breaking in. While these things are still basically true, that's no
+excuse for writing bad software. So more recent versions of the software have
+made some strides in security. This section is a brief synopsis of the
+security&mdash;related issues in installing VoxBo. Although ultimately, you are
+responsible for making sure things are installed securely (if that's even
+possible, we make no guarantees), here we describe the recommended arrangement.
+</para>
+
+<para>
+First, a brief note on set&mdash;user&mdash;id (setuid) programs, for those who haven't run
+into this before. You are probably already familiar with file permissions like
+read, write, and execute. The setuid bit is less often seen (for good reason),
+but it's a nifty solution to all kinds of security problems. Normally, when you
+run a program, that program has <emphasis>your</emphasis> level of access. When
+you run a setuid program, that program has <emphasis>its owner's</emphasis> level
+of access. For example, consider the program <emphasis>passwd</emphasis>, which
+is used to change your password. Everyone needs to be able to run it. But the
+program needs to have access to the password file, which should be protected. The
+solution is to make passwd a setuid program owned by root. When you run it, the
+program has root permissions. But the program is written so that it will only
+allow you to change your own password.
+</para>
+
+<para>
+Programs with the setuid bit set let users do all kinds of things they would
+ordinarily have to get the sysadmin to do. Alas, a poorly written setuid program
+may also introduce serious security problems. If a user figures out a way to
+trick a setuid program into doing something other than what it was originally
+intended to do, big security holes can result. Software developers are cautioned
+against writing setuid programs except where absolutely necessary. We think
+it's the appropriate solution in this case (although we&rsquo;re always glad to
+entertain suggestions for improvements, and setgid is certainly a valid
+alternative).
+</para>
+
+<para>
+FYI, if you want to set the setuid bit for a program you own, you can do a chmod
+u+s &lt;filename&gt;. Then, any user who runs that program will be able to do anything
+with that program that you could, more or less. (Generally speaking, unless you
+really know what you're doing, never do this.) But if you do, and you run
+<emphasis role="blue">ls &mdash;l</emphasis>, it will look something like:
+</para>
+
+<para>
+<programlisting>r&mdash;sr&mdash;xr&mdash;x</programlisting>
+</para>
+
+<para>
+Back to VoxBo. In our context, setuid is used to maintain the security of the
+sequence queue while at the same time allowing users to submit and modify
+sequences. For this reason, the recommended security arrangement is that the
+queue directory should be owned by a single trusted user and writeable solely by
+that user (we use a special "voxbo" user account), but readable by everyone.
+Any user actions that need to modify the files in these directories will be via
+setuid programs (although at some future point we may go to a kind of
+authenaticating server model).
+</para>
+
+<para>
+The two setuid programs we include, that manipulate the queue, are
+<emphasis>voxq</emphasis> and <emphasis>vbsubmit</emphasis>. Both should be
+owned by the voxbo user. The makefile in the voxbo source directory sets the
+setuid permission bit for voxq and vbsubmit when it installs them (even if you
+use the precompiled binaries, as long as you type "make install").
+</para>
+
+<para>
+<emphasis>voxprep</emphasis> and <emphasis>voxanalyze</emphasis> (the only two
+components that actually create job sequences) do all their submitting via the
+vbsubmit executable. Therefore, they do not need any special permissions.
+</para>
+
+<para>
+<emphasis>voxbo</emphasis> (the scheduler) creates files with umask 077, i.e.,
+only read/writeable by the user who created them. Since it creates files that
+the user voxbo should be able to modify, it should always be invoked by that
+user.
+</para>
+
+<para>
+<emphasis>vbsrvd</emphasis> (the server) gets run via the inetd daemon. Although
+vbsrvd needs to access voxbo files, it also likes to act like the various users
+who submit jobs. For this reason, we have vbsrvd run as root. If you don't want
+to run it as root, you can also run it as user voxbo. The only difference is
+that jobs will run under that user, so all the data files and directories
+involved in each job need to be read/writeable by voxbo, and the users who
+really own those data files will need to be able to read/write the files that
+voxbo creates (which usually means they should be in the same group).
+</para>
+
+<para>
+Note that it's fairly easy to change things to match your security model. If
+you're more worried about having a setuid program than about having users be
+able to freely modify each others' jobs, don't set the setuid bit, leave the
+queue directory publicly writeable, and modify the vbsubmit program to use a
+different umask when writing sequence files. If you don't like the idea of
+having vbsrvd using setuid to run jobs as the users who created them, modify
+yout inetd.conf appropriately, and remind users to make their data directories
+world read/writeable.
+</para>
+
+<para>
+One additional point, that was also covered in the section on configuring inetd.
+vbsrvd, being a tcp&mdash;based server, is a potential hole in your system's security.
+We don't know of any ways to exploit it, but it's almost a certainty that there
+are some. To minimize your risk, use tcp_wrappers to reduce the risk of it
+coming under attack.
+</para>
+
+<para>
+That's about it for security. Please remember that installing VoxBo may
+compromise your system, corrupt your files, ruin your career, burn your toast,
+etc. The best we can do right now is assure you that we have had no obvious
+problems, and that things seem to work fine in the cooperative environment of
+our lab.
+</para>
+
+</sect1>
+
+
+<sect1>
+<title>Single&mdash;User Mode</title>
+
+<para>
+As of the September 2000 release, the experimental single&mdash;user mode is
+completely broken. We think. We don't use it, and we don't think anyone else
+does either. But we'd like to put it back in, because people should be able to
+use VoxBo without having root access. Nonetheless, we don't want to spend time
+on features that nobody actually needs. So if you'd like to use VoxBo in
+single&mdash;user mode, drop me (Dan) a line. I promise only that I'll tally votes.
+The rest of this section refers to how it used to sort of work.
+</para>
+
+<para>
+An experimental single&mdash;user (standalone) mode is available in VoxBo. It hasn't
+been tested extensively, because we don't use it. But this section outlines how
+it works in principle and possibly in practice. An upcoming release will have a
+slightly more stable single&mdash;user mode.
+</para>
+
+<para>
+A single CPU can either be set up to run as a VoxBo server or as a standalone
+VoxBo workstation, but not both. If a system configuration file (either
+/etc/voxbo.conf or VOXBODIR/etc/defaults) exists, the machine can operate only
+as a server. If not, it can operate only as a standalone workstation.
+</para>
+
+<para>
+Note that if neither of these files exists, you must specify the root VoxBo
+directory in your personal .voxborc file.
+</para>
+
+<para>
+The main difference between server and standalone mode is that in standalone
+mode, jobs won't run by themselves. You need to invoke a specialized version of
+the server by typing the following command:
+</para>
+
+<para>
+<programlisting>vbrun</programlisting>
+</para>
+
+<para>
+vbrun should actually be a symbolic link to vbsrvd, the server program. But when
+invoked with this name on a machine not set up as a server, it serves as both
+scheduler and server. Basically, it goes through all the jobs in the job queue
+and runs them in sequence. Since you're only using one CPU, you don't get any of
+the benefits of parallel processing. However, you do get to queue up your work
+and let it run in your absence. vbrun will continue to run until there's nothing
+left to do, at which point it will quit. If you create more jobs after it has
+already quit, you will have to start it again.
+</para>
+
+</sect1>
+
+
+<sect1>
+<title>Troubleshooting</title>
+
+<para>
+This is a woefully inadequate first draft of a troubleshooting section. Usually
+I take half&mdash;baked stuff like this out of documents before they leave the
+building. But even half&mdash;baked, this stuff might help someone somewhere somehow.
+</para>
+
+<para>
+<emphasis>General troubleshooting</emphasis>
+</para>
+
+<itemizedlist>
+<listitem><para>You can verify some aspects of voxbo's interpretation of your
+config files with voxq &mdash;z, which will dump a bunch of configuration information
+to your screen. Soon it will include host info as well. Try it under a user
+account, the voxbo account, and as root.</para></listitem>
+<listitem><para>59 In /usr/local/VoxBo/etc, there should be log files for each
+host.  Some problems might generate messages in these files, making things
+easier to debug.  In the defaults file, you can set keeplogs to 2, causing all
+the individual job files to be retained permanently in
+/usr/local/VoxBo/etc/logs.  Sometimes these logs can be helpful in tracking down
+problems, even though the jobs don't report errors.</para></listitem>
+</itemizedlist>
+
+<para>
+<emphasis>My server doesn't show up under voxq &mdash;c</emphasis>
+</para>
+
+<itemizedlist>
+<listitem><para>Make sure your server is specified correctly in your defaults
+file.</para></listitem>
+<listitem><para>Make sure you're reading the right defaults file. Use voxq &mdash;z to
+check. Remember that if your VoxBo directory isn't /usr/local/VoxBo/, you will
+have to specify it in /ect/voxbo.conf.</para></listitem>
+</itemizedlist>
+
+<para>
+<emphasis>My server is always listed as [not responding] via voxq</emphasis>
+</para>
+
+<para>
+This is the single most common installation hurdle, although it usually just
+requires general system administration knowledge, not VoxBo&mdash;specific knowledge. 
+Here are some things to check
+</para>
+
+<itemizedlist>
+<listitem><para>Make sure your network is intact (i.e., you can ping the
+server).</para></listitem>
+<listitem><para>Make sure inetd or xinetd is running on the server in
+question.</para></listitem>
+<listitem><para>Make sure vbsrvd is correctly configured in inetd.conf or in
+xinetd.d.</para></listitem>
+<listitem><para>Make sure vbsrvd is listed in /etc/services</para></listitem>
+<listitem><para>Make sure the server allows connections to vbsrvd (i.e., check
+hosts.allow).</para></listitem>
+<listitem><para>Did you remember to restart inetd or xinetd since the last
+time you changed their config files?</para></listitem>
+<listitem><para>Use netstat or lsof to see if vbsrvd is actually listening on
+the server (try "lsof | grep vbsrvd" or "netstat &mdash;a | grep
+vbsrvd").</para></listitem>
+<listitem><para>Can you telnet to the appropriate port (e.g., telnet
+servername 6004)?  If it works, it should wait for a CR before exiting.  If not,
+it might exit immediately.  Check log files on the server, like
+/var/log/messages and /var/log/secure.</para></listitem>
+<listitem><para>Is the correct uid set for user voxbo? Try boxq &mdash;&mdash;dump to
+see.</para></listitem>
+<listitem><para>Does user VoxBo own and have permission to write to VoxBo/etc/
+?</para></listitem>
+<listitem><para>VoxBo times out non&mdash;responding connections after about 1.5
+seconds.  If a machine doesn't respond by then, it will list as non&mdash;responding. 
+If it's intermittent, it won't cause any problems, but if it's a constant
+irritation, go find the number in the source code.  If a machine doesn't respond
+for a long time, a hostname.dead file will get created in the queue directory. 
+If you think the host is back up, delete that file.</para></listitem>
+</itemizedlist>
+
+<para>
+<emphasis>A server that was working before suddenly isn't responding to
+voxq</emphasis>
+</para>
+
+<para>
+If a server that was responding just fine is suddenly not responding, here are
+some things to check.
+</para>
+
+<itemizedlist>
+<listitem><para>VoxBo times out non&mdash;responding connections after about 1.5
+seconds.  If a machine doesn't respond by then, it will list as non&mdash;responding. 
+This won't cause any serious problems if it's intermittent.  We are still
+tweaking that time constant, and may make it configurable.  If a machine doesn't
+respond for 20 minutes, a hostname.dead file will get created in the queue
+directory.  If you think the host is back up, delete that file
+manually.</para></listitem>
+<listitem><para>inetd and xinetd both get a little upset if there are too many
+connections to a port in a limited period of time, and will stop listening for a
+few minutes.  The default limit is a bit low for VoxBo, so occasionally a
+machine might stop responding when things are busy, and show up again later. 
+Try setting it to 200.</para></listitem>
+</itemizedlist>
+
+<para>
+<emphasis>Jobs aren't running</emphasis>
+</para>
+
+<itemizedlist>
+<listitem><para>Check the VOXBODIR/etc/voxbo_pid and VOXBODIR/etc/voxbo.log
+files to see which machine the scheduler was last started on.  Try something
+like "ps &mdash;ef | grep voxbo" to verify that the scheduler is running on that
+machine.</para></listitem>
+<listitem><para>Double&mdash;check priorities &mdash; do a voxq &mdash;a and
+ check that the
+priority for the job in question is greater than or equal to the priority of
+some available server. Remember, for stuff to run you want the job to be at high
+priority and the CPU to be at low priority.</para></listitem>
+<listitem><para>Double&mdash;check license and CPU availability &mdash; do a voxq
+ &mdash;l and
+make sure the server you think should be running your job is actually considered
+available, and that any needed resources are also considered
+available.</para></listitem>
+<listitem><para>VoxBo has a refraction mechanism that doesn't allow the same job
+to run twice in a half hour if it crashes unexpectedly. If odd things have been
+happening, give it some time.</para></listitem>
+</itemizedlist>
+
+</sect1>
+</chapter>

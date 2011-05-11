@@ -1,0 +1,45 @@
+.TH dcmsplit 1 "January, 2011 (v1.8.5)" "VoxBo" "The VoxBo Manual"
+.SH NAME
+dcmsplit - remove identifying fields from DICOM files
+.SH SYNOPSIS
+.B dcmsplit
+<file> ... [<flags>...]
+.SH DESCRIPTION
+.B dcmsplit
+is part of the VoxBo suite of tools for brain image analysis.
+.P
+.B dcmsplit
+removes identifying elements from a DICOM file.  It is not guaranteed
+to remove all identifying elements, nor does it address identifying
+information in the image data (e.g., facial features).  But it might be
+useful as part of the de-identification process.
+.P
+.B dcmsplit
+can optionally put the removed elements into a separate file, and can
+also remove custom-specified groups and elements.  It can also run
+recursively on directories.
+.P
+To see the list of groups/elements removed automatically, to get more
+help, and to get a complete list of available flags, run the program
+with no arguments.
+.SH AVAILABILITY
+Pre-built VoxBo binaries are available for Linux, OSX, and Cygwin, and
+via the NeuroDebian project (neuro.debian.net) for Debian derivatives.
+.SH CAVEATS
+VoxBo is provided with no warranty whatsoever.
+.SH AUTHOR
+For an historical roster of the VoxBo development team, visit
+www.voxbo.org.
+.SH SEE ALSO
+For detailed help on any VoxBo command-line program, run it with no
+arguments.  For graphical programs, use the -h flag.  For more help
+with VoxBo, for information about the mailing list, or to report bugs,
+visit the web site at www.voxbo.org.
+.P
+For information about file format support in VoxBo, see
+.BR voxbo-fileformats (7).
+For general information about VoxBo, see
+.BR voxbo (7).
+See also
+.BR vbrename (1),
+.BR dicominfo (1).

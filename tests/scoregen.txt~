@@ -1,0 +1,35 @@
+
+
+# vbim -newvol 20 20 20 4 float -addnoise 10 5 -thresh 12 -quantize 1 -convert byte -write maskIND.nii.gz z
+
+intact 0 2
+damaged 100 2
+
+bounds 0 100
+
+lesions lesions.nii.gz
+voxel v1 1 1 1
+voxel v2 2 2 2
+voxel v3 3 3 3
+voxel v4 4 4 4
+mask m1 mask00000.nii.gz
+mask m2 mask00001.nii.gz
+mask m3 mask00002.nii.gz
+mask m4 mask00003.nii.gz
+
+ifvoxel v1
+generate 001.ref
+ifvoxeland v1 v2
+generate 002.ref
+region m1
+generate 003.ref
+regionor m1 m2
+generate 004.ref
+regionand m1 m2
+generate 005.ref
+regionpct m1
+generate 006.ref
+regionpctor m1 m2
+generate 007.ref
+regionpctand m1 m2
+generate 008.ref

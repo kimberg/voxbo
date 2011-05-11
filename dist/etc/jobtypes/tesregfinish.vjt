@@ -1,0 +1,32 @@
+
+shortname tesregfinish
+description Finishes GLM analysis.
+invocation commandline
+
+argument
+ name=stem
+ argdesc=matrix stem name 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=steps
+ argdesc=number of steps for the regression 
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=flags
+ argdesc=exclude error norm flag 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command tesregfinish -m $(stem) -s $(steps) $(flags)
+requires cpu

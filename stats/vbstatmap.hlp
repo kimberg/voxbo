@@ -1,0 +1,33 @@
+
+VoxBo vbstatmap (v%1%)
+summary: creates a stat map from a GLM directory
+usage:
+    vbstatmap <glm dir> [flags]
+flags:
+    -c <contrast>     contrast name or vector
+    -o <file>         output file
+    -p <x> <y> <z>    FWHM in voxels for pseudo-t variance smoothing
+    -m <mask>         mask volume
+    -q <num>          q value for an FDR test
+example:
+  vbstatmap myglm_directory -o out.cub -c "foo t vec 1 0" -p 0 0 0
+notes:
+
+  You are strongly encouraged to specify your contrasts in the
+  contrasts.txt file, which is automatically created along with your
+  GLM, and comes with comments explaining its use.  Then you can just
+  use the -c flag with the name of a contrast in that file (e.g., "-c
+  mycontrast").  If you want to specify the contrast on the command
+  line, it's best to use that same syntax, e.g.: -c "foo t vec 1 0
+  -1".  Note that the first token ("foo") isn't used for anything
+  right now.  For more information on specifying contrasts, type
+  "vbtool contrast"
+
+  Use the -p option to smooth the variance map for a pseudo-t map
+
+  Note that VoxBo defaults to one tailed tests, and that /1 and /2
+  force one tailed and two tailed for p and z maps
+
+  If you provide a q value of 0 (-q 0), vbstatmap will give you FDR
+  thresholds for a range of commonly requested q values.
+

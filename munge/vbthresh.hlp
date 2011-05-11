@@ -1,0 +1,18 @@
+
+VoxBo vbthresh (v%1%)
+summary: threshold 4D files
+usage:
+  vbthresh [<flags>...]
+flags:
+  -i <file>          input 4D filename
+  -o <file>          set output filename (default: input filename)
+  -c <val>           absolute threshold value
+  -b <size>          bin size for histogram thresholding method
+  -h                 show help
+  -v                 show version
+notes:
+  The -i argument must be provided.
+
+  Note that if vbthresh finds a value below threshold, it zeroes out
+  the entire time series for that voxel.
+

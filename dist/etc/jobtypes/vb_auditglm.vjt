@@ -1,0 +1,12 @@
+
+shortname vb_auditglm
+description audit a voxbo glm
+invocation commandline
+
+argument
+ name=glmdir
+ argdesc=the full path to the glm directory to be audited
+end
+
+command glminfo -r $(glmdir) > $(glmdir)/audit.txt
+requires cpu

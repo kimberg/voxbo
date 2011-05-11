@@ -1,0 +1,34 @@
+Record No.				-> demographics				
+MRN					-> demographics
+Gender					-> demographics
+Date of Birth				-> demographics
+Home Phone				-> demographics
+Handedness				-> demographics
+Education Yrs				-> demographics
+Education Highest Deg			-> demographics
+Occupation				-> demographics
+English First Language?			-> demographics
+Other Languages				-> demographics
+Ethnic Group				-> demographics
+Ethnic Group (3/02)			-> demographics
+Racial Group (3/02)			-> demographics
+Racial Group-2 (3/02)			-> demographics
+Diagnosis				-> demographics
+Vision Difficulties			-> demographics
+Hearing Difficulties			-> demographics
+Mobility				-> demographics
+Other Health Problems			-> demographics
+Current Medications			-> demographics
+Past Psychoactive Medications		-> demographics
+History of Learning Disabilities	-> demographics
+
+Neuroradiological Report		-> medical
+Scheduled Date for Behavioral Testing	-> medical
+
+Today		   -> ignore!
+Age		   -> ignore!
+Current Age	   -> ignore!
+
+Date of History	   -> ?
+Total Flags	   -> ?
+viewexclude	   -> score_flags

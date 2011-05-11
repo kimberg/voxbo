@@ -1,0 +1,41 @@
+;VB98
+;REF1
+;
+;     UNSMOOTHED       NO GLOBAL SIGNAL COVARIATE
+;
+; These three parameters define the shape of a 1/f noise curve. They were
+;  derived from the square root of the grand average power spectrum from 13
+;  subjects scanned under the null-hypothesis. This curve can be used
+;  as a model of the intrinsic autocorrelation present in BOLD fMRI data
+;  collected under the null-hypothesis. Typically, this representation is
+;  placed within the K matrix of the GLM of Worsley and Friston (1995).
+;
+;  For these values, the data are unsmoothed and no global signal covariate
+;  was included. 
+;
+;  The values (k1, k2, k3) correspond to steepness, y-offset, and x-offset,
+;  respectively. The equation that these parameters are used within is:
+;
+;                    1
+;   a(w) =   ----------------  + k2
+;              k1*( w + k3 )
+;
+;  For more details, see:
+;
+;    Zarahn, E., Aguirre, G.K., DUEsposito, M. (1997) Empirical
+;      analyses of BOLD fMRI statistics. I. Spatially unsmoothed
+;      data collected under null-hypothesis conditions.
+;      Neuroimage 5: 179-197.
+;
+; and
+;
+;    Aguirre G.K., Zarahn, E., D'Esposito, M. (1997) Empirical
+;      analyses of BOLD fMRI statistics. II. Spatially smoothed
+;      data collected under null-hypothesis and experimental conditions.
+;      Neuroimage 5: 199-212.
+;
+
+     76.9778
+     1.91129
+ 0.000230495
+

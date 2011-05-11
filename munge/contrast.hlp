@@ -1,0 +1,37 @@
+
+In each VoxBo GLM folder, there is a contrasts.txt file that defines
+statistical contrasts of interest.  You can edit that file manually to
+define and name which contrasts interest you.
+
+A contrast specification just defines how to weight and scale the
+parameter estimates associated with the covariates of interest for a
+GLM.
+
+In VoxBo programs that take contrasts (e.g., vbstatmap, vbdumpstats,
+etc), you can specify a contrast either as the name of a constrast
+that's already defined in your contrasts.txt file or you can just
+provide the contrast definition you want.
+
+The general form for a contrast is:
+
+  <name> <scale> vec 1 0 0 0 0 0
+
+with one value for each covariate of interest.  To check the list of
+covariates of interest for your GLM, run "glminfo glmdir" (where
+glmdir is the directory containing your glm).  Right now you have to
+edit contrasts.txt manually to specify a new contrast.
+
+<name> is whatever name you'd like for the contrast.  If you put the
+specification in contrasts.txt, that name can be used in programs like
+vbstatmap to select your contrast.  <scale> is one of the following:
+
+    t                  - t value map
+    i                  - intercept term percent change map
+    beta or rb         - raw beta values map
+    f                  - F value map
+    tp t1 tp1          - p map from a 1-tailed t-test
+    t2 tp2             - p map from a 2-tailed t-test
+    fp                 - p map for F values
+    tz                 - Z-transformed t statistics
+    fz                 - Z map for F values
+

@@ -1,0 +1,33 @@
+
+# maps.txt
+
+# The file describes which templates may be found by VoxBo's vbview
+# (and maybe later, other programs).  You can specify a path for
+# searching for templates, something like this:
+#   path /usr/lib/templates:/usr/share/templates:/tmp
+# Note that VOXBO/elements/templates, where VOXBO is the VoxBo
+# installation directory (typically /usr/local/VoxBo), is always
+# searched, you don't need to specify it.
+
+# You can also specify templates and atlases.  Each template line
+# looks something like this:
+#   template 1 ch2.nii.gz the colin27 brain
+# Where "ch2.nii.gz" is the filename, "1" is the template ID, and the
+# rest of the line is a brief text description.  You can have multiple
+# lines for the same template ID, and the first one that's found is
+# used (this is helpful if you're not sure exactly what the filename
+# will be).  Atlases are specified similarly, and are loaded as masks:
+#   mask 7 aal.cub the AAL atlas
+
+path /usr/share/data/mni-colin27
+
+template 1 ch2.nii.gz colin27 (181x217x181)
+template 1 ch2.cub.gz colin27 (181x217x181)
+template 1 colin27_t1_tal_lin.nii.gz colin27 (181x217x181)
+template 2 avg305T1.cub MNI 305 T1 (181x217x181)
+template 3 avg305T2.cub MNI 305 T2 (181x217x181)
+template 4 avg152T1.cub MNI 152 T1 (181x217x181)
+template 5 avg152T2.cub MNI 152 T2 (181x217x181)
+template 6 single_subj_T1.cub the old SPM single-subject template
+
+mask 7 aal.cub the AAL atlas

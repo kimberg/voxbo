@@ -1,0 +1,31 @@
+shortname matadd
+description Efficient Matrix Operations in c (compute X+Y)
+invocation commandline
+
+argument
+ name=in1
+ argdesc=first matrix 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=in2
+ argdesc=second matrix 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=out
+ argdesc=sum of inputmatrix1 and inputmatrix2 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -add $(in1) $(in2) $(out)
+requires cpu

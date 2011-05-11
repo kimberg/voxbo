@@ -1,0 +1,25 @@
+
+shortname avants_compose
+description avants reg
+invocation script
+requires cpu
+
+argument
+ name=firstmap
+ argdesc=stem of first map to compose
+ type=string
+end
+
+argument
+ name=secondmap
+ argdesc=stem of second map to compose
+ type=string
+end
+
+argument
+ name=newmap
+ argdesc=stem of second map to compose
+ type=string
+end
+
+command /home/avants/bin/3D/ComposeMaps $(firstmap) $(secondmap) $(newmap)

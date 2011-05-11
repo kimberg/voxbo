@@ -1,0 +1,24 @@
+
+shortname assembleps
+
+argument
+ name=stem
+ argdesc=directory containing glm information
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=steps
+ argdesc=number of steps in regression
+ type=long
+ default=1
+ low=none
+ high=none
+end
+description Assembles partial ref files.
+
+invocation commandline
+command assembleps -m $(stem) -s $(steps)
+requires cpu

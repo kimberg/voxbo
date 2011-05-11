@@ -1,0 +1,21 @@
+shortname vb2cub
+description convert a 3d image to CUB format
+invocation commandline
+
+argument
+ name=infile
+ argdesc=3D file/dir 
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output file name
+ type=string
+end
+
+command vb2cub $(infile) $(outfile)
+requires cpu
+
+
+
+

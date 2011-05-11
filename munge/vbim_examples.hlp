@@ -1,0 +1,23 @@
+Here are some examples of using vbim:
+
+To get very basic info about a file:
+    vbim foo.nii -info
+
+To get more detailed information about the data within a mask:
+    vbim foo.nii -regioninfo mask.nii
+
+To apply a mask to a 3D image and write out the result:
+    vbim image.nii -mask mask.nii -write maskedimage.nii
+
+To mask a 4D image:
+    vbim image.nii -mask mask.nii -write4D maskedimage.nii
+
+To average a bunch of 3D volumes:
+    vbim *.nii.gz -average -write mean.nii.gz
+
+To create a lesion count map from a set of lesion masks:
+    vbim *.nii -count -write count.nii.gz
+
+To create a 4D volume (20x20x20 voxels, 32-bit int, 10 time points) of
+random data with a mean of 100 and sd of 10:
+    vbim -newvol 20 20 20 10 int32 -addnoise 100 10 -write3d myvol.nii

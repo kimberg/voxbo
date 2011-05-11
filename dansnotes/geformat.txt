@@ -1,0 +1,118 @@
+
+[text snagged from the medical image file format faq]
+
+        control header (offset 0):
+
+                0   - int      - magic number = 0x494d4746 = "IMGF"
+                4   - int      - byte displacement to pixel data
+                8   - int      - width
+                12  - int      - height
+                16  - int      - depth (bits)
+                20  - int      - compression (0=asis,1=rectangular,2=packed,
+                                 3=compressed,4=compressed&packed)
+                32  - int      - background shade to use for non-image
+                54  - u_short  - 16 bit end_around_carry sum of pixels
+                56  - int      - ptr to unique image identifier
+                60  - int      - length of unique image identifier
+                64  - int      - ptr to unpack header
+                68  - int      - length of unpack header
+                72  - int      - ptr to compression header
+                76  - int      - length of compression header
+                80  - int      - ptr to histogram header
+                84  - int      - length of histogram header
+                88  - int      - ptr to text plane
+                92  - int      - length of text plane
+                96  - int      - ptr to graphics plane
+                100 - int      - length of graphics plane
+                104 - int      - ptr to data base header
+                108 - int      - length of data base header
+                112 - int      - value to add to stored pixels
+                116 - int      - ptr to user defined data
+                120 - int      - length of user defined data
+                124 - int      - ptr to suite header
+                128 - int      - length of suite header
+                132 - int      - ptr to exam header
+                136 - int      - length of exam header
+                140 - int      - ptr to series header
+                144 - int      - length of series header
+                148 - int      - ptr to image header
+                152 - int      - length of image header
+
+        unpack header:
+
+                // used when compression is packed, or compressed & packed
+                // contains perimeter encoding map ... cf. GE 9800
+
+                struct {
+                        short pixels_to_left_of_line;
+                        short pixels_in_stored_line;
+                } table [height_of_image];
+
+        compression header:
+
+                Not necessary for decompressing entire image ... rather it
+                contains seeds for various "strips" of the image to allow
+                jumping into the compressed pixel data ... see the GE docs.
+
+        histogram header:
+
+                Contains statistical information for determining optimum
+                windowing ... see the GE docs and GenIncl produced header
+
+        exam header:
+
+                0   - char[4]  - suite ID
+                8   - u_short  - exam number
+                84  - char[13] - patient ID
+                97  - char[25] - patient name
+                122 - short    - patient age
+                126 - short    - patient sex
+                305 - char[3]  - exam type - "MR" or "CT"
+
+        series header:
+
+                10  - short    - series number
+                84  - char[3]  - anatomical reference
+                92  - char[25] - scan protocol name
+
+        image header - common to CT and MR:
+
+                12  - short    - image number
+                26  - float    - slice thickness mm
+                30  - short    - matrix size - X
+                32  - short    - matrix size - Y
+                34  - float    - display field of view - X (mm)
+                38  - float    - display field of view - Y (mm)
+                42  - float    - image dimension - X
+                46  - float    - image dimension - Y
+                50  - float    - pixel size - X
+                54  - float    - pixel size - Y
+                58  - char[14] - pixel data ID
+                72  - char[17] - iv contrast agent
+                89  - char[17] - oral contrast agent
+
+                126 - float    - image location
+                130 - float    - image centre R mm (ie. X +ve to right)
+                134 - float    - image centre A mm (ie. Y +ve to anterior)
+                138 - float    - image centre S mm (ie. Z +ve to superior)
+                154 - float    - image TLHC R mm (ie. X +ve to right)
+                158 - float    - image TLHC A mm (ie. Y +ve to anterior)
+                162 - float    - image TLHC S mm (ie. Z +ve to superior)
+                166 - float    - image TRHC R mm (ie. X +ve to right)
+                170 - float    - image TRHC A mm (ie. Y +ve to anterior)
+                174 - float    - image TRHC S mm (ie. Z +ve to superior)
+                178 - float    - image BRHC R mm (ie. X +ve to right)
+                182 - float    - image BRHC A mm (ie. Y +ve to anterior)
+                186 - float    - image BRHC S mm (ie. Z +ve to superior)
+
+        image header - for MR (1022 bytes long):
+
+                194 - int      - repetition time(usec)
+                198 - int      - inversion time(usec)
+                202 - int      - echo time(usec)
+                210 - short    - number of echoes
+                212 - short    - echo number
+                218 - float    - NEX
+                308 - char[33] - pulse sequence name
+                362 - char[17] - coil name
+                640 - short    - ETL for FSE

@@ -1,0 +1,48 @@
+shortname matxy
+description Efficient Matrix Operations in c (compute XY)
+invocation commandline
+
+argument
+ name=in1
+ argdesc=first matrix
+ type=string
+ default=none
+ low=none
+ high=none
+end
+invocation commandline
+argument
+ name=in2
+ argdesc=second matrix
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=out
+ argdesc=output matrix
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=col1
+ argdesc=first selected column
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=col2
+ argdesc=second selected column
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -xy $(in1) $(in2) $(out) $(col1) $(col2)
+requires cpu

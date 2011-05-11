@@ -1,0 +1,23 @@
+
+shortname slicecorrect
+description interpolate to correct for slice acquisition order
+invocation commandline
+
+argument
+ name=infile
+ argdesc=4D volums to correct
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output file
+ type=string
+end
+argument
+ name=notused
+ argdesc=unused argument
+ type=string
+end
+
+command sliceacq -i $(infile) -o $(outfile)
+requires cpu

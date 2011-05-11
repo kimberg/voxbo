@@ -1,0 +1,42 @@
+
+# script bigprep.vbp
+
+# jobtypes are found in /usr/local/VoxBo/etc/jobtypes
+
+# globals for this script:
+# DIR - target directory for processed data
+# rawdir - directory of raw data
+# firstrun - eventual path to first run in processed data
+# thresh - absolute threshold value
+# anat - sample anatomical in rawdir
+# func - sample functional in rawdir
+# dummies - number of dummy images per scan
+
+# setup
+runonce shellcommand "mkdir -p $DIR"
+runonce shellcommand "mkdir -p $adir"
+runonce vb2cub $rawdir/$rawanat $adir/Anatomical.cub
+runonce shellcommand "tes2cub $rawdir/$rawfunc $adir/Functional.cub"
+runonce newprep $adir
+
+# calc params
+runonce spm2_norm_calc $adir $paramfile $anat $refvol $xa $ya $za $bb_anat
+
+# make ndisplay.cub
+runonce spm2_norm_apply3d $adir $adir/$paramfile $anat nDisplay.cub $xa $ya $zf $bb_disp
+
+# apply to scout image
+runonce spm2_norm_apply3d $adir $adir/$paramfile $func n$func $xf $yf $zf $bb_func
+
+# process the data
+shellcommand "mkdir -p $run"
+shellcommand "vb2tes $rawdir/$src $run/$run.tes -e $dummies"
+slicecorrect $run/$run.tes $run/$run.tes 1
+orient $run/$run.tes $run/$run.tes RPI
+runonce extractref $firstrun $adir/FirstEPI.cub
+#realign $run/$run.tes $run/$run.tes 0.5 $adir/FirstEPI.cub
+spm2_realign $run $adir/FirstEPI.cub $run.tes $run.tes
+smooth $run/$run.tes $run/$run.tes 3 3 3
+threshold $run/$run.tes $run/$run.tes $thresh
+calcgs $run/$run.tes $run/$run.tes
+calcps $run/$run.tes $run/$run.tes

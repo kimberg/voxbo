@@ -1,0 +1,18 @@
+
+VoxBo vbi (v%1%)
+summary: display information about any voxbo-readable file
+usage: 
+  vbi [flags] <file> [<file> ...] 
+flags:
+  -d    include dimensions
+  -t    include data type
+  -z    include voxel sizes
+  -o    include origin
+  -r    include orientation
+  -l    produce long format output
+  -a    load data before printing info
+  -f    show all metadata for analyze, nifti, and dicom files
+  -q    be quiet about unrecognized files
+  -h    help
+  -v    version
+

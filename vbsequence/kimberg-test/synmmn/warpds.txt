@@ -1,0 +1,58 @@
+
+# this dataset is going to be used with the brian, spm, air, and other
+# scripts.  so it can have attributes of the data that are only needed
+# by some of the code, but shouldn't have stuff that's specific to how
+# we're processing the data
+
+# universals -- same for all subjects
+:nativestem=mprage
+:nativemaskstem=lesion
+
+m09
+:wdir=/jet/kimberg/lesions/registration/wplus/m09
+:rawdir=/jet/kimberg/lesions/registration/scans/M09
+:nativestem=M09_MPRAGE
+:nativemaskstem=m09native
+
+m11
+:wdir=/jet/kimberg/lesions/registration/wplus/m11
+:rawdir=/jet/kimberg/lesions/registration/scans/M11
+:nativestem=M11_MPRAGE
+:nativemaskstem=m11native
+
+m35
+:wdir=/jet/kimberg/lesions/registration/wplus/m35
+:rawdir=/jet/kimberg/lesions/registration/scans/M35
+:nativestem=M35_MPRAGE
+:nativemaskstem=m35native
+
+m94
+:wdir=/jet/kimberg/lesions/registration/wplus/m94
+:rawdir=/jet/kimberg/lesions/registration/scans/M94
+:nativestem=M94_MPRAGE
+:nativemaskstem=m94native
+
+mr0786
+:wdir=/jet/kimberg/lesions/registration/wplus/mr0786
+:rawdir=/jet/kimberg/lesions/registration/scans/mr0786
+:nativestem=mr0786
+:nativemaskstem=mr0786_nmask
+
+mr1229
+:wdir=/jet/kimberg/lesions/registration/wplus/mr1229
+:rawdir=/jet/kimberg/lesions/registration/scans/mr1229
+:nativestem=MR1229_MPRAGE
+:nativemaskstem=mr1229_nmask
+
+mr1238
+:wdir=/jet/kimberg/lesions/registration/wplus/mr1238
+:rawdir=/jet/kimberg/lesions/registration/scans/mr1238
+:nativestem=mr1238
+:nativemaskstem=mr1238_nmask
+
+mr1380
+:wdir=/jet/kimberg/lesions/registration/wplus/mr1380
+:rawdir=/jet/kimberg/lesions/registration/scans/mr1380
+:nativestem=mr1380
+:nativemaskstem=mr1380_nmask
+

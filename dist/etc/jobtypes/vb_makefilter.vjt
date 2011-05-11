@@ -1,0 +1,50 @@
+shortname vb_makefilter
+description create exogenous data filter
+invocation commandline
+requires cpu
+
+argument
+ name=outfile
+ argdesc=filter file name
+ type=string
+ default="/tmp/my.exofilt"
+end
+argument
+ name=lowflag
+ argdesc=flag for low frequency filter, e.g., -lf 10
+ type=string
+ default=""
+end
+argument
+ name=middleflag
+ argdesc=flag for middle frequency filter, e.g., -mf 10,20,30
+ type=string
+ default=""
+end
+argument
+ name=highflag
+ argdesc=flag for high frequency filter, e.g., -hf 1
+ type=string
+ default=""
+end
+argument
+ name=kernelflag
+ argdesc=flag for convolution kernel, e.g., -k /path/to/kernel.ref
+ type=string
+ default=""
+end
+argument
+ name=ndata
+ argdesc=number of data points
+ type=integer
+ default=100
+end
+argument
+ name=tr
+ argdesc=TR in milliseconds
+ type=integer
+ default=3000
+end
+
+command vbmakefilter -e $(outfile) $(lowflag) $(highflag) $(middleflag) $(kernelflag) -t $(ndata) $(tr)
+#command vbmakefilter -e $(outfile) $(lowflag) $(highflag) $(middleflag) -t $(ndata) $(tr)

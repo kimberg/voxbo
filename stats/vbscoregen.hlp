@@ -1,0 +1,42 @@
+
+VoxBo vbscoregen (v%1%)
+usage:
+  vbscoregen <filename>
+notes:
+
+  vbscoregen is a little hack for generating simulated behavioral
+  scores for lesion analysis.  It's mostly for testing methods, doing
+  Monte Carlo analyses, and things like that.
+
+  The config file should contain three lines that define the levels of
+  the behavioral score:
+
+    intact <x> <sd>
+    damaged <x> <sd>
+    bounds <min> <max>
+
+  One line to give the name of the 4D lesion map file:
+
+    lesions <filename>
+
+  As many lines as you like to define voxels or regions of interest:
+
+    voxel <name> <x> <y> <z>
+    mask <name> <fname>
+
+  Then, there are the following primitives for describing the
+  relationship between the lesion data and the behavioral score.
+
+    ifvoxel <voxelname>    # damaged iff that voxel is damaged
+    ifvoxeland <v1> <v2>   # damaged iff both are damaged
+    region <regionname>    # damaged iff any voxel in that region is damaged
+    regionor <r1> <r2>     # damaged iff any voxel in either region is damaged
+    regionand <r1> <r2>    # just what it sounds like
+    regionpct <r1>         # pct damage to r1 is used to create score
+    regionpctor <r1> <r2>  # 
+    regionpctand <r1> <r2> # 
+
+  Finally, a line to spew out the file should be included after any one of the above:
+
+    generate <refname>
+

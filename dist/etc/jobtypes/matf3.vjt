@@ -1,0 +1,23 @@
+shortname matf3
+description create F3 matrix (V*KG*invert(KTtKG)
+invocation commandline
+
+argument
+ name=vmatrix
+ argdesc=first matrix
+ type=string
+end
+invocation commandline
+argument
+ name=kgmatrix
+ argdesc=second matrix
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output matrix
+ type=string
+end
+
+command vbmm2 -f3 $(vmatrix) $(kgmatrix) $(outfile)
+requires cpu

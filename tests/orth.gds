@@ -1,0 +1,333 @@
+
+gsession regular.G
+
+TR 2000
+sampling 2000
+length 100
+
+newcov intercept
+end
+
+newcov single iv1.ref
+  type I
+  cov-name iv1
+  option mean-center
+end
+
+newcov single iv2.ref
+  type I
+  cov-name iv2
+  option mean-center
+end
+
+newcov single iv1.ref
+  type I
+  cov-name orth1
+  option mean-center
+  option orthog
+  orth-name iv2
+end
+
+newcov single iv2.ref
+  type I
+  cov-name orth2
+  option mean-center
+  option orthog
+  orth-name iv1
+end
+
+del-cov orth1
+del-cov orth2
+
+
+
+gsession orth1.G
+
+TR 2000
+sampling 2000
+length 100
+
+newcov intercept
+end
+
+newcov single iv1.ref
+  type I
+  cov-name iv1
+  option mean-center
+end
+
+newcov single iv2.ref
+  type I
+  cov-name iv2
+  option mean-center
+end
+
+newcov single iv1.ref
+  type I
+  cov-name orth1
+  option mean-center
+  option orthog
+  orth-name iv2
+end
+
+newcov single iv2.ref
+  type I
+  cov-name orth2
+  option mean-center
+  option orthog
+  orth-name iv1
+end
+
+del-cov iv1
+del-cov orth2
+
+
+gsession orth2.G
+
+TR 2000
+sampling 2000
+length 100
+
+newcov intercept
+end
+
+newcov single iv1.ref
+  type I
+  cov-name iv1
+  option mean-center
+end
+
+newcov single iv2.ref
+  type I
+  cov-name iv2
+  option mean-center
+end
+
+newcov single iv1.ref
+  type I
+  cov-name orth1
+  option mean-center
+  option orthog
+  orth-name iv2
+end
+
+newcov single iv2.ref
+  type I
+  cov-name orth2
+  option mean-center
+  option orthog
+  orth-name iv1
+end
+
+del-cov orth1
+del-cov iv2
+
+
+gsession orthboth.G
+
+TR 2000
+sampling 2000
+length 100
+
+newcov intercept
+end
+
+newcov single iv1.ref
+  type I
+  cov-name iv1
+  option mean-center
+end
+
+newcov single iv2.ref
+  type I
+  cov-name iv2
+  option mean-center
+end
+
+newcov single iv1.ref
+  type I
+  cov-name orth1
+  option mean-center
+  option orthog
+  orth-name iv2
+end
+
+newcov single iv2.ref
+  type I
+  cov-name orth2
+  option mean-center
+  option orthog
+  orth-name iv1
+end
+
+del-cov iv1
+del-cov iv2
+
+
+gsession justiv1.G
+
+TR 2000
+sampling 2000
+length 100
+
+newcov intercept
+end
+
+newcov single iv1.ref
+  type I
+  cov-name iv1
+  option mean-center
+end
+
+newcov single iv2.ref
+  type I
+  cov-name iv2
+  option mean-center
+end
+
+newcov single iv1.ref
+  type I
+  cov-name orth1
+  option mean-center
+  option orthog
+  orth-name iv2
+end
+
+newcov single iv2.ref
+  type I
+  cov-name orth2
+  option mean-center
+  option orthog
+  orth-name iv1
+end
+
+del-cov iv2
+del-cov orth1
+del-cov orth2
+
+
+gsession justiv2.G
+
+TR 2000
+sampling 2000
+length 100
+
+newcov intercept
+end
+
+newcov single iv1.ref
+  type I
+  cov-name iv1
+  option mean-center
+end
+
+newcov single iv2.ref
+  type I
+  cov-name iv2
+  option mean-center
+end
+
+newcov single iv1.ref
+  type I
+  cov-name orth1
+  option mean-center
+  option orthog
+  orth-name iv2
+end
+
+newcov single iv2.ref
+  type I
+  cov-name orth2
+  option mean-center
+  option orthog
+  orth-name iv1
+end
+
+del-cov iv1
+del-cov orth1
+del-cov orth2
+
+
+gsession justorth1.G
+
+TR 2000
+sampling 2000
+length 100
+
+newcov intercept
+end
+
+newcov single iv1.ref
+  type I
+  cov-name iv1
+  option mean-center
+end
+
+newcov single iv2.ref
+  type I
+  cov-name iv2
+  option mean-center
+end
+
+newcov single iv1.ref
+  type I
+  cov-name orth1
+  option mean-center
+  option orthog
+  orth-name iv2
+end
+
+newcov single iv2.ref
+  type I
+  cov-name orth2
+  option mean-center
+  option orthog
+  orth-name iv1
+end
+
+del-cov iv1
+del-cov iv2
+del-cov orth2
+
+
+
+gsession justorth2.G
+
+TR 2000
+sampling 2000
+length 100
+
+newcov intercept
+end
+
+newcov single iv1.ref
+  type I
+  cov-name iv1
+  option mean-center
+end
+
+newcov single iv2.ref
+  type I
+  cov-name iv2
+  option mean-center
+end
+
+newcov single iv1.ref
+  type I
+  cov-name orth1
+  option mean-center
+  option orthog
+  orth-name iv2
+end
+
+newcov single iv2.ref
+  type I
+  cov-name orth2
+  option mean-center
+  option orthog
+  orth-name iv1
+end
+
+del-cov iv1
+del-cov iv2
+del-cov orth1

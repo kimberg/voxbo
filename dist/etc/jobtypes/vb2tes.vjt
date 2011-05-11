@@ -1,0 +1,17 @@
+shortname vb2tes
+description convert a 4D image to TES format
+invocation commandline
+
+argument
+ name=infile
+ argdesc=3D file/dir 
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output file name
+ type=string
+end
+
+command vb2tes $(infile) $(outfile)
+requires cpu

@@ -1,0 +1,154 @@
+
+VoxBo vbim (v%1%)
+summary: image munging for VoxBo
+usage:
+  vbim [<flag> ...]
+general flags:
+  -i <file> ...          specify an arbitrary number of input files
+  -files/-input/-f       same as -i, for convenience
+  -o <file>              a single output file, will be 3D or 4D
+  -h                     show help
+  -v                     show version
+
+options for building volumes:
+  -newvol <x> <y> <z> <t> <type>
+                          newvol creates new empty volumes
+  -random01               fill entire volume with random 0s and 1s
+  -addnoise <mu> <sigma>  add Gaussian noise (an optional third argument
+                          is the PRNG seed -- see vbsim for more info)
+
+image processing operations:
+  -smoothvox <x> <y> <z>  3D Gaussian smooth
+  -smoothvox2 <x> <y> <z> 3D Gaussian smooth with out-of-brain correction
+  -smoothmm <x> <y> <z>   3D Gaussian smooth
+  -smoothmm2 <x> <y> <z>  3D Gaussian smooth with out-of-brain correction
+  -thresh <val>           zero where <= val
+  -threshabs <val>        zero where absolute value <= val
+  -cutoff <val>           zero where >= val
+  -quantize <val>         set non-zero values to val
+  -convert <new type>     see below
+  -add <img/num>          add image (if file exists) or scalar
+  -sub <img/num>          subtract image (if file exists) or scalar
+  -mult <img/num>         multiply by image (if file exists) or scalar
+  -div <img/num>          divide by image (if file exists) or scalar
+  -nminus <img/num>       subtract from img (if file exists) or scalar
+  -signflip               flip sign
+  -abs                    absolute value
+  -flipx/flipy/flipz      flip x, y, or z axis
+  -shift <x> <y> <z>      shift x, y, and z voxels
+  -bigendian/littleendian change how the data will be written out
+  -nonans                 replace NaNs and Infs with 0
+  -byteswap               
+  -zeroleft/zeroright
+  -zero <args>            e.g., "x first 20"  "z last 10"   "y firsthalf"
+  -rotate <p> <r> <y>     rotate around origin using pitch/roll/yaw in degrees
+  -regionat <x> <y> <z>   create mask of region including voxel at coordinates x,y,z
+  -splitregions <fname>   output filename (XXX will be replaced by an index)
+  -setspace <file>        reset or copy (if file is provided) orientation info
+  -remap <file>           file has two values per line: old value and new value
+  -combine ...            see below
+# NOT YET IMPLEMENTED:
+# orient <from> <to>     RPI notation, use -- as from for current orientation
+# ndividedby <num>
+# removesmallregions <n>  // uses function zerosmallregions(cube,double)
+
+mask-related
+  -maskcombine            see below
+  -maskselect <vals>      include only values in supplied list (e.g., 3,24,37-40)
+  -mask <mask>            mask volume (0's masked out)
+  -maskout <mask>         mask volume (non-0's masked out)
+  -subdivide <x> <y> <z>  subdivide mask using cubes of given dimensions
+  -invert                 zet non-zeros to zero, zeros to 1
+  -multi                  combine input masks into a multi-mask
+  -union [<mask>]         combine input masks by calculating the union.  if mask is
+                          provided, apply it separately to each volume.
+  -intersect [<mask>]     combine input masks by calculating the intersection.  if mask
+                          is provided, apply it separately to each volume.
+  -count                  combine input masks by counting non-zero voxels
+  -overlapmask            create a color-coded overlap mask of up to 3 masks
+  -uniquemask             included voxels will differ in at least one mask
+  -separatemasks          separate a 3D multi-ROI volume into separate masks
+                          with appropriate filenames already set
+  -randomvoxel [<mask>]   select a random voxel inside an optional mask
+  -randomvoxelnear [...]  arguments are x,y,z followed by stdevs of Gaussian defining
+                          distribution of selected voxel
+  -drawsphere <radius>    draw a sphere of 1's centered at previously selected voxel
+
+combining operations:
+  -sum                sum all volumes
+  -average            average all volumes
+  -product            product of all volumes
+  -select <n>         randomly select n volumes (discard the rest)
+  -include <range>    include volumes in range, e.g., 0-5,7,9-13 (no spaces)
+  -exclude <range>    exclude volumes in range, e.g., 0-5,7,9-13 (no spaces)
+  -oddeven            replace each pair of images with odd minus even
+  -writecompacted     reform 4D data to include only masked-in voxels
+#  -writepca <n> <mask <file>      write a 4D file including only the first
+#                                  n principal components
+
+output/summary operations:
+  -write <name> <special>  write 3d output, name is optional.  if the third
+                           argument is supplied, then the string SUB in the
+                           filename is replaced with the volume number.
+  -writeprefixed <prefix>  prefix each volume's original name and write
+  -write4d <name>          combine the volumes into a 4d file
+  -writeref <name>         writes non-zero values, sorted ascending, to a file
+  -info                    print general info about each 3D volume
+  -regioninfo              print region info for all contiguous non-zero regions
+  -regioninfo <mask>       print region info for region in provided mask
+
+examples:
+  Type "vbim -h examples" to see some examples.
+
+notes:
+  All arguments that come before the first operation are considered
+  input files.  So you can usually omit the -i and do this:
+
+    vbim *.nii.gz -sum -write sum.nii.gz
+
+  vbim takes multiple 3D volumes (contained in any combination of 3D
+  and 4D files) and applies the specified image processing operations,
+  in the order specified.
+  
+  vbim replaces all of voxbo's old image/mask mungers.  If there's
+  missing functionality you need, please let us know.
+
+  vbim has three kinds of operations.  Image processing operations are
+  applied to each 3D volume independently.  Combining operations apply
+  to the whole set of 3D volumes and typically reduce the set to a
+  single volume.  Output/summary operations print out information
+  about the volumes as they exist at that point and/or write out
+  files.  The operations are applied in the order given, and can be
+  mixed freely (e.g., you can have multiple image processing
+  operations intermixed with the -write operation to save a copy of
+  each step along the way).
+
+  For the -convert and -newvol operations, valid types are: byte,
+  int16, int32, float, and double.  When converting to float or
+  double, images are un-scaled if needed (slope and intercept are
+  factored into the stored values directly).  Note that VoxBo
+  historically has used more ambiguous names for int16 and int32.
+
+  The -combine operation implements several methods for re-calculating
+  each voxel's value as a combination of surrounding voxels.  It takes
+  five arguments.  The first argment is either "fixed" or "moving"
+  (aka f/m).  Fixed means that the brain is divided into fixed
+  subregions, and each voxel in a given subregion gets the same value.
+  Moving means that each voxel gets a value calculated from a region
+  centered at that voxel.  The next three arguments are the size of
+  the region in x, y, and z, in voxels.  The final argument is the
+  combination method: one of sum count (count nonzero), average, or
+  pct (percent nonzero).  Note that the output is stored in the same
+  format as the input, so you may want to convert to a different
+  datatype before performing some operations (e.g., many masks are
+  stored as byte data, which can only represent integers in the 0-255
+  range).
+
+  The -maskcombine operator is similar to -combine, using an input
+  mask to define the subregions.  The first argument is the name of a
+  mask file, the second is the operator to use.  The sum, count,
+  average, and pct operators are supported.
+
+  -smoothvox2 and -smoothmm2 do Gaussian smoothing without averaging
+   in 0's from outside the volume.
+

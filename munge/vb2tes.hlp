@@ -1,0 +1,21 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vb2tes (v%1%)
+usage:
+  vb2tes  <4D file/dir> <tesname> [<flags>]
+flags:
+  -i <nums>      include only these volumes
+  -e <nums>      exclude these volumes
+  -m <outfile>   multifile mode, writes to outfile
+  -f             convert to floating point
+  -n             replace NaNs and Infs with zeros
+notes:
+  for the -i and -e flags, you can specify a list of numbers as a list
+  range, or combination as follows: 1,3,5,7,9 or 32-45 or 0,1,2,7-10
+
+  vb2tes has been deprecated and is no longer actively maintained.
+  please use vbconv or vbim instead, e.g.:
+
+    vbconv foo.nii foo.tes
+

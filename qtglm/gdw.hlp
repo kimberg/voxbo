@@ -1,0 +1,9 @@
+
+VoxBo gdw (v%1%)
+summary: graphcal design matrix editor
+usage:
+  gdw <flags>
+flags:
+  -h                     show help
+  -v                     show version
+

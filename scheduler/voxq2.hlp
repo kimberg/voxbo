@@ -1,0 +1,7 @@
+(sysadmin only:)
+  voxq --die              ask voxbo to die
+  voxq --reset            ask voxbo to reread config
+  voxq --dump             dump voxbo config info
+  voxq --jobtypes         describe registered jobtypes
+  voxq --queue [on/off]   turn job running on or off
+  voxq --server add/remove <server>

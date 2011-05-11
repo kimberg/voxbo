@@ -1,0 +1,16 @@
+
+VoxBo vbinterpolate (v%1%)
+summary:
+  linear interpolation to replace oddball volumes
+usage:
+  vbinterpolate  [<flags>] <4D infile> <4D outfile> <vols to remove>
+flags:
+  -f             convert to floating point
+  -n             replace NaNs and Infs with zeros
+  -l             use linear interpolation (default is cubic spline)
+  -h             show help
+  -v             show version
+notes:
+  vols to remove is a comma-separated list of volume indices (you can
+  also use a dash for ranges), with the first volume being 0.  e.g.,
+  44,45,51,51 interpolates 4 volumes, as does 24-27

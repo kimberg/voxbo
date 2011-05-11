@@ -1,0 +1,16 @@
+
+VoxBo vbmaskcompare (v%1%)
+summary: mask comparison for VoxBo
+usage:
+  vbmaskcompare <mask1> <mask2>
+flags:
+  -h             show help
+  -v             show version
+  -s             include surface comparison
+  -dd <dist>     maximum allowable distance for non-discrepant voxels
+  -o <stem>      base output filename for discrepant voxel masks
+notes:
+  Your output stem should include the substring XXX.  That part will
+  be replaced in the actual output, so if you specify foo_XXX.cub, you
+  will get filenames like: foo_d1.cub, foo_d2.cub, etc.
+

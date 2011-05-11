@@ -1,0 +1,10 @@
+
+VoxBo vbmakeresid (v%1%)
+summary:
+  produces a residual volume for a GLM directory
+usage:
+  vbmakeresid  <glm stem> <outfile>
+flags:
+  -n <num>     number of residuals to collect, evenly spaced if needed
+  -h           help
+  -v           version

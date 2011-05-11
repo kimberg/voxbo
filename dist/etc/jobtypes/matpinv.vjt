@@ -1,0 +1,24 @@
+shortname matpinv
+description Efficient Matrix Operations in c (compute pinv(X))
+invocation commandline
+
+argument
+ name=in
+ argdesc=matrix before pseudo-inversion
+ type=string
+ default=none
+argument
+ name=out
+ argdesc=matrix after pseudo-inversion
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -pinv $(in) $(out)
+requires cpu
+
+
+
+

@@ -1,0 +1,94 @@
+
+shortname spm2_norm_calc_a
+description SPM2 Normalization -- calculate parameters
+invocation script
+requires cpu
+requires matlab
+retry_tag Try again later
+setenv MATLABPATH=/usr/local/spm2
+setenv HOME=/tmp
+
+argument
+ name=dir
+ argdesc=directory
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=paramfile
+ argdesc=file containing params
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=infile
+ argdesc=your volume 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=refvolume
+ argdesc=reference volume 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=vox_x
+ argdesc=vox_x size
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=vox_y
+ argdesc=vox_y size
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=vox_z
+ argdesc=vox_z size
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=bb
+ argdesc=bounding box
+ type=string
+ default=none
+ low=none
+ high=none
+end
+command vb2img $(dir)/$(infile) $(dir)/tmp_spm2norm.img
+# for fun, add  -logfile /jet/kimberg/test/spmnorm/matlab.log
+command /usr/local/bin/matlab12 -nodisplay -nojvm -c 27000@aleida.uphs.upenn.edu
+| spm_defaults;
+| global defaults;
+| cd $(dir);
+| defaults.normalise.write.vox=[$(vox_x) $(vox_y) $(vox_z)];
+| defaults.normalise.write.interp=7;
+| defaults.normalise.write.wrap=[0 0 0];
+| defaults.normalise.write.bb=$(bb);
+| defaults.normalise.estimate.cutoff=Inf
+| VG=spm_vol('$(refvolume)')
+| V=spm_vol('$(dir)/tmp_spm2norm.img')
+| params=spm_normalise(VG,V,'$(dir)/$(paramfile)','','',defaults.normalise.estimate);
+| msk=spm_write_sn(V,params,defaults.normalise.write,'mask');
+| spm_write_sn(V,params,defaults.normalise.write,msk);
+| exit
+command vb2cub $(dir)/wtmp_spm2norm.img $(dir)/n$(infile)
+command /bin/rm $(dir)/tmp_spm2norm.img $(dir)/tmp_spm2norm.hdr
+command /bin/rm $(dir)/wtmp_spm2norm.img $(dir)/wtmp_spm2norm.hdr

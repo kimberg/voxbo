@@ -1,0 +1,15 @@
+
+*******************************************************************
+* this program has been deprecated and is no longer actively
+* maintained.  please use vbconv or vbim instead.
+*******************************************************************
+
+VoxBo vb2img (v%1%)
+usage:
+  vb2img  [<flags>] <3D file/dir> <imgname>
+flags:
+  -f             convert to floating point
+  -n             replace NaNs and Infs with zeros
+  -h             show help
+  -v             show version
+

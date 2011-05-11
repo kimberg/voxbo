@@ -1,0 +1,13 @@
+
+VoxBo vbcmp (v%1%)
+summary: compare two or more vector, matrix, volume (3D) or series(4D)
+usage:
+  vbcmp [-m <mask>] <file> <file> [<file> ...]
+flags:
+  -m <mask>     restrict comparison to mask for 3D or 4D
+  -h            show this help
+  -v            show version
+notes
+  If you specify more than two files, you will get all pairwise
+  comparisons.
+

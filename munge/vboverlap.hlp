@@ -1,0 +1,18 @@
+
+VoxBo vboverlap (v%1%)
+summary: mask/lesion summary utility for VoxBo
+usage:
+  vboverlap <flags> [<mask>...]
+flags:
+  -a <atlas>        atlas file
+  -m <num>          value of interest in mask(s)
+  -r <num>          value of interest in atlas
+  -h        show help
+  -v        show version
+notes:
+
+  If -m is not specified, all non-zero values in the mask are
+  included.  If -r is not specified, each distinct value in the atlas
+  is considered separately.
+
+  The -a flag is mandatory.

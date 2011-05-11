@@ -1,0 +1,36 @@
+.TH vborient 1 "January, 2011 (v1.8.5)" "VoxBo" "The VoxBo Manual"
+.SH NAME
+vborient - re-orient 3D or 4D image data
+.SH SYNOPSIS
+.B vborient
+<infile> <outfile> <new orientation> [-from <orient>]
+.SH DESCRIPTION
+.B vborient
+is part of the VoxBo suite of tools for brain image analysis.
+.P
+.B vborient
+re-orients 3D and 4D volumes along the major axes, using simple
+three-letter codes for (R)ight, (L)eft, (I)nferior, (S)uperior,
+(A)nterior, and (P)osterior.  E.g., an axial image in radiological
+orientation is RPI.
+.P
+To get a complete list of available flags, run the program with no
+arguments.
+.SH AVAILABILITY
+Pre-built VoxBo binaries are available for Linux, OSX, and Cygwin, and
+via the NeuroDebian project (neuro.debian.net) for Debian derivatives.
+.SH CAVEATS
+VoxBo is provided with no warranty whatsoever.
+.SH AUTHOR
+For an historical roster of the VoxBo development team, visit
+www.voxbo.org.
+.SH SEE ALSO
+For detailed help on any VoxBo command-line program, run it with no
+arguments.  For graphical programs, use the -h flag.  For more help
+with VoxBo, for information about the mailing list, or to report bugs,
+visit the web site at www.voxbo.org.
+.P
+For information about file format support in VoxBo, see
+.BR voxbo-fileformats (7).
+For general information about VoxBo, see
+.BR voxbo (7).

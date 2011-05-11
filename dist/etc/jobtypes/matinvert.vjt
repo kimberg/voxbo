@@ -1,0 +1,24 @@
+shortname matinvert
+description Efficient Matrix Operations in c (compute X^-1)
+invocation commandline
+
+argument
+ name=in
+ argdesc=matrix before inversion
+ type=string
+ default=none
+argument
+ name=out
+ argdesc=matrix after inversion
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -invert $(in) $(out)
+requires cpu
+
+
+
+

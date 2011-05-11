@@ -1,0 +1,30 @@
+
+VoxBo vbfilter (v%1%)
+usage:
+  vbfilter [<flags>] <1D or 4D file/dir> ...
+flags:
+  -lp <freq>     lowpass: pass frequencies <= freq
+  -hp <freq>     highpass: pass frequencies >= freq
+  -bp <f1> <f2>  bandpass: pass frequencies f1 <= freq <=f2
+  -bs <f1> <f2>  bandstop: squash frequencies f1 <= freq <= f2
+  -rl <n>        remove lows: remove the n lowest frequencies
+  -rh <n>        remove highs: remove the n highest frequencies
+  -rm <range>    remove range: remove ordinal frequencies (e.g., 4-7)
+  -o <filename>  set output file name
+  -i             print info but don't actually do anything
+  -p <ms>        specify sampling period in ms
+  -h             print help
+  -v             print version
+notes:
+  Use the -i option to see the ordinal list of frequencies.
+
+  All specified filtering options will be applied in sequence, but
+  once an option removes a frequency, subsequent options won't restore
+  it.
+
+  The rl and rh options take counts, so -rl 1 means to remove the
+  single lowest frequency.  The rm option removes ordinal frequencies
+  counting from 1.
+
+  If no output filename is provided with -o, then the input filename
+  is prepended with f.

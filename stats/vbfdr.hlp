@@ -1,0 +1,20 @@
+
+VoxBo vbfdr (v%1%)
+usage:
+  vbfdr <file> ...
+flags:
+  -q <q>          FDR q value
+  -h              show help
+  -v              show version
+notes:
+  The default value for q is 0.01.
+
+  For each file processed, vbfdr assumes it's either a 3D file with
+  just p values or a 4D file with p values as the first volume.  In
+  the former case, you just get the p threshold.  In the latter case,
+  you will also get the corresponding value from any other volumes in
+  the series.  If the output is from vbperminfo with the -u option,
+  then usually the first FDR threshold is for the original stat values
+  (e.g., t values), and the second is for Z transformed scores
+  (derived from the p values).
+

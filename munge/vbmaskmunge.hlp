@@ -1,0 +1,33 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vbmaskmunge (v%1%)
+summary: mask munging for VoxBo
+usage:
+  vbmaskmunge <file> [<file> ...]
+flags:
+  -s <x> <y> <z> smooth with FWHM of x/y/z voxels
+  -t <t>         threshold at t (zero values <= t)
+  -x <t>         cutoff at t (zero values >= t)
+  -q             set non-zero values to 1
+  -z             set zero values to 1, others to zero
+  -c             combine input masks into a multi-mask
+  -u             combine input masks by calculating the union
+  -i             combine input masks by calculating the intersection
+  -n             combine input masks by counting
+  -d             calculate the difference between first two input cubes
+  -r             calculate the ratio of the first two input cubes
+  -m             calculate the product of the first two input cubes
+  -a <file>      apply result mask to file instead of saving
+  -p <pre>       prepend 'pre' to output (default 'm')
+  -o <file>      output filename (for single files only)
+  -h             show help
+  -v             show version
+notes:
+  The -c option proceeds with the input masks in the order given.  The
+  first mask is given code 1, the second 2, etc.  If there's overlap,
+  later masks override earlier ones.
+
+  vbmaskmunge has been deprecated and is no longer actively
+  maintained.  please use vbim instead.
+

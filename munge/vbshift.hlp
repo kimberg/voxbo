@@ -1,0 +1,9 @@
+
+VoxBo vbshift (v%1%)
+usage:
+  vbshift in out [flags]
+flags:
+  -r <filename>  guess offset by comparison with file 
+  -x <num>       force shift of num in x 
+  -y <num>       force shift of num in y
+  -z <num>       force shift of num in z

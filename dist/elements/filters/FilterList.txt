@@ -1,0 +1,18 @@
+;VB98
+;TXT1
+;
+; This list provides the names and paths of the filters available in the
+;  filters folder. If you wish to add filters to the matrix design program
+;  simply add the file to this folder and update this file.
+;
+; For each filter, the menu name and file name are listed
+;
+
+First eigenvector
+Eigen1.ref
+
+Blocked IRF
+EmpiricalBlocked_IRF.ref
+
+Poisson
+Poisson_IRF.ref

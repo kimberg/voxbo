@@ -1,0 +1,13 @@
+
+shortname vbse
+description estimate smoothness from a 4D (residual) file
+invocation commandline
+requires cpu
+
+argument
+ name=stem
+ argdesc=stem name for GLM directory
+ type=string
+end
+
+command vbse $(stem).res $(stem).se

@@ -1,0 +1,25 @@
+
+VoxBo vbdumpstats (v%1%)
+summary: dump stats from one or more VoxBo GLMs
+usage:
+  vbdumpstats <glmdir> [<flags>]
+flags:
+  -c <contrast>    name of desired contrast
+  -m <maskfile>    mask file for region
+  -p <x> <y> <z>   position (coordinate)
+  --pca <#>        use nth principal component instead of region mean
+  -d               drift correct data (default off)
+  -d0              don't drift correct data
+  -n               mean norm data (default off)
+  -n0              don't mean norm data
+#  -t               tab-delimited output
+  -h               help
+  -v               version
+notes:
+  either -m or -p must be specified
+
+  if -c is omitted, all contrasts in contrasts.txt are used
+
+  option -c can take either a contrast name (to look up in
+  contrasts.txt) or a contrast spec of the following form: "<name>
+  <scale> vec 1 -1..."

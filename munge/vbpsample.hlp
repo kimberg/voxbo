@@ -1,0 +1,26 @@
+
+###############################################################
+# sample script file for VoxBo vbprep
+###############################################################
+
+# at the top, set the working directory, priority, sequence name, and
+# your email address
+DIR /home/username
+PRIORITY 3
+SEQUENCENAME mySequenceName
+EMAIL yourusername@yourdomain.edu
+
+# set global variable
+GLOBALS myValue=LAS
+
+# establish the separate bits of data to which the script will be applied
+FILE myInFile=/home/myName/file1.cub myOutFile=/home/myName/file2.cub
+FILE myInFile=/home/myName/file3.cub myOutFile=/home/myName/file4.cub
+
+# now the actual script
+
+# the next line runs twice, once for each FILE line above
+vborient $myInFile $myOutFile $myValue
+
+# "runonce" makes the next line run once, FILE variables aren't used
+runonce vborient /home/myName/file1 /home/myName/file2 $myValue

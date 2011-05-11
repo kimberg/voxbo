@@ -1,0 +1,12 @@
+
+shortname vb_volregress
+description do volume regression
+invocation commandline
+requires cpu
+
+argument
+ name=flags
+ argdesc=flags (includes vars)
+end
+
+command vbvolregress $(flags)

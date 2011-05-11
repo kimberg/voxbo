@@ -1,0 +1,95 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vbimagemunge (v%1%)
+summary: image munging for VoxBo
+usage:
+  vbimagemunge [<file> ...] <flags> -- <op> [<op> ...]
+flags:
+  -h             show help
+  -v             show version
+image processing operations:
+  smoothvox <x> <y> <z>  3D Gaussian smooth
+  smoothmm <x> <y> <z>   3D Gaussian smooth
+  thresh <val>           zero where <= val
+  threshabs <val>        zero where absolute value <= val
+  cutoff <val>           zero where >= val
+  quantize <val>         set non-zero values to val
+  invert                 zet non-zeros to zero, zeros to 1
+  combine ...            see below
+  convert <new type>     see below
+  add <img/num>          add image (if file exists) or scalar
+  sub <img/num>          subtract image (if file exists) or scalar
+  mult <img/num>         multiply by image (if file exists) or scalar
+  div <img/num>          divide by image (if file exists) or scalar
+  nminus <img/num>       subtract from img (if file exists) or scalar
+  random01               fill entire volume with random 0s and 1s
+  remap <file>           file has two values per line: old value and new value
+  flipx/flipy/flipz      
+  bigendian/littleendian change how the data will be written out
+  byteswap               
+  zeroleft/zeroright     
+  rotate <pitch> <roll> <yaw>
+  regionat <x> <y> <z>   find region including voxel at coordinates x,y,z
+  splitregions <fname>   output filename (XXX will be replaced by an index)
+# NOT YET IMPLEMENTED:
+# orient <from> <to>     RPI notation, use -- as from for current orientation
+# ndividedby <num>
+# removesmallregions <n>  // uses function zerosmallregions(cube,double)
+combining operations:
+  sum               sum all volumes
+  average           average all volumes
+  product           product of all volumes
+  multi             combine input masks into a multi-mask
+  union             combine input masks by calculating the union
+  intersect         combine input masks by calculating the intersection
+  count             combine input masks by counting non-zero voxels
+  overlapmask       create a color-coded overlap mask of up to 3 masks
+  select <n>        randomly select n volumes
+  include <range>   include volumes in range, e.g., 0-5,7,9-13 (no spaces)
+  exclude <range>   exclude volumes in range, e.g., 0-5,7,9-13 (no spaces)
+output/summary operations:
+  write <name>            write to single output filename
+  writeprefixed <prefix>  prefix each volume's original name and write
+  write4d <name>          combine the volumes into a 4d file
+  info                    print general info about each 3D volume
+  regioninfo              print region info    // vbregion has great methods
+notes:
+  vbim replaced vbimagemunge and various other mungers.  this program
+  is no longer actively maintained.
+
+  vbimagemunge replaces vbmaskmunge, for the most part.
+
+  vbimagemunge takes multiple 3D volumes as input, and applies the
+  specified image processing operations, in the order specified.  If a
+  4D input volume is specified, it is broken down into 3D volumes.
+  
+  vbimagemunge has three kinds of operations.  Image processing
+  operations are applied to each 3D volume independently.  Combining
+  operations apply to the whole set of 3D volumes and typically reduce
+  the set to a single volume.  Output/summary operations print out
+  information about the volumes as they exist at that point and/or
+  write out files.  The operations are applied in the order given.
+
+  For convert, valid new types are: byte, int16, int32, float, and
+  double.  Note that VoxBo historically has used more ambiguous names
+  for int16 and int32.
+
+  The combine operation implements several methods for re-calculating
+  each voxel's value as a combination of surrounding voxels.  It takes
+  six arguments.  The first argment is either "fixed" or "moving" (can
+  be abbreviated with f/m).  Fixed means that the brain is divided
+  into fixed subregions, and each voxel in a given subregion gets the
+  same value.  Moving means that each voxel gets a value calculated
+  from a region centered at that voxel.  The next three arguments are
+  the size of the region in x, y, and z.  The following argument is
+  the combination method.  The following methods are supported: sum,
+  count (count nonzero), average, pct (percent nonzero), any (1 if any
+  voxel in the region is nonzero), sumthresh (1 if the sum exceeds a
+  threshold), and averagethresh.  The final argument is the threshold
+  for sumthresh and averagethresh (ignored for the other methods, but
+  you must still supply a value.  Note that the output is stored in
+  the same format as the input, so you may want to convert to a
+  different datatype before performing some operations (e.g., many
+  masks are stored as byte data, which can only represent integers in
+  the 0-255 range).

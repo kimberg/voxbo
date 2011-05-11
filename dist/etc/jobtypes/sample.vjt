@@ -1,0 +1,46 @@
+
+# sample.vjt
+# sample VoxBo jobtype file
+
+# many things for which you might want to define a VoxBo jobtype can
+# be accomplished via the shellcommand jobtype.  but if you create
+# your own jobtype, you can include some interaction with an
+# interpreter (e.g., MATLAB or IDL), and you can customize the jobtype
+# a little more, chain commands, and have the jobtype automatically
+# included in VoxBo's interfaces.
+
+# shortname is just the name of the jobtype, should usually match the filename
+# description is free text, best kept succinct
+# invocation is "script" except for internal jobtypes ("commandline" also ok)
+
+shortname sample
+description sample jobtype
+invocation script
+requires cpu
+setenv foo=bar
+
+# each argument should be represented with a paragraph like the below
+# name: the name of the argument
+# argdesc: a brief text description of the argument
+# type: a single token describing the role; "input" and "output" may
+#       be treated specially, and "compound" indicates that all provided
+#       arguments should be aggregated into one string
+# default: default value
+
+argument
+ name=command
+ argdesc=text description
+ type=compound
+ default=ls
+end
+
+# here's the actual command or commands
+# variable replacement is done with $(varname)
+# multiple commands can be listed, and will be executed in order
+# script lines (for text input to the command) follow the command
+#   and are prepended with "|"
+
+command /bin/sh -c "$(command)"
+command matlab
+| spm
+| exit

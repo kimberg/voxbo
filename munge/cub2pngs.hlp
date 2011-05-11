@@ -1,0 +1,5 @@
+
+VoxBo cub2pngs (v%1%)
+summary: convert any 3D image to a directory of PNG images
+usage:
+  cub2pngs <cubename> <directory> [stem]

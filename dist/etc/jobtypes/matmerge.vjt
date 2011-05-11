@@ -1,0 +1,14 @@
+shortname matmerge
+description Efficient Matrix Operations in c (join columns)
+invocation commandline
+
+argument
+ name=out
+ argdesc=assemble out from available parts
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -assemblecols $(out)

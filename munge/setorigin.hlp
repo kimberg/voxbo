@@ -1,0 +1,12 @@
+
+VoxBo setorigin (v%1%)
+summary: perform various origin-related manipulations
+usage:
+  setorigin A <x> <y> <z>    set the origin of A to x,y,z
+  setorigin -g A             guesstimate the origin for A
+  setorigin -m A B           maps the origin of A onto B
+  setorigin -c A B [C ...]   copies the origin from A to B, C, ...
+  setorigin -s A [B ...]     strips the origin from A, B, ...
+  setorigin -x A [B ...]     sets the origin to the dead center for A, B, ...
+notes:
+  setorigin will set non-integer origins for nifti files only

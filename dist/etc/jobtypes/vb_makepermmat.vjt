@@ -1,0 +1,24 @@
+
+shortname vb_makepermmat
+description create exogenous data filter
+invocation commandline
+requires cpu
+
+argument
+ name=outfile
+ argdesc=output file name
+end
+argument
+ name=ndata
+ argdesc=number of data points
+end
+argument
+ name=nperms
+ argdesc=number of permutations
+end
+argument
+ name=permtype
+ argdesc=either "sign" or "data"
+end
+
+command vbpermmat $(outfile) $(nperms) $(ndata) $(permtype)

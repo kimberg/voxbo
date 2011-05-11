@@ -1,0 +1,43 @@
+
+shortname avants_synmmn_masked
+description SyNMMN
+invocation script
+requires cpu
+
+argument
+ name=nativestem
+ argdesc=stem name
+ type=string
+end
+argument
+ name=nativemaskstem
+ argdesc=native image mask
+ type=string
+end
+argument
+ name=templatestem
+ argdesc=template image
+ type=string
+end
+argument
+ name synmmn_iterations
+ argdesc number of iterations for each synmmn stage
+ default 1x1x1x1
+end
+argument
+ name=forwardwarp
+ argdesc=name for composed mapping
+ type=string
+end
+argument
+ name=inversewarp
+ argdesc=name for composed mapping
+ type=string
+end
+
+command /home/avants/bin/3D/mstart3dt4_mask $(nativestem).hdr $(templatestem).hdr rigid.hdr rigidparams 0 750 32 6000 $(nativemaskstem).hdr
+command /home/avants/bin/3D/tran2vec $(nativestem).hdr rigidparams rigidwarp
+command /home/avants/bin/3D/tran2vec $(templatestem).hdr rigidparams rigidinversewarp 1
+command /home/avants/bin/3D/SyNMMN -f $(nativestem).hdr -m rigid.hdr -l 0.7 -n 4 -i$(synmmn_iterations) -c 4 -s 1.5 -o sym -x $(nativemaskstem).hdr
+command /home/avants/bin/3D/ComposeMaps symwarp rigidwarp $(forwardwarp)
+command /home/avants/bin/3D/ComposeMaps rigidinversewarp syminversewarp $(inversewarp)

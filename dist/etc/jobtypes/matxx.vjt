@@ -1,0 +1,41 @@
+shortname matxx
+description Efficient Matrix Operations in c (compute XX)
+invocation commandline
+
+argument
+ name=in
+ argdesc=first matrix
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=out
+ argdesc=matrix representing (inputmatrix)(inputmatrix)
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=col1
+ argdesc=first selected column
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=col2
+ argdesc=second selected column
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -xy $(in) $(in) $(out) $(col1) $(col2)
+requires cpu
+
+

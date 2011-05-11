@@ -1,0 +1,12 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vecsplit (v%1%)
+usage:
+  vecsplit [<file> ...]
+notes:
+  for every movement parameter file you specify, vecsplit will split
+  it into six separate vectors, for the six parameters.
+
+  vecsplit has been deprecated and is no longer actively maintained.
+

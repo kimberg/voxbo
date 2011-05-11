@@ -1,0 +1,13 @@
+name=my
+description=a little job
+
+argument
+  name=input_filename
+  description=the name of the file used for input
+  types=string
+end
+
+resource
+  name=input_filename
+  types=string
+end

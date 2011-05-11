@@ -1,0 +1,28 @@
+
+shortname matlabcommand
+description execute any matlab function
+requires cpu
+requires matlab
+invocation script
+setenv MATLABPATH=$(SPM2_PATH)
+setenv HOME=/tmp
+
+argument
+ name=command
+ argdesc=the entire line to be run from the within matlab
+# type=compound means it aggregates all the provided arguments into one
+# type=compound
+end
+argument
+ name=path
+ argdesc=prepend to matlab path
+ type=string
+ default=none
+end
+
+
+command $(SPM2_MATLAB_CMD)
+| path('$(path)',path)
+| $(command)
+| exit
+

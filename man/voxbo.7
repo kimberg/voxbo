@@ -1,0 +1,35 @@
+.TH voxbo 7 "January, 2011 (v1.8.5)" "VoxBo" "The VoxBo Manual"
+.SH NAME
+voxbo - general information about the VoxBo toolbox
+.SH DESCRIPTION
+VoxBo is a suite of tools for brain image analysis, especially fMRI
+analysis and lesion-behavior mapping.  VoxBo includes over 100 tools,
+including many for general-purpose image munging (e.g., vbim(1)), many
+that implement specific statistical procedures (e.g., vbtmap(1)), and
+some that would likely be just as useful for non-imaging applications
+(vbbatch(1)).
+.P
+VoxBo has supported cluster parallel processing since 1998.  Although
+cluster installation is a little tricky, it's worth the effort if
+you'd like to speed up your analyses by an order of magnitude or two.
+As of 2010, VoxBo also supports desktop parallel processing on
+multi-core systems.  We do not yet support GPU parallel processing.
+.P
+All VoxBo tools support a common set of file formats.  See
+voxbo-fileformats(7) for more information.
+.SH AVAILABILITY
+Pre-built VoxBo binaries are available for Linux, OSX, and Cygwin, and
+via the NeuroDebian project (neuro.debian.net) for Debian derivatives.
+.SH CAVEATS
+VoxBo is provided with no warranty whatsoever.
+.SH AUTHOR
+For an historical roster of the VoxBo development team, visit
+www.voxbo.org.
+.SH SEE ALSO
+For detailed help on any VoxBo command-line program, run it with no
+arguments.  For graphical programs, use the -h flag.  For more help
+with VoxBo, for information about the mailing list, or to report bugs,
+visit the web site at www.voxbo.org.
+.P
+For information about VoxBo file formats, see
+.BR voxbo-fileformats (7).

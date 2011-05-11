@@ -1,0 +1,20 @@
+
+scan_type description type of the scan
+scan_type MRI
+scan_type MRA
+scan_type CT
+scan_type flatbed
+scan_type once-over
+scan_type expensive
+
+side_type description side of the injury
+side_type left
+side_type right
+side_type middle
+
+
+
+lesion_location description location of the lesion
+lesion_location here
+lesion_location there
+lesion_location everywhere

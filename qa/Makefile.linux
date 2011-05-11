@@ -1,0 +1,55 @@
+
+# Makfile for qa
+
+include ../make_stuff.txt
+
+# place to search for includes and targets
+VPATH = ../lib:../vbwidgets
+# voxbo libs that might be important here
+VBLIBS=libvbutil.a libvbio.a libvbprefs.a
+
+CPLUS_INCLUDE_PATH=../lib:$(QTINCDIR):../vbwidgets:/sw/include
+LIBRARY_PATH=:../lib:$(QTLIBDIR):/usr/X11R6/lib:/sw/lib
+export CPLUS_INCLUDE_PATH LIBRARY_PATH
+OBJECTS=vbqa.o ../vbwidgets/display.o ../vbwidgets/moc_display.o
+XLIBS=-lX11 -lXext -lpthread 
+LIBS=-lvbio -lvbprefs -lvbutil -lz $(QTLIBNAME) $(GSL_LIBS) $(XLIBS) $(DLLIB)
+CFLAGS=-O3 -Wall
+
+# qtsurf itself
+
+all: vbqa
+
+install:
+	cp vbqa $(BINDIR)
+
+vbqa: $(OBJECTS) $(VBLIBS)
+	$(CXX) -o vbqa $(OBJECTS) $(LIBS) $(RPATHS)
+
+# the objects
+
+vbqa.o: ../vbwidgets/display.h vbqa.cpp
+	$(CXX) -c vbqa.cpp -Wall $(CFLAGS)
+
+testx.o: testx.cpp
+	$(CXX) -c testx.cpp -Wall $(CFLAGS)
+
+# display code
+
+../vbwidgets/display.o: ../vbwidgets/display.cpp ../vbwidgets/display.h
+	make -C ../vbwidgets display.o
+
+../vbwidgets/moc_display.o: ../vbwidgets/moc_display.cpp ../vbwidgets/display.h 
+	make -C ../vbwidgets moc_display.o
+
+../vbwidgets/moc_display.cpp: $(MOC) ../vbwidgets/display.h ../vbwidgets/display.cpp 
+	$(MOC) ../vbwidgets/display.h -o moc_display.cpp
+
+# clean!
+
+clean:
+	rm -f *.o *~ *.moc.h vbqa qatest *.exe
+
+# rule to build the libvoxbo libraries
+$(VBLIBS):
+	make -C ../lib $@

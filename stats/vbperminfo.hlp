@@ -1,0 +1,52 @@
+
+VoxBo vbperminfo (v%1%)
+summary: display information about permutation testing results
+usage:
+  vbperminfo -c <dir> <outfile> <thresh> <alpha> <mask>
+        creates a distribution of max cluster size
+  vbperminfo -p <stem> <outfile> <alpha>
+        creates a distribution of peak values
+  vbperminfo -u -t <truevol> -i <iterationdir> -o output
+  vbperminfo -r <file> [alpha]
+        calculates criteria for an existing ResultValues.ref
+  vbperminfo -k <stem> <outfile> <clustersize> <alpha>
+        creates a distribution for cluster-corrected thresholds
+  vbperminfo -d <dist> <stat value>
+  vbperminfo -dr <dist> <stat value or ref>
+
+other usage (these options may be outdated)
+  vbperminfo -pm [-a <alpha>] [-m <mask>] [-o <outfile>] <dir> <dir> ...
+        creates a distribution for peak minimum values across multiple maps
+        the result is stored in outfile and sampled at alpha (default 0.05)
+
+notes:
+  The -p and -u options will accept a directory, filename, or stem as
+  the data source.  A stem is just the part of the filename shared by
+  all the permutation volumes.  E.g., "permdir/cube" matches all files
+  in permdir that begin with "cube".  The -c and -k options currently
+  require a stem (will be fixed soon).
+
+  The -pm option can be slow and use up a lot of memory.  Only use it
+  if you're sure you need it.
+
+  The -u option calculates a separate permutation test in each voxel
+  (using the same set of permutations) and produces three maps (in a
+  single 4D volume).  The first is the p map, the second is a map of
+  the original stat values, and the third contains Z scores (converted
+  from the p values).
+
+  The -d option takes a vector file that contains a distribution of
+  values, and a stat value of interest, and returns a p value
+  corresponding to the proportion of values in the distribution
+  meeting or exceeding that value.  -dr returns the proportion of
+  values <= the value you pass.
+
+  The -r option allows you to examine existing ResultValues.ref files,
+  trying out different alpha values.
+
+  Note that the reported thresholds must be *exceeded* -- i.e., if the
+  results file tells you that an alpha of 0.05 requires a threshold of
+  t=3.17, voxels with a value of t=3.17 do not meet this standard.
+  This is particularly important in cases where the permutation
+  distribution may have duplicate values.
+

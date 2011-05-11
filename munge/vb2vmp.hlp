@@ -1,0 +1,8 @@
+
+VoxBo vb2vmp (v%1%)
+usage:
+  vb2vmp  [<flags>] <3D file/dir> <imgname>
+flags:
+  -n             replace NaNs and Infs with zeros
+  -h             show help
+  -v             show version

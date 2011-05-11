@@ -1,0 +1,14 @@
+
+shortname shellcommand
+description execute any command line
+invocation commandline
+
+argument
+ name=command
+ argdesc=the entire line to be run from the command line 
+# type=compound means it aggregates all the provided arguments into one
+# type=compound
+end
+
+command /bin/sh -c "$(command)"
+requires cpu

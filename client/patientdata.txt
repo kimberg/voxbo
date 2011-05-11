@@ -1,0 +1,55 @@
+
+# "session" examiner date
+
+# session "Dan Kimberg" 1980 11 16 02 00 00
+
+# node - id - parent - value
+
+session 10101
+
+scan               1000   0     ignored
+scan:type          1001   1000  MRIx
+scan:date          1002   1000  "2002 12 1 0 0 0"
+
+session 10102
+
+scan                    2000   0     ignored2
+scan:type               2001   2000  hahaha
+scan:date               2002   2000  none
+scan:tech               2006   2000  doris
+scan:lesion             2003   2000  ignored
+scan:lesion:location    2004   2003  "some gyrus or something"
+scan:lesion:size        2005   2003  222
+scan:lesion:side        2007   2003  middle
+
+session 10101
+
+#demographics            3000   0     xxx
+#demographics:firstname  3001   3000  bob
+#demographics:lastname   3002   3000  thebuilder
+#demographics:dob        3003   3000  "1967 5 10 0 0 0"
+#demographics:phone      3004   3000  1-800-EAT-DIRT
+
+session 10102
+
+demographics            4000   0     xxx
+demographics:firstname  4001   4000  dora
+demographics:lastname   4002   4000  theexplorer
+demographics:DOB        4003   4000  "1960 4 2 0 0 0"
+demographics:phonenumber      4004   4000  1-800-EAT-FOOD
+demographics:sampletime      4005 4000 "0 0 0 3 30 27"
+demographics:sampledate      4006 4000 "1963 11 22 0 0 0"
+demographics:sampledatetime  4007 4000 "1964 12 23 4 31 28"
+
+simpletest              5000   0     xxx
+simpletest:datetime     5001   5000  "1967 5 10 15 30 00"
+simpletest:combo        5002   5000  "bogo scan"
+simpletest:string       5003   5000  "very useful data"
+simpletest:string       5004   5000  "very useful data 2"
+simpletest:text         5005   5000  "big <b>block</b> of text"
+#simpletest:image        5006   5000  noval
+#simpletest:brainimage   5007   5000  noval
+
+simpletest              6000   0     yyy
+simpletest:combo        6002   6000  "bogo scan"
+simpletest:missing      6003   6000  "surprise, this node doesn't exist"

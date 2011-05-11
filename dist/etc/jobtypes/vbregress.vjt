@@ -1,0 +1,30 @@
+shortname vbregress
+description 4D regression
+invocation commandline
+
+argument
+ name=stem
+ argdesc=stem of GLM directory
+ type=string
+end
+argument
+ name=steps
+ argdesc=number of steps to break regression into
+ type=string
+ default="1"
+end
+argument
+ name=index
+ argdesc=index of piece to execute
+ type=string
+ default="1"
+end
+argument
+ name=flags
+ argdesc=flags (e.g. -d for detrend and -m for mean norm)
+ type=string
+ default=""
+end
+
+command vbregress $(stem) -p $(index) $(steps) $(flags)
+requires cpu

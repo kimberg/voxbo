@@ -1,0 +1,47 @@
+
+VoxBo vbtmap (v%1%)
+usage:
+  vbtmap <4D file> <1D file> <outfile> <flags>
+flags:
+  -op <mat> <ind>    order permutation
+#  -p <part> <nparts> do just part of the volume
+  -m <maskfile>      specify inclusion mask file
+  -n <min>           minimum number of lesions for inclusion (default:2)
+  -q <q>             calculate FDR thresh for q
+  -pfile             write p values, lowest to highest, to this file
+  -cifile <file> <ci>   (see below)
+  -nodup             omit duplicate voxels from FDR calculation
+  -f                 flip sign of stat values
+  -2                 use two-tailed test when calculating ps
+  -w                 use welch's t-test (unequal variances)
+  -z                 convert t to z
+  -h                 show help
+  -v                 show version
+notes:
+  By default, vbtmap calculates t values for lesion minus no-lesion.
+  I.e., a positive t or z means that patients with a lesion in that
+  voxel had higher scores.  So you would typically expect positive
+  values for error or response time measures, for example.  Use the -f
+  flag to flip it.  p values are one-tailed.
+
+  The minimum number of lesions can't be set to less than 2, because
+  vbtmap is designed to carry out a 2-sample t-test.
+
+  The -nodup flag allows groups of identical voxels (i.e., voxels
+  lesioned in exactly the same set of patients) to be counted only
+  once for the FDR comparison.  I'm not sure if this is a good, bad,
+  or indifferent idea.  But it's important to consider that when you
+  do this, the FDR rate applies to regions (contiguous or otherwise)
+  of identical voxels, not to voxels per se.
+
+  If you provide a q value of 0 (-q 0), vbtmap will give you FDR
+  thresholds for a range of commonly requested q values.
+
+  The -cifile flag takes as arguments a filename and the desired
+  confidence interval.  A 4D file is written to the filename with
+  three volums: the mean difference between groups, the lower end of
+  the confidence interval, and the upper end.  The confidence interval
+  can be specified either in the 0-1 range or as a percentage (in the
+  1-99 range).  Note that -cifile currently does not work for the
+  Welch's t-test, and does not respect the -f flag.
+

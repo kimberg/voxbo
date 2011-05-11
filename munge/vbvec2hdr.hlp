@@ -1,0 +1,10 @@
+
+VoxBo vbvec2hdr (v%1%)
+summary: perform various header-related manipulations
+usage:
+  vbvec2hdr <flags>
+flags:
+  -o <outfile>    set hdr line (replace or add)
+  -t <tag> <vec>  vector file and text tag (in quotes)
+  -h              show help
+  -v              print version

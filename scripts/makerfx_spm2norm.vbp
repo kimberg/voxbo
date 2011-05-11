@@ -1,0 +1,41 @@
+
+# script makerfx_spm2norm.vbp
+
+#make the rfx dir, in case it doesn't exist
+runonce shellcommand "/bin/mkdir -p $rfxdir"
+
+# make statmap from each glm
+vbstatmap $glmdir $rfxdir/$tag_map.cub "$contrast" $scale
+
+# copy mask to dir
+shellcommand "vbmaskmunge $glmdir/*.prm -o $rfxdir/$tag_mask.cub"
+
+# copy the origin to the map
+setorigin $adir/$func $rfxdir/$tag_map.cub
+
+# copy all headers to the map (to get origin and voxel sizes)
+shellcommand "vbhdr -c $adir/$func $rfxdir/$tag_map.cub"
+
+# copy all headers to the mask (to get origin and voxel sizes)
+shellcommand "vbhdr -c $adir/$func $rfxdir/$tag_mask.cub"
+
+# normalize each stat map
+spm2_norm_apply3d $rfxdir $adir/$paramfile $tag_map.cub $tag_nmap.cub $xf $yf $zf $bb_func
+
+# normalize each mask
+spm2_norm_apply3d $rfxdir $adir/$paramfile $tag_mask.cub $tag_nmask.cub $xf $yf $zf $bb_func
+
+# quantize each normalized mask
+shellcommand "vbmaskmunge -t 0.5 -q $rfxdir/$tag_nmask.cub -o $rfxdir/$tag_nmask.cub"
+
+# merge the normalized masks into the rfx ubermask
+runonce shellcommand "vbmaskmunge $rfxdir/*_nmask.cub -i -o $rfxdir/ubermask.cub"
+
+# merge the stat maps into a full.tes
+runonce shellcommand "vb2tes -m $rfxdir/full_$tesname.tes $rfxdir/*_nmap.cub"
+
+# create coverage map
+runonce shellcommand "vbmaskmunge -n $rfxdir/*_nmask.cub -o $rfxdir/coverage_$tesname.cub"
+
+# apply ubermask to full tes
+runonce shellcommand "vbmaskmunge $rfxdir/ubermask.cub -a $rfxdir/full_$tesname.tes -o $rfxdir/$tesname.tes"

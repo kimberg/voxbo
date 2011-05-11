@@ -1,0 +1,16 @@
+
+You could try just:
+
+  make
+  make install
+
+If you have slightly more complicated needs, preface that with:
+
+  ./configure.py
+
+and then run it again with whatever arguments you need.
+
+For more detailed build notes and other documentation, visit the web
+site at:
+
+  http://www.voxbo.org/

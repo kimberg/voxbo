@@ -1,0 +1,829 @@
+;======================================================================;
+;=                                   __                               =;
+;=                      \   /       l  \     98                       =;
+;=                       \ /  /\ \/ l--< /\                           =;
+;=                        v   \/ /\ l__/ \/                           =;
+;=                                                                    =;
+;=                 --------------------------------                   =;
+;=                                                                    =;
+;=   VoxBo_RawHdr.pro                                                 =;
+;=                                                                    =;
+;=     defines the arrangement of the header on GE image files        =;
+;=                                                                    =;
+;=                 --------------------------------                   =;
+;=                                                                    =;
+;=           modified from routines provided by David Alsop           =;
+;=                                                                    =;
+;=           ***  This code is not in the public domain ***           =;
+;=                                                                    =;
+;=      The description of the header format provided here is         =;
+;=        proprietary information owned by General Electric           =;
+;=                                                                    =;
+;=                 --------------------------------                   =;
+;=                                                                    =;
+;=  For manuals and complete source                                   =;
+;=    code, please visit the VoxBo website:                           =;
+;=                                                                    =;
+;=                        www.voxbo.com                               =;
+;=                                                                    =;
+;======================================================================;
+
+
+
+
+function mk_Imagehdr56
+
+;;sets up structures for image header
+
+
+TYPINT=FIX(0)
+TYPLON=LONG(0)
+TYPFLT=FLOAT(0)
+TYPBYTE=BYTE(0)
+
+SUITEDATATYPE={                  $
+SU_ID:    BYTARR(4),$;    /*SUITE ID FOR THIS EXAM*/
+SU_UNIQ:  TYPINT,$;   /*THE MAKE-UNIQUE FLAG*/
+SU_DISKID:  TYPBYTE,$;    /*DISK ID*/
+SU_PRODID:  BYTARR(13),$;   /*PRODUCT ID*/
+SU_VERSCRE: TYPINT,$;   /*GENESIS VERSION OF RECORD*/
+SU_VERSCUR: TYPINT,$;   /*GENESIS VERSION OF RECORD*/
+SU_CHECKSUM:  BYTARR(90)$;    /*SUITE RECORD CHECKSUM*/
+}
+
+EXAMDATATYPE={                                                       $
+EX_SUID:  BYTARR(4),$;    /*SUITE ID FOR THIS EXAM*/
+EX_UNIQ:  TYPINT,$;   /*THE MAKE-UNIQUE FLAG*/
+EX_DISKID:  TYPINT,$;   /*DISK ID FOR THIS EXAM*/
+EX_NO:    TYPINT,$;   /*EXAM NUMBER*/
+EX_HOSPNAME:  BYTARR(34),$;   /*HOSPITAL NAME*/
+EX_DETECT:  TYPINT,$;   /*DETECTOR TYPE*/
+EX_NUMCELLS:  TYPLON,$;   /*NUMBER OF CELLS IN DET*/
+EX_ZEROCELL:  TYPLON,$;   /*CELL NUMBER AT THETA*/
+EX_CELLSPACE: TYPLON,$;   /*CELL SPACING*/
+EX_SRCTODET:  TYPFLT,$;   /*DISTANCE FROM SOURCE TO DETECTOR*/
+EX_SRCTOISO:  TYPFLT,$;   /*DISTANCE FROM SOURCE TO ISO*/
+EX_TUBETYP: TYPINT,$;   /*TUBE TYPE*/
+EX_DASTYP:  TYPINT,$;   /*DAS TYPE*/
+EX_NUM_DCNK:  TYPINT,$;   /*NUMBER OF DECON KERNALS*/
+EX_DCN_LEN: TYPINT,$;   /*NUMBER OF ELEMENTS IN A DECON KERNAL*/
+EX_DCN_DENSITY: TYPINT,$;   /*DECON KERNAL DENSITY*/
+EX_DCN_STEPSIZE:TYPINT,$;   /*DECON KERNAL STEPSIZE*/
+EX_DCN_SHIFTCNT:TYPINT,$;   /*DECON KERNAL SHIFT COUNT*/
+EX_MAGSTRENGTH: TYPLON,$;   /*MAGNET STRENGTH (IN GAUSS)*/
+EX_PATID: BYTARR(13),$;   /*PATIENT ID FOR THIS EXAM*/
+EX_PATNAME: BYTARR(25),$;   /*PATIENT NAME*/
+EX_PATAGE:  TYPINT,$;   /*PATIENT AGE (YEARS, MONTHS OR DAYS)*/
+EX_PATIAN:  TYPINT,$;   /*PATIENT AGE NOTATION*/
+EX_PATSEX:  TYPINT,$;   /*PATIENT SEX*/
+EX_PATWEIGHT: TYPFLT,$;   /*PATIENT WEIGHT*/
+EX_TRAUMA:  TYPINT,$;   /*TRAUMA FLAG*/
+EX_HIST:  BYTARR(61),$;   /*PATIENT HISTORY*/
+EX_REQNUM:  BYTARR(13),$;   /*REQUISITION NUMBER*/
+EX_DATETIME:  TYPLON,$;   /*EXAM DATE/TIME STAMP*/
+EX_REFPHY:  BYTARR(33),$;   /*REFERRING PHYSICIAN*/
+EX_DIAGRAD: BYTARR(33),$;   /*DIAGNOSTICIAN/RADIOLOGIST*/
+EX_OP:    TYPLON,$;   /*OPERATOR*/
+EX_DESC:  BYTARR(23),$;   /*EXAM DESCRIPTION*/
+EX_TYP:   BYTARR(3),$;    /*EXAM TYPE*/
+EX_FORMAT:  TYPINT,$;   /*EXAM FORMAT*/
+EX_FIRSTAXTIME: LONARR(2),$;    /*START TIME(SECS) FIRST AXIAL IN EXAM*/
+EX_SYSID: BYTARR(10),$;   /*CREATOR SUITE AND HOST*/
+EX_LASTMOD: TYPLON,$;   /*DATE/TIME OF LAST CHANGE*/ 
+EX_PROTOCOLFLAG:TYPINT,$;   /*NON-ZERO INDICATES PROTOCOL EXAM*/
+EX_ALLOC_KEY: BYTARR(14),$;   /*PROCESS THAT ALLOCATED THIS RECORD*/
+EX_DELTA_CNT: TYPLON,$;   /*INDICATES # OF UPDATES TO HEADER*/
+EX_VERSCRE: TYPINT,$;   /*GENESIS VERSION - CREATED*/
+EX_VERSCUR: TYPINT,$;   /*GENESIS VERSION - NOW*/
+EX_CHECKSUM:  TYPLON,$;   /*EXAM RECORD CHECKSUM*/
+EX_COMPLETE:  TYPLON,$;   /*EXAM COMPLETE FLAG*/
+EX_SERIESCT:  TYPLON,$;   /*LAST SERIES NUMBER USED*/
+EX_NUMARCH: TYPLON,$;   /*NUMBER OF SERIES ARCHIVED*/
+EX_NUMSERIES: TYPLON,$;   /*NUMBER OF SERIES EXISTING*/
+EX_SERIES:  BYTARR(8),$;    /*SERIES KEYS FOR THIS EXAM*/
+EX_NUMUNSER:  TYPLON,$;   /*NUMBER OF UNSTORED SERIES*/
+EX_UNSERIES:  BYTARR(8),$;    /*UNSTORED SERIES KEYS FOR THIS EXAM*/
+EX_TOARCHCNT: TYPLON,$;   /*NUMBER OF UNARCHIVED SERIES*/
+EX_TOARCHIVE: BYTARR(8),$;    /*UNARCHIVED SERIES KEYS FOR THIS EXAM*/
+EX_PROSPCNT:  TYPLON,$;   /*NUMBER OF PROSPECTIVE/SCOUT SERIES*/
+EX_PROSP: BYTARR(8),$;    /*PROSP./SCOUT SERIES KEYS THIS EXAM*/
+EX_MODELNUM:  TYPLON,$;   /*LAST MODEL NUMBER USED*/
+EX_MODELCNT:  TYPLON,$;   /*NUMBER OF THREED MODELS*/
+EX_MODELS:  BYTARR(8),$;    /*THREED MODEL KEYS FOR EXAM*/
+EX_STAT:  TYPINT,$;   /*PATIENT STATUS*/
+EX_UNIQUE_SYS_ID:BYTARR(16),$;    /* UNIQUE SYSTEM ID */
+EX_SERVICE_ID:  BYTARR(16),$;   /* UNIQUE SERVICE ID */
+EX_MOBILE_LOC:  BYTARR(20),$;   /* MOBILE LOCATION LOCATION len ??? */
+excess:   BYTARR(534)$;
+}
+
+SERIESDATATYPE={              $
+SE_SUID:  BYTARR(4),$;    /*SUITE ID FOR THIS IMAGE*/
+SE_UNIQ:  TYPINT,$;   /*THE MAKE-UNIQUE FLAG*/
+SE_DISKID:  TYPINT,$;   /*DISK ID FOR THIS SERIES*/
+SE_EXNO:  TYPINT,$;   /*EXAM NUMBER*/
+SE_NO:    TYPINT,$;   /*SERIES NUMBER*/
+SE_DATETIME:  TYPLON,$;   /*ALLOCATION SERIES DATA/TIME STAMP*/
+SE_ACTUAL_DT: TYPLON,$;   /*ACTUAL SERIES DATA/TIME STAMP*/
+SE_DESC:  BYTARR(30),$;   /*SERIES DESCRIPTION*/
+SE_PR_SYSID:  BYTARR(9),$;    /*PRIMARY RECEIVER SUITE AND HOST*/
+SE_PANSYSID:  BYTARR(9),$;    /*ARCHIVER SUITE AND HOST*/
+SE_TYP:   TYPINT,$;   /*SERIES TYPE*/
+SE_SOURCE:  TYPINT,$;   /*SERIES FROM WHICH PRESCRIBED*/
+SE_PLANE: TYPINT,$;   /*MOST-LIKE PLANE (FOR L/S)*/
+SE_SCAN_TYPE: TYPINT,$;   /*SCOUT OR AXIAL (FOR CT)*/
+SE_POSITION:  TYPLON,$;   /*PATIENT POSITION*/
+SE_ENTRY: TYPLON,$;   /*PATIENT ENTRY*/
+SE_ANREF: TYPLON,$;   /*ANATOMICAL REFERENCE*/
+SE_LMHOR: TYPFLT,$;   /*HORIZONTAL LANDMARK*/
+SE_PRTCL: BYTARR(26),$;   /*SCAN PROTOCOL NAME*/
+SE_CONTRAST:  TYPINT,$;   /*IF > 0 IMAGE USED CONTRAST(L/S)*/
+SE_START_RAS: BYTARR(2),$;    /*RAS LETTER FOR FIRST SCAN LOCATION (L/S)*/
+SE_START_LOC: TYPFLT,$;   /*FIRST SCAN LOCATION (L/S)*/
+SE_END_RAS: BYTARR(2),$;    /*RAS LETTER FOR LAST SCAN LOCATION (L/S)*/
+SE_END_LOC: TYPFLT,$;   /*LAST SCAN LOCATION (L/S)*/
+SE_PSEQ:  TYPINT,$;   /*LAST PULSE SEQUENCE USED (L/S)*/
+SE_SORTORDER: TYPINT,$;   /*IMAGE SORT ORDER (L/S)*/
+SE_LNDMRKCNT: TYPLON,$;   /*LANDMARK COUNTER*/
+SE_NACQ:  TYPINT,$;   /*NUMBER OF ACQUISITIONS*/
+SE_XBASEST: TYPINT,$;   /*STARTING NUMBER FOR BASELINES*/
+SE_XBASEEND:  TYPINT,$;   /*ENDING NUMBER FOR BASELINES*/
+SE_XENHST:  TYPINT,$;   /*STARTING NUMBER FOR ENHANCED SCANS*/
+SE_XENHEND: TYPINT,$;   /*ENDING NUMBER FOR ENHANCED SCANS*/
+SE_LASTMOD: TYPLON,$;   /*DATE/TIME OF LAST CHANGE*/
+SE_ALLOC_KEY: BYTARR(14),$;   /*PROCESS THAT ALLOCATED THIS RECORD*/
+SE_DELTA_CNT: TYPLON,$;   /*INDICATES NUMBER OF UPDATES TO HEADER*/
+SE_VERSCRE: TYPINT,$;   /*GENESIS VERSION - CREATED*/
+SE_VERSCUR: TYPINT,$;   /*GENESIS VERSION - NOW*/
+SE_PDS_A: TYPLON,$;   /*PIXELDATA SIZE - AS STORED*/
+SE_PDS_C: TYPLON,$;   /*PIXELDATA SIZE - COMPRESSED*/
+SE_PDS_U: TYPLON,$;   /*PIXELDATA SIZE - UNCOMPRESSED*/
+SE_CHECKSUM:  TYPLON,$;   /*SERIES RECORD CHECKSUM*/
+SE_COMPLETE:  TYPLON,$;   /*SERIES COMPLETE FLAG*/
+SE_NUMARCH: TYPLON,$;   /*NUMBER OF IMAGES ARCHIVED*/
+SE_IMAGECT: TYPLON,$;   /*LAST IMAGE NUMBER USED*/
+SE_NUMIMAGES: TYPLON,$;   /*NUMBER OF IMAGES EXISTING*/
+SE_IMAGES:  BYTARR(8),$;    /*IMAGE KEYS FOR THIS SERIES*/
+SE_NUMUNIMG:  TYPLON,$;   /*NUMBER OF UNSTORED IMAGES*/
+SE_UNIMAGES:  BYTARR(8),$;    /*UNSTORED IMAGE KEYS FOR THIS SERIES*/
+SE_TOARCHCNT: TYPLON,$;   /*NUMBER OF UNARCHIVED IMAGES*/
+SE_TOARCHIVE: BYTARR(8),$;    /*UNARCHIVED IMAGE KEYS FOR THIS SERIES*/
+SE_ECHO1_ALPHA: TYPFLT,$;   /*ECHO 1 ALPHA VALUE*/
+SE_ECHO1_BETA:  TYPFLT,$;   /*ECHO 1 BETA VALUE*/
+SE_ECHO1_WINDOW:TYPINT,$;   /*ECHO 1 WINDOW VALUE*/
+SE_ECHO1_LEVEL: TYPINT,$;   /*ECHO 1 LEVEL VALUE*/
+SE_ECHO2_ALPHA: TYPFLT,$;   /*ECHO 2 ALPHA VALUE*/
+SE_ECHO2_BETA:  TYPFLT,$;   /*ECHO 2 BETA VALUE*/
+SE_ECHO2_WINDOW:TYPINT,$;   /*ECHO 2 WINDOW VALUE*/
+SE_ECHO2_LEVEL: TYPINT,$;   /*ECHO 2 LEVEL VALUE*/
+SE_ECHO3_ALPHA: TYPFLT,$;   /*ECHO 3 ALPHA VALUE*/
+SE_ECHO3_BETA:  TYPFLT,$;   /*ECHO 3 BETA VALUE*/
+SE_ECHO3_WINDOW:TYPINT,$;   /*ECHO 3 WINDOW VALUE*/
+SE_ECHO3_LEVEL: TYPINT,$;   /*ECHO 3 LEVEL VALUE*/
+SE_ECHO4_ALPHA: TYPFLT,$;   /*ECHO 4 ALPHA VALUE*/
+SE_ECHO4_BETA:  TYPFLT,$;   /*ECHO 4 BETA VALUE*/
+SE_ECHO4_WINDOW:TYPINT,$;   /*ECHO 4 WINDOW VALUE*/
+SE_ECHO4_LEVEL: TYPINT,$;   /*ECHO 4 LEVEL VALUE*/
+SE_ECHO5_ALPHA: TYPFLT,$;   /*ECHO 5 ALPHA VALUE*/
+SE_ECHO5_BETA:  TYPFLT,$;   /*ECHO 5 BETA VALUE*/
+SE_ECHO5_WINDOW:TYPINT,$;   /*ECHO 5 WINDOW VALUE*/
+SE_ECHO5_LEVEL: TYPINT,$;   /*ECHO 5 LEVEL VALUE*/
+SE_ECHO6_ALPHA: TYPFLT,$;   /*ECHO 6 ALPHA VALUE*/
+SE_ECHO6_BETA:  TYPFLT,$;   /*ECHO 6 BETA VALUE*/
+SE_ECHO6_WINDOW:TYPINT,$;   /*ECHO 6 WINDOW VALUE*/
+SE_ECHO6_LEVEL: TYPINT,$;   /*ECHO 6 LEVEL VALUE*/
+SE_ECHO7_ALPHA: TYPFLT,$;   /*ECHO 7 ALPHA VALUE*/
+SE_ECHO7_BETA:  TYPFLT,$;   /*ECHO 7 BETA VALUE*/
+SE_ECHO7_WINDOW:TYPINT,$;   /*ECHO 7 WINDOW VALUE*/
+SE_ECHO7_LEVEL: TYPINT,$;   /*ECHO 7 LEVEL VALUE*/
+SE_ECHO8_ALPHA: TYPFLT,$;   /*ECHO 8 ALPHA VALUE*/
+SE_ECHO8_BETA:  TYPFLT,$;   /*ECHO 8 BETA VALUE*/
+SE_ECHO8_WINDOW:TYPINT,$;   /*ECHO 8 WINDOW VALUE*/
+SE_ECHO8_LEVEL: TYPINT,$;   /*ECHO 8 LEVEL VALUE*/
+excess:   BYTARR(684)$;     ;;;;;;;;was 676
+}
+
+
+
+;image header
+MRIMAGEDATATYPE={               $
+IM_SUID:  BYTARR(4),$;    /*SUITE ID FOR THIS IMAGE*/
+IM_UNIQ:  TYPINT,$;   /*THE MAKE-UNIQUE FLAG*/
+IM_DISKID:  TYPINT,$;   /*DISK ID FOR THIS IMAGE*/
+IM_EXNO:  TYPINT,$;   /*EXAM NUMBER FOR THIS IMAGE*/
+IM_SENO:  TYPINT,$;   /*SERIES NUMBER FOR THIS IMAGE*/
+IM_NO:    TYPINT,$;   /*IMAGE NUMBER*/
+IM_DATETIME:  TYPLON,$;   /*ALLOCATION IMAGE DATE/TIME STAMP*/
+IM_ACTUAL_DT: TYPLON,$;   /*ACTUAL IMAGE DATE/TIME STAMP*/
+IM_SCTIME:  TYPLON,$;   /*DURATION OF SCAN (SECS)*/
+IM_SLTHICK: TYPFLT,$;   /*SLICE THICKNESS (MM)*/
+IM_IMATRIX_X: TYPINT,$;   /*IMAGE MATRIX SIZE - X*/
+IM_IMATRIX_Y: TYPINT,$;   /*IMAGE MATRIX SIZE - Y*/
+IM_DFOV:  TYPFLT,$;   /*DISPLAY FIELD OF VIEW - X (MM)*/
+IM_DFOV_RECT: TYPFLT,$;   /*DISPLAY FIELD OF VIEW - Y (MM)*/
+IM_DIM_X: TYPFLT,$;   /*IMAGE DIMENSION - X*/
+IM_DIM_Y: TYPFLT,$;   /*IMAGE DIMENSION - Y*/
+IM_PIXSIZE_X: TYPFLT,$;   /*IMAGE PIXEL SIZE - X*/
+IM_PIXSIZE_Y: TYPFLT,$;   /*IMAGE PIXEL SIZE - Y*/
+IM_PDID:  BYTARR(14),$;   /*PIXEL DATA ID*/
+IM_CONTRASTIV:  BYTARR(7),$;    /*IV CONTRAST AGENT*/
+IM_CONTRASTORAL:BYTARR(27),$;   /*ORAL CONTRAST AGENT*/
+IM_CONTMODE:  TYPINT,$;   /*IMAGE CONTRAST MODE*/
+IM_SERRX: TYPINT,$;   /*SERIES FROM WHICH PRESCRIBED*/
+IM_IMGRX: TYPINT,$;   /*IMAGE FROM WHICH PRESCRIBED*/
+IM_SCREENFORMAT:TYPINT,$;   /*SCREEN FORMAT(8/16 BIT)*/
+IM_PLANE: TYPINT,$;   /*PLANE TYPE*/
+IM_SCANSPACING: TYPFLT,$;   /*SPACING BETWEEN SCANS (MM?)*/
+IM_COMPRESS:  TYPINT,$;   /*IMAGE COMPRESSION TYPE*/
+IM_SCOUTTYPE: BYTARR(2),$;    /*SCOUT TYPE (AP OR LATERAL)*/
+IM_LOC_RAS: BYTARR(2),$;    /*RAS LETTER OF IMAGE LOCATION*/
+IM_LOC:   TYPFLT,$;   /*IMAGE LOCATION*/
+IM_CTR:   FLTARR(3),$;    /*CENTER COORDS OF PLANE IMAGE, RAS*/ 
+IM_NORM:  FLTARR(3),$;    /*NORMAL R COORDS, RAS*/
+IM_TLHC:  FLTARR(3),$;    /*COORDS OF TOP LEFT HAND CORNER, RAS*/
+IM_TRHC:  FLTARR(3),$;    /*COORDS OF TOP RIGHT HAND CORNER,RAS*/
+IM_BRHC:  FLTARR(3),$;    /*COORDS OF BOTTOM RIGHT HAND CORNER*/
+IM_FORIMGREV: BYTARR(4),$;    /*FOREIGN IMAGE REVISION*/
+IM_TR:    TYPLON,$;   /*PULSE REPETITION TIME(USEC)*/
+IM_TI:    TYPLON,$;   /*PULSE INVERSION TIME(USEC)*/
+IM_TE:    TYPLON,$;   /*PULSE ECHO TIME(USEC)*/
+IM_TE2:   TYPLON,$;   /*SECOND ECHO ECHO (USEC)*/
+IM_NUMECHO: TYPINT,$;   /*NUMBER OF ECHOES*/
+IM_ECHONUM: TYPINT,$;   /*ECHO NUMBER*/
+IM_TBLDLTA: TYPFLT,$;   /*TABLE DELTA*/
+IM_NEX:   TYPFLT,$;   /*NUMBER OF EXCITATIONS*/
+IM_CONTIG:  TYPINT,$;   /*CONTINUOUS SLICES FLAG*/
+IM_HRTRATE: TYPINT,$;   /*CARDIAC HEART RATE (BPM)*/
+IM_TDEL:  TYPLON,$;   /*DELAY TIME AFTER TRIGGER (USEC)*/
+IM_SARAVG:  TYPFLT,$;   /*AVERAGE SAR*/
+IM_SARPEAK: TYPFLT,$;   /*PEAK SAR*/
+IM_MONSAR:  TYPINT,$;   /*MONITOR SAR FLAG*/ 
+IM_TRGWINDOW: TYPINT,$;   /*TRIGGER WINDOW (% OF R-R INTERVAL)*/
+IM_REPTIME: TYPFLT,$;   /*CARDIAC REPETITION TIME*/
+IM_IMGPCYC: TYPINT,$;   /*IMAGES PER CARDIAC CYCLE*/
+IM_XMTGAIN: TYPINT,$;   /*ACTUAL TRANSMIT GAIN (.1 DB)*/
+IM_RCVGAIN1:  TYPINT,$;   /*ACTUAL RECEIVE GAIN ANALOG (.1 DB)*/
+IM_RCVGAIN2:  TYPINT,$;   /*ACTUAL RECEIVE GAIN DIGITAL (.1 DB)*/
+IM_MR_FLIP: TYPINT,$;   /*FLIP ANGLE FOR GRASS SCANS (DEG.)*/
+IM_MINDAT:  TYPLON,$;   /*MINIMUM DELAY AFTER TRIGGER (USEC)*/
+IM_CPHASE:  TYPINT,$;   /*TOTAL CARDIAC PHASE PRESCRIBED*/
+IM_SWAPPF:  TYPINT,$;   /*SWAP PHASE/FREQUENCY AXIS*/
+IM_PAUSEINT:  TYPINT,$;   /*PAUSE INTERVAL (SLICES)*/
+IM_PAUSETIME: TYPLON,$;   /*PAUSE TIME*/
+IM_OBPLANE: TYPLON,$;   /*OBLIQUE PLANE*/
+IM_SLOCFOV: TYPFLT,$;   /*SLICE OFFSETS ON FREQ AXIS*/
+IM_XMTFREQ: TYPLON,$;   /*CENTER FREQUENCY (0.1 HZ)*/
+IM_AUTOXMTFREQ: TYPLON,$;   /*AUTO CENTER FREQUENCY (0.1 HZ)*/
+IM_AUTOXMTGAIN: TYPINT,$;   /*AUTO TRANSMIT GAIN (0.1 DB)*/
+IM_PRESCAN_R1:  TYPINT,$;   /*PRESCAN R1 - ANALOG*/
+IM_PRESCAN_R2:  TYPINT,$;   /*PRESCAN R2 - DIGITAL*/
+IM_USER_BITMAP: TYPLON,$;   /*BITMAP DEFINING USER CVS*/
+IM_CENFREQ: TYPINT,$;   /*CENTER FREQUENCY METHOD*/
+IM_IMODE: TYPINT,$;   /*IMAGING MODE*/
+IM_IOPT:  TYPLON,$;   /*IMAGING OPTIONS*/
+IM_PSEQ:  TYPINT,$;   /*PULSE SEQUENCE*/
+IM_PSEQMODE:  TYPINT,$;   /*PULSE SEQUENCE MODE*/
+IM_PSDNAME: BYTARR(34),$;   /*PULSE SEQUENCE NAME*/
+IM_PSD_DATETIME:TYPLON,$;   /*PSD CREATION DATE AND TIME*/
+IM_PSD_INAME: BYTARR(14),$;   /*PSD NAME FROM INSIDE PSD*/
+IM_CTYP:  TYPINT,$;   /*COIL TYPE*/
+IM_CNAME: BYTARR(18),$;   /*COIL NAME*/
+IM_SURFCTYP:  TYPINT,$;   /*SURFACE COIL TYPE*/
+IM_SURFCEXT:  TYPINT,$;   /*EXTREMITY COIL FLAG*/
+IM_RAWRUNNUM: TYPLON,$;   /*RAWDATA RUN NUMBER*/
+IM_CAL_FLDSTR:  TYPLON,$;   /*CALIBRATED FIELD STR. (X10 UGAUSS)*/
+IM_SUPP_TECH: TYPINT,$;   /*SAT FAT/WATER/NONE*/
+IM_VBW:   TYPLON,$;   /*VARIABLE BANDWIDTH (HZ)*/
+IM_SLQUANT: TYPINT,$;   /*NUMBER OF SLICES IN THIS SCAN GROUP*/
+IM_GPRE:  TYPINT,$;   /*GRAPHICALLY PRESCRIBED*/
+IM_INTR_DEL:  TYPLON,$;   /*INTERIMAGE/INTERLOC DELAY (USEC)*/
+IM_USERCVS: FLTARR(25),$;   /*USER VARIABLES*/
+IM_ALLOC_KEY: BYTARR(14),$;   /**/
+IM_LASTMOD: TYPLON,$;   /*DATE/TIME OF LAST CHANGE*/
+IM_VERSCR:  TYPINT,$;   /*GENESIS VERSION - CREATED*/
+IM_VERSCUR: TYPINT,$;   /*GENESIS VERSION - NOW*/
+IM_PDS_A: TYPLON,$;   /*PIXELDATA SIZE - AS STORED*/
+IM_PDS_C: TYPLON,$;   /*PIXELDATA SIZE - COMPRESSED*/
+IM_PDS_U: TYPLON,$;   /*PIXELDATA SIZE - UNCOMPRESSED*/
+IM_CHECKSUM:  TYPLON,$;   /*ACQRECON RECORD CHECKSUM*/
+IM_ARCHIVED:  TYPLON,$;   /*IMAGE ARCHIVE FLAG*/
+IM_COMPLETE:  TYPLON,$;   /*IMAGE COMPLETE FLAG*/
+IM_SATBITS: TYPINT,$;   /*BITMAP OF SAT SELECTIONS*/
+IM_SCIC:  TYPINT,$;   /*SURFACE COIL INT. CORRECTION FLAG*/
+IM_SATXLOC1:  TYPINT,$;   /*R-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATXLOC2:  TYPINT,$;   /*L-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATYLOC1:  TYPINT,$;   /*A-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATYLOC2:  TYPINT,$;   /*P-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATZLOC1:  TYPINT,$;   /*S-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATZLOC2:  TYPINT,$;   /*I-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATXTHICK: TYPINT,$;   /*THICKNESS OF X-AXIS SAT PULSE*/
+IM_SATYTHICK: TYPINT,$;   /*THICKNESS OF Y-AXIS SAT PULSE*/
+IM_SATZTHICK: TYPINT,$;   /*THICKNESS OF Z-AXIS SAT PULSE*/
+IM_FLAX:  TYPINT,$;   /*PHASE CONTRAST FLOW AXIS*/
+IM_VENC:  TYPINT,$;   /*PHASE CONTRAST VELOCITY ENCODING*/
+IM_THK_DISCLMR: TYPINT,$;   /*SLICE THICKNESS*/
+IM_PS_FLAG: TYPINT,$;   /*AUTO/MANUAL PRESCAN FLAG*/
+IM_PS_STATUS: TYPINT,$;   /*BITMAP OF CHANGED VALUES*/
+IM_IMAGE_TYPE:  TYPINT,$;   /*MAGNITUDE, PHASE, IMAGINARY,OR REAL*/
+IM_VAS_COLLAPSE:TYPINT, $;    /*COLLAPSE IMAGE*/
+excess:   bytarr(434) }
+
+
+
+IMAGE_HEADER={              $
+  suite:    SUITEDATATYPE,$;         
+  exam:   EXAMDATATYPE,$;         /* From imagedb.h */
+  series:   SERIESDATATYPE,$;       /* From imagedb.h */
+  image:    MRIMAGEDATATYPE $;        /* From imagedb.h */
+}       
+
+return,image_header
+
+end
+
+
+
+
+
+function mk_GErawhdr56
+
+;;sets up structures for 39940 rawdata header
+;;corrections made to excess
+
+
+
+TYPINT=FIX(0)
+TYPLON=LONG(0)
+TYPFLT=FLOAT(0)
+
+RDB_HEADER52_REC={              $
+rdbm_rev:   TYPFLT,$;
+run_int:    TYPLON,$; /* Rdy pkt Run Number */
+scan_seq:   TYPINT,$; /* Rdy pkt Sequence Number */
+run_char:   BYTARR(6),$;  /* Rdy pkt Run no in char */
+scan_date:    BYTARR(10),$; /*  */
+scan_time:    BYTARR(8),$;  /*  */
+logo:     BYTARR(10),$; /* rdbm  used to verify file */
+file_contents:    TYPINT,$; /* Data type 0=emp 1=nrec 2=rw  0, 1, 2 */
+lock_mode:    TYPINT,$; /* unused */
+dacq_ctrl:    TYPINT,$; /* rhdacqctrl bit mask    15 bits */
+recon_ctrl:   TYPINT,$; /* rhrcctrl bit mask    15 bits */
+exec_ctrl:    TYPINT,$; /* rhexecctrl bit mask    15 bits */
+scan_type:    TYPINT,$; /* bit mask       15 bits */
+data_collect_type:  TYPINT,$; /* rhtype  bit mask   15 bits */
+data_format:    TYPINT,$; /* rhformat  bit mask     15 bits */
+recon:      TYPINT,$; /* rhrecon proc-a-son recon 0 - 100 */
+datacq:     TYPINT,$; /* rhdatacq proc-a-son dacq */
+npasses:    TYPINT,$; /* rhnpasses  passes for a scan  0 - 256 */
+npomp:      TYPINT,$; /* rhnpomp  pomp group slices   1,2 */
+nslices:    TYPINT,$; /* rhnslices  slices in a pass  0 - 256 */
+nechoes:    TYPINT,$; /* rhnecho  echoes of a slice 1 - 32 */
+navs:     TYPINT,$; /* rhnavs  num of excitiations  1 - 32727 */
+nframes:    TYPINT,$; /* rhnframes  yres    0 - 1024 */
+baseline_views:   TYPINT,$; /* rhbline  baselines   0 - 1028 */
+hnover:     TYPINT,$; /* rhhnover  overscans    0 - 1024 */
+frame_size:   TYPINT,$; /* rhfrsize  xres     0 - 1024 */
+point_size:   TYPINT,$; /* rhptsize     2 - 4 */
+vquant:     TYPINT,$; /* rhvquant 3d volumes    1 */
+cheart:     TYPINT,$; /* RX Cine heart phases   1 - 32 */
+ctr:      TYPFLT,$; /* RX Cine TR in sec  0 - 3.40282e38*/
+ctrr:     TYPFLT,$; /* RX Cine RR in sec  0 - 30.0 */
+initpass:   TYPINT,$; /* rhinitpass allocate passes    0 - 32767 */
+incrpass:   TYPINT,$; /* rhincrpass tps autopauses  0 - 32767 */
+method_ctrl:    TYPINT,$; /* rhmethod  0=recon, 1=psd 0, 1 */
+da_xres:    TYPINT,$; /* rhdaxres       0 - 1024 */
+da_yres:    TYPINT,$; /* rhdayres       0 - 2049 */
+rc_xres:    TYPINT,$; /* rhrcxres       0 - 1024 */
+rc_yres:    TYPINT,$; /* rhrcyres       0 - 1024 */
+im_size:    TYPINT,$; /* rhimsize       0 - 512 */
+rc_zres:    TYPLON,$; /* power of 2 > rhnslices 0 - 128 */
+raw_pass_size:    TYPLON,$; /* rhrawsize      0 - 2147483647*/
+sspsave:    TYPLON,$; /* rhsspsave      0 - 2147483647*/
+udasave:    TYPLON,$; /* rhudasave      0 - 2147483647*/
+fermi_radius:   TYPFLT,$; /* rhfermr fermi radius   0 - 3.40282e38*/
+fermi_width:    TYPFLT,$; /* rhfermw fermi width    0 - 3.40282e38*/
+fermi_ecc:    TYPFLT,$; /* rhferme fermi excentiricty 0 - 3.40282e38*/
+clip_min:   TYPFLT,$; /* rhclipmin 4x IP limit  
+clip_max:   TYPFLT,$; /* rhclipmax 4x IP limit  
+default_offset:   TYPFLT,$; /* rhdoffset default offset = 0 +-3.40282e38 */
+xoff:     TYPFLT,$; /* rhxoff scroll img in x   +-256 */
+yoff:     TYPFLT,$; /* rhyoff scroll img in y +-256 */
+nwin:     TYPFLT,$; /* rhnwin hecho window width  0 - 256 */
+ntran:      TYPFLT,$; /* rhntran hecho trans width  0 - 256 */
+scalei:     TYPFLT,$; /* PS rhscalei      +-3.40282e38 */
+scaleq:     TYPFLT,$; /* PS rhscaleq  def = 0   +-3.40282e38 */
+transpose:    TYPINT,$; /* RX 0, 1 n / y transpose  0 - 1*/
+rotation:   TYPINT,$; /* RX 0 90 180 270 deg    0 - 3 */
+kissoff_views:    TYPINT,$; /* rhblank zero image views 0 - 512 */
+slblank:    TYPINT,$; /* rhslblank  slice blank 3d  0 - 128 */ 
+gradcoil:   TYPINT,$; /* RX 0=off 1=Schnk 2=Rmr 0 - 2 */
+ddaover:    TYPINT,$; /* rhddaover unused */
+sarr:     TYPINT,$; /* SARR bit mask    15 bits */
+fd_tr:      TYPINT,$; /* SARR feeder timing info */
+fd_te:      TYPINT,$; /* SARR feeder timing info */
+fd_ctrl:    TYPINT,$; /* SARR control of feeder */
+algor_num:    TYPINT,$; /* SARR df decimation ratio */
+fd_df_dec:    TYPINT,$; /* SARR which feeder algor */
+dab:      INTARR(2,4),$;  /* st, stp rcv  0 - 15 */
+user:     FLTARR(20),$; /* rhusercvs    +-3.40282e38 */
+v_type:     TYPLON,$; /* rhvtype  bit mask  31 bits */
+v_coefx:    FLTARR(12),$; /* RX x flow direction control  0 - 4 */
+vm_coef:    FLTARR(4),$;  /* RX weight for mag image 1  0 - 1 */
+v_venc:     TYPFLT,$; /* RX vel encodeing cm / sec  0.001-5000 */
+spectral_width:   TYPFLT,$; /* specwidth  filter width kHz  500 - 3355432 */
+csi_dims:   TYPINT,$; /* spectro */
+xcsi:     TYPINT,$;   /* rhspecrescsix      2 - 64 */
+ycsi:     TYPINT,$; /* rhspecrescsiy      2 - 64 */
+zcsi:     TYPINT,$; /* spectro */
+roilenx:    TYPFLT,$;   /* RX x csi volume dimension */
+roileny:    TYPFLT,$; /* RX y csi volume dimension */
+roilenz:    TYPFLT,$; /* RX z csi volume dimension */
+roilocx:    TYPFLT,$; /* RX x csi volume center */
+roilocy:    TYPFLT,$; /* RX y csi volume center */
+roilocz:    TYPFLT,$; /* RX z csi volume center */
+numdwell:   TYPFLT,$; /* specdwells   0- 3.40282e38*/
+ps:   LONARR(9),$;  /* PS internal use only */
+ps_scalei:    TYPFLT,$; /* PS rational scaling    +-3.40282e38 */
+ps_scaleq:    TYPFLT,$; /* PS unused */     
+ps_snr_warning:   TYPLON,$; /* PS noise test 0=16 1=32 bits 0, 1 */
+ps_aps_or_mps:    TYPLON,$; /* PS prescan order logic 0 - 5 */
+ps_mps_bitmap:    TYPLON,$; /* PS bit mask      4 bits*/
+ps_powerspec:   BYTARR(256),$;  /* PS                             */
+ps_filler1:   TYPLON,$; /* PS filler */
+ps_filler2:   TYPLON,$; /* PS filler */
+rec_noise_mean:   FLTARR(16),$; /* PS mean noise each receiver   +-3.40282e38 */
+rec_noise_std:    FLTARR(16),$; /* PS noise calc for muti rec   +-3.40282e38 */
+halfecho:   TYPINT,$; /* spectro full, half echo       0, 1 */
+im_size_y:    TYPINT,$; /* rh????       0 - 512 */
+data_collect_type1: TYPLON,$; /* rh???? bit mask    31 bits */
+freq_scale:   TYPFLT,$; /* rh???? freq k-space step      +-3.40282e38 */
+phase_scale:    TYPFLT,$; /* rh???? freq k-space step      +-3.40282e38 */
+ovl:      TYPINT,$;           /* rhovl - overlaps for MOTSA */ 
+  
+pc:  INTARR(20),$;             /* Linear Corr. 0:off, 1:linear, 2:polynomial */
+ileaves:  TYPINT,$;           /* Nunmber of interleaves */
+kydir:  TYPINT,$;             /* Ky traversal dircetion 0: top-down, 1:center out */
+alt:  TYPINT,$;               /* Alt read sign 0=no, 1=odd/even, 2=pairs */
+reps:  TYPINT,$;              /* Number of scan repetitions */
+ref:  TYPINT,$;               /* Ref Scan 0: off 1: on */
+
+pc1:  FLTARR(5),$;         /* Constant S term normalization factor */
+;   /* VRG Filter param */
+vrgf:  TYPLON,$;              /* control word for VRG filter */
+vrgfxres:  TYPLON,$;          /* control word for VRGF final x resolution */
+
+;   /* Bandpass Asymmetry  Correction Param. */
+bp_corr:  TYPLON,$;           /* control word for bandpass asymmetry */
+recv_freq_s:  TYPFLT,$;       /* starting frequency (+62.5) */
+recv_freq_e:  TYPFLT,$;       /* ending   frequency (-62.5) */
+
+hniter:  TYPLON,$;            /* Selects the number of
+                               ;      iterations used in homodyne processing */
+
+fast_rec:  TYPLON,$;          /* Added for homodyne II, tells if
+                                     ;     teh fast receiver is being used
+                                      ;    and the lpf setting of teh fast
+                                       ;   receiver, 0: fast receiver off,
+                                        ;  1 - 5: lpf settings   */
+
+refframes:  TYPLON,$;         /* total # of frames for ref scan */
+refframep:  TYPLON,$;         /* # of frames per pass for a ref scan */
+scnframe:  TYPLON,$;          /* total # of frames for a entire scan */
+pasframe:  TYPLON,$;          /* # of frames per pass */
+
+pc2:  INTARR(5),$;    /* Adjust view indexes if set so bestky view = 0 */
+pclinslope:  TYPFLT,$;   /* Value to set lin slope to if forced           */
+pcconfix:  TYPINT,$;     /* If = 2, force slope to be set to pcconslope   */
+                               ;   /* If = 1, neg readout slope = pos readout slope */
+pcconslope:  TYPFLT,$;   /* Value to set con slope to if forced           */
+pccoil:  TYPINT,$;       /* If 1,2,3,4, use that coil's results for all   */
+
+excess:     INTARR(519) $;  /* free space for later expansion */
+} 
+
+VME_ADDRESS={   $
+bam_modifier: TYPLON,$;
+bam_address:  TYPLON $;
+}       
+         
+RDB_MAX_DABS=1
+RDB_PASS_INFO_ENTRY=REPLICATE(VME_ADDRESS,RDB_MAX_DABS)
+
+RDB_MAX_PASSES=512
+RDB_PER_PASS_TAB=REPLICATE(RDB_PASS_INFO_ENTRY,RDB_MAX_PASSES);
+
+RDB_SLICE_INFO_ENTRY={            $
+pass_number:  TYPINT,$;       /* which pass this slice is in */
+slice_in_pass:  TYPINT,$;       /* which slice in this pass */
+gw_points:  FLTARR(3,3)$;    /* corner points of image */
+}
+
+RDB_MAX_SLICES=512
+RDB_DATA_ACQ_TAB=REPLICATE(RDB_SLICE_INFO_ENTRY,RDB_MAX_SLICES)
+
+RDB_NEX_TYPE={              $
+filler:   INTARR(1026)$;
+}       
+
+
+TOOLSDATA=BYTARR(2048);
+
+
+EXAMDATATYPE={                                                       $
+EX_SUID:  BYTARR(4),$;    /*SUITE ID FOR THIS EXAM*/
+EX_UNIQ:  TYPINT,$;   /*THE MAKE-UNIQUE FLAG*/
+EX_DISKID:  TYPINT,$;   /*DISK ID FOR THIS EXAM*/
+EX_NO:    TYPINT,$;   /*EXAM NUMBER*/
+EX_HOSPNAME:  BYTARR(34),$;   /*HOSPITAL NAME*/
+EX_DETECT:  TYPINT,$;   /*DETECTOR TYPE*/
+EX_NUMCELLS:  TYPLON,$;   /*NUMBER OF CELLS IN DET*/
+EX_ZEROCELL:  TYPLON,$; /*CELL NUMBER AT THETA*/
+EX_CELLSPACE: TYPLON,$;   /*CELL SPACING*/
+EX_SRCTODET:  TYPFLT,$;   /*DISTANCE FROM SOURCE TO DETECTOR*/
+EX_SRCTOISO:  TYPFLT,$;   /*DISTANCE FROM SOURCE TO ISO*/
+EX_TUBETYP: TYPINT,$;   /*TUBE TYPE*/
+EX_DASTYP:  TYPINT,$;   /*DAS TYPE*/
+EX_NUM_DCNK:  TYPINT,$;   /*NUMBER OF DECON KERNALS*/
+EX_DCN_LEN: TYPINT,$;   /*NUMBER OF ELEMENTS IN A DECON KERNAL*/
+EX_DCN_DENSITY: TYPINT,$; /*DECON KERNAL DENSITY*/
+EX_DCN_STEPSIZE:TYPINT,$; /*DECON KERNAL STEPSIZE*/
+EX_DCN_SHIFTCNT:TYPINT,$; /*DECON KERNAL SHIFT COUNT*/
+EX_MAGSTRENGTH: TYPLON,$; /*MAGNET STRENGTH (IN GAUSS)*/
+EX_PATID: BYTARR(13),$;   /*PATIENT ID FOR THIS EXAM*/
+EX_PATNAME: BYTARR(25),$;   /*PATIENT NAME*/
+EX_PATAGE:  TYPINT,$;   /*PATIENT AGE (YEARS, MONTHS OR DAYS)*/
+EX_PATIAN:  TYPINT,$;   /*PATIENT AGE NOTATION*/
+EX_PATSEX:  TYPINT,$;   /*PATIENT SEX*/
+EX_PATWEIGHT: TYPFLT,$; /*PATIENT WEIGHT*/
+EX_TRAUMA:  TYPINT,$;   /*TRAUMA FLAG*/
+EX_HIST:  BYTARR(61),$;   /*PATIENT HISTORY*/
+EX_REQNUM:  BYTARR(13),$;   /*REQUISITION NUMBER*/
+EX_DATETIME:  TYPLON,$;   /*EXAM DATE/TIME STAMP*/
+EX_REFPHY:  BYTARR(33),$;   /*REFERRING PHYSICIAN*/
+EX_DIAGRAD: BYTARR(33),$;   /*DIAGNOSTICIAN/RADIOLOGIST*/
+EX_OP:    TYPLON,$;   /*OPERATOR*/
+EX_DESC:  BYTARR(23),$;   /*EXAM DESCRIPTION*/
+EX_TYP:   BYTARR(3),$;    /*EXAM TYPE*/
+EX_FORMAT:  TYPINT,$;   /*EXAM FORMAT*/
+EX_FIRSTAXTIME: LONARR(2),$;    /*START TIME(SECS) FIRST AXIAL IN EXAM*/
+EX_SYSID: BYTARR(10),$;   /*CREATOR SUITE AND HOST*/
+EX_LASTMOD: TYPLON,$;   /*DATE/TIME OF LAST CHANGE*/ 
+EX_PROTOCOLFLAG:TYPINT,$;   /*NON-ZERO INDICATES PROTOCOL EXAM*/
+EX_ALLOC_KEY: BYTARR(14),$;   /*PROCESS THAT ALLOCATED THIS RECORD*/
+EX_DELTA_CNT: TYPLON,$;   /*INDICATES # OF UPDATES TO HEADER*/
+EX_VERSCRE: TYPINT,$;   /*GENESIS VERSION - CREATED*/
+EX_VERSCUR: TYPINT,$;   /*GENESIS VERSION - NOW*/
+EX_CHECKSUM:  TYPLON,$;   /*EXAM RECORD CHECKSUM*/
+EX_COMPLETE:  TYPLON,$;   /*EXAM COMPLETE FLAG*/
+EX_SERIESCT:  TYPLON,$;   /*LAST SERIES NUMBER USED*/
+EX_NUMARCH: TYPLON,$;   /*NUMBER OF SERIES ARCHIVED*/
+EX_NUMSERIES: TYPLON,$;   /*NUMBER OF SERIES EXISTING*/
+EX_SERIES:  BYTARR(8),$;    /*SERIES KEYS FOR THIS EXAM*/
+EX_NUMUNSER:  TYPLON,$;   /*NUMBER OF UNSTORED SERIES*/
+EX_UNSERIES:  BYTARR(8),$;    /*UNSTORED SERIES KEYS FOR THIS EXAM*/
+EX_TOARCHCNT: TYPLON,$;   /*NUMBER OF UNARCHIVED SERIES*/
+EX_TOARCHIVE: BYTARR(8),$;    /*UNARCHIVED SERIES KEYS FOR THIS EXAM*/
+EX_PROSPCNT:  TYPLON,$;   /*NUMBER OF PROSPECTIVE/SCOUT SERIES*/
+EX_PROSP: BYTARR(8),$;    /*PROSP./SCOUT SERIES KEYS THIS EXAM*/
+EX_MODELNUM:  TYPLON,$;   /*LAST MODEL NUMBER USED*/
+EX_MODELCNT:  TYPLON,$;   /*NUMBER OF THREED MODELS*/
+EX_MODELS:  BYTARR(8),$;    /*THREED MODEL KEYS FOR EXAM*/
+EX_STAT:  TYPINT,$;   /*PATIENT STATUS*/
+EX_UNIQUE_SYS_ID:BYTARR(16),$;    /* UNIQUE SYSTEM ID */
+EX_SERVICE_ID:  BYTARR(16),$; /* UNIQUE SERVICE ID */
+EX_MOBILE_LOC:  BYTARR(20),$; /* MOBILE LOCATION LOCATION len ??? */
+excess:   BYTARR(534)$;           :::::::::was 524
+}
+
+SERIESDATATYPE={              $
+SE_SUID:  BYTARR(4),$;    /*SUITE ID FOR THIS IMAGE*/
+SE_UNIQ:  TYPINT,$;   /*THE MAKE-UNIQUE FLAG*/
+SE_DISKID:  TYPINT,$;   /*DISK ID FOR THIS SERIES*/
+SE_EXNO:  TYPINT,$;   /*EXAM NUMBER*/
+SE_NO:    TYPINT,$;   /*SERIES NUMBER*/
+SE_DATETIME:  TYPLON,$;   /*ALLOCATION SERIES DATA/TIME STAMP*/
+SE_ACTUAL_DT: TYPLON,$;   /*ACTUAL SERIES DATA/TIME STAMP*/
+SE_DESC:  BYTARR(30),$;   /*SERIES DESCRIPTION*/
+SE_PR_SYSID:  BYTARR(9),$;    /*PRIMARY RECEIVER SUITE AND HOST*/
+SE_PANSYSID:  BYTARR(9),$;    /*ARCHIVER SUITE AND HOST*/
+SE_TYP:   TYPINT,$;   /*SERIES TYPE*/
+SE_SOURCE:  TYPINT,$;   /*SERIES FROM WHICH PRESCRIBED*/
+SE_PLANE: TYPINT,$;   /*MOST-LIKE PLANE (FOR L/S)*/
+SE_SCAN_TYPE: TYPINT,$;   /*SCOUT OR AXIAL (FOR CT)*/
+SE_POSITION:  TYPLON,$;   /*PATIENT POSITION*/
+SE_ENTRY: TYPLON,$;   /*PATIENT ENTRY*/
+SE_ANREF: TYPLON,$;   /*ANATOMICAL REFERENCE*/
+SE_LMHOR: TYPLON,$;   /*HORIZONTAL LANDMARK*/
+SE_PRTCL: BYTARR(26),$;   /*SCAN PROTOCOL NAME*/
+SE_CONTRAST:  TYPINT,$;   /*IF > 0 IMAGE USED CONTRAST(L/S)*/
+SE_START_RAS: BYTARR(2),$;    /*RAS LETTER FOR FIRST SCAN LOCATION (L/S)*/
+SE_START_LOC: TYPFLT,$;   /*FIRST SCAN LOCATION (L/S)*/
+SE_END_RAS: BYTARR(2),$;    /*RAS LETTER FOR LAST SCAN LOCATION (L/S)*/
+SE_END_LOC: TYPFLT,$;   /*LAST SCAN LOCATION (L/S)*/
+SE_PSEQ:  TYPINT,$;   /*LAST PULSE SEQUENCE USED (L/S)*/
+SE_SORTORDER: TYPINT,$;   /*IMAGE SORT ORDER (L/S)*/
+SE_LNDMRKCNT: TYPLON,$;   /*LANDMARK COUNTER*/
+SE_NACQ:  TYPINT,$;   /*NUMBER OF ACQUISITIONS*/
+SE_XBASEST: TYPINT,$;   /*STARTING NUMBER FOR BASELINES*/
+SE_XBASEEND:  TYPINT,$;   /*ENDING NUMBER FOR BASELINES*/
+SE_XENHST:  TYPINT,$;   /*STARTING NUMBER FOR ENHANCED SCANS*/
+SE_XENHEND: TYPINT,$;   /*ENDING NUMBER FOR ENHANCED SCANS*/
+SE_LASTMOD: TYPLON,$;   /*DATE/TIME OF LAST CHANGE*/
+SE_ALLOC_KEY: BYTARR(14),$;   /*PROCESS THAT ALLOCATED THIS RECORD*/
+SE_DELTA_CNT: TYPLON,$;   /*INDICATES NUMBER OF UPDATES TO HEADER*/
+SE_VERSCRE: TYPINT,$;   /*GENESIS VERSION - CREATED*/
+SE_VERSCUR: TYPINT,$;   /*GENESIS VERSION - NOW*/
+SE_PDS_A: TYPLON,$;   /*PIXELDATA SIZE - AS STORED*/
+SE_PDS_C: TYPLON,$;   /*PIXELDATA SIZE - COMPRESSED*/
+SE_PDS_U: TYPLON,$;   /*PIXELDATA SIZE - UNCOMPRESSED*/
+SE_CHECKSUM:  TYPLON,$;   /*SERIES RECORD CHECKSUM*/
+SE_COMPLETE:  TYPLON,$;   /*SERIES COMPLETE FLAG*/
+SE_NUMARCH: TYPLON,$;   /*NUMBER OF IMAGES ARCHIVED*/
+SE_IMAGECT: TYPLON,$;   /*LAST IMAGE NUMBER USED*/
+SE_NUMIMAGES: TYPLON,$;   /*NUMBER OF IMAGES EXISTING*/
+SE_IMAGES:  BYTARR(8),$;    /*IMAGE KEYS FOR THIS SERIES*/
+SE_NUMUNIMG:  TYPLON,$;   /*NUMBER OF UNSTORED IMAGES*/
+SE_UNIMAGES:  BYTARR(8),$;    /*UNSTORED IMAGE KEYS FOR THIS SERIES*/
+SE_TOARCHCNT: TYPLON,$;   /*NUMBER OF UNARCHIVED IMAGES*/
+SE_TOARCHIVE: BYTARR(8),$;    /*UNARCHIVED IMAGE KEYS FOR THIS SERIES*/
+SE_ECHO1_ALPHA: TYPFLT,$;   /*ECHO 1 ALPHA VALUE*/
+SE_ECHO1_BETA:  TYPFLT,$;   /*ECHO 1 BETA VALUE*/
+SE_ECHO1_WINDOW:TYPINT,$;   /*ECHO 1 WINDOW VALUE*/
+SE_ECHO1_LEVEL: TYPINT,$;   /*ECHO 1 LEVEL VALUE*/
+SE_ECHO2_ALPHA: TYPFLT,$;   /*ECHO 2 ALPHA VALUE*/
+SE_ECHO2_BETA:  TYPFLT,$;   /*ECHO 2 BETA VALUE*/
+SE_ECHO2_WINDOW:TYPINT,$;   /*ECHO 2 WINDOW VALUE*/
+SE_ECHO2_LEVEL: TYPINT,$;   /*ECHO 2 LEVEL VALUE*/
+SE_ECHO3_ALPHA: TYPFLT,$;   /*ECHO 3 ALPHA VALUE*/
+SE_ECHO3_BETA:  TYPFLT,$;   /*ECHO 3 BETA VALUE*/
+SE_ECHO3_WINDOW:TYPINT,$;   /*ECHO 3 WINDOW VALUE*/
+SE_ECHO3_LEVEL: TYPINT,$;   /*ECHO 3 LEVEL VALUE*/
+SE_ECHO4_ALPHA: TYPFLT,$;   /*ECHO 4 ALPHA VALUE*/
+SE_ECHO4_BETA:  TYPFLT,$;   /*ECHO 4 BETA VALUE*/
+SE_ECHO4_WINDOW:TYPINT,$;   /*ECHO 4 WINDOW VALUE*/
+SE_ECHO4_LEVEL: TYPINT,$;   /*ECHO 4 LEVEL VALUE*/
+SE_ECHO5_ALPHA: TYPFLT,$;   /*ECHO 5 ALPHA VALUE*/
+SE_ECHO5_BETA:  TYPFLT,$;   /*ECHO 5 BETA VALUE*/
+SE_ECHO5_WINDOW:TYPINT,$;   /*ECHO 5 WINDOW VALUE*/
+SE_ECHO5_LEVEL: TYPINT,$;   /*ECHO 5 LEVEL VALUE*/
+SE_ECHO6_ALPHA: TYPFLT,$;   /*ECHO 6 ALPHA VALUE*/
+SE_ECHO6_BETA:  TYPFLT,$;   /*ECHO 6 BETA VALUE*/
+SE_ECHO6_WINDOW:TYPINT,$;   /*ECHO 6 WINDOW VALUE*/
+SE_ECHO6_LEVEL: TYPINT,$;   /*ECHO 6 LEVEL VALUE*/
+SE_ECHO7_ALPHA: TYPFLT,$;   /*ECHO 7 ALPHA VALUE*/
+SE_ECHO7_BETA:  TYPFLT,$;   /*ECHO 7 BETA VALUE*/
+SE_ECHO7_WINDOW:TYPINT,$;   /*ECHO 7 WINDOW VALUE*/
+SE_ECHO7_LEVEL: TYPINT,$;   /*ECHO 7 LEVEL VALUE*/
+SE_ECHO8_ALPHA: TYPFLT,$;   /*ECHO 8 ALPHA VALUE*/
+SE_ECHO8_BETA:  TYPFLT,$;   /*ECHO 8 BETA VALUE*/
+SE_ECHO8_WINDOW:TYPINT,$;   /*ECHO 8 WINDOW VALUE*/
+SE_ECHO8_LEVEL: TYPINT,$;   /*ECHO 8 LEVEL VALUE*/
+excess:   BYTARR(684)$;     ;;;;;;;;was 676
+}
+
+
+
+;image header
+MRIMAGEDATATYPE={               $
+IM_SUID:  BYTARR(4),$;    /*SUITE ID FOR THIS IMAGE*/
+IM_UNIQ:  TYPINT,$;   /*THE MAKE-UNIQUE FLAG*/
+IM_DISKID:  TYPINT,$;   /*DISK ID FOR THIS IMAGE*/
+IM_EXNO:  TYPINT,$;   /*EXAM NUMBER FOR THIS IMAGE*/
+IM_SENO:  TYPINT,$;   /*SERIES NUMBER FOR THIS IMAGE*/
+IM_NO:    TYPINT,$;   /*IMAGE NUMBER*/
+IM_DATETIME:  TYPLON,$;   /*ALLOCATION IMAGE DATE/TIME STAMP*/
+IM_ACTUAL_DT: TYPLON,$;   /*ACTUAL IMAGE DATE/TIME STAMP*/
+IM_SCTIME:  TYPLON,$;   /*DURATION OF SCAN (SECS)*/
+IM_SLTHICK: TYPFLT,$;   /*SLICE THICKNESS (MM)*/
+IM_IMATRIX_X: TYPINT,$;   /*IMAGE MATRIX SIZE - X*/
+IM_IMATRIX_Y: TYPINT,$;   /*IMAGE MATRIX SIZE - Y*/
+IM_DFOV:  TYPFLT,$;   /*DISPLAY FIELD OF VIEW - X (MM)*/
+IM_DFOV_RECT: TYPFLT,$;   /*DISPLAY FIELD OF VIEW - Y (MM)*/
+IM_DIM_X: TYPFLT,$;   /*IMAGE DIMENSION - X*/
+IM_DIM_Y: TYPFLT,$;   /*IMAGE DIMENSION - Y*/
+IM_PIXSIZE_X: TYPFLT,$;   /*IMAGE PIXEL SIZE - X*/
+IM_PIXSIZE_Y: TYPFLT,$;   /*IMAGE PIXEL SIZE - Y*/
+IM_PDID:  BYTARR(14),$; /*PIXEL DATA ID*/
+IM_CONTRASTIV:  BYTARR(7),$;  /*IV CONTRAST AGENT*/
+IM_CONTRASTORAL:BYTARR(27),$; /*ORAL CONTRAST AGENT*/
+IM_CONTMODE:  TYPINT,$;   /*IMAGE CONTRAST MODE*/
+IM_SERRX: TYPINT,$;   /*SERIES FROM WHICH PRESCRIBED*/
+IM_IMGRX: TYPINT,$;   /*IMAGE FROM WHICH PRESCRIBED*/
+IM_SCREENFORMAT:TYPINT,$;   /*SCREEN FORMAT(8/16 BIT)*/
+IM_PLANE: TYPINT,$;   /*PLANE TYPE*/
+IM_SCANSPACING: TYPFLT,$;   /*SPACING BETWEEN SCANS (MM?)*/
+IM_COMPRESS:  TYPINT,$;   /*IMAGE COMPRESSION TYPE*/
+IM_SCOUTTYPE: BYTARR(2),$;    /*SCOUT TYPE (AP OR LATERAL)*/
+IM_LOC_RAS: BYTARR(2),$;    /*RAS LETTER OF IMAGE LOCATION*/
+IM_LOC:   TYPFLT,$;   /*IMAGE LOCATION*/
+IM_CTR:   FLTARR(3),$;    /*CENTER COORDS OF PLANE IMAGE, RAS*/ 
+IMIM_NORM:  FLTARR(3),$;    /*NORMAL R COORDS, RAS*/
+IM_TLHC:  FLTARR(3),$;    /*COORDS OF TOP LEFT HAND CORNER, RAS*/
+IM_TRHC:  FLTARR(3),$;    /*COORDS OF TOP RIGHT HAND CORNER,RAS*/
+IM_BRHC:  FLTARR(3),$;    /*COORDS OF BOTTOM RIGHT HAND CORNER*/
+IM_FORIMGREV: BYTARR(4),$;    /*FOREIGN IMAGE REVISION*/
+IM_TR:    TYPLON,$;   /*PULSE REPETITION TIME(USEC)*/
+IM_TI:    TYPLON,$;   /*PULSE INVERSION TIME(USEC)*/
+IM_TE:    TYPLON,$;   /*PULSE ECHO TIME(USEC)*/
+IM_TE2:   TYPLON,$;   /*SECOND ECHO ECHO (USEC)*/
+IM_NUMECHO: TYPINT,$;   /*NUMBER OF ECHOES*/
+IM_ECHONUM: TYPINT,$;   /*ECHO NUMBER*/
+IM_TBLDLTA: TYPFLT,$;   /*TABLE DELTA*/
+IM_NEX:   TYPFLT,$;   /*NUMBER OF EXCITATIONS*/
+IM_CONTIG:  TYPINT,$;   /*CONTINUOUS SLICES FLAG*/
+IM_HRTRATE: TYPINT,$;   /*CARDIAC HEART RATE (BPM)*/
+IM_TDEL:  TYPLON,$;   /*DELAY TIME AFTER TRIGGER (USEC)*/
+IM_SARAVG:  TYPFLT,$;   /*AVERAGE SAR*/
+IM_SARPEAK: TYPFLT,$;   /*PEAK SAR*/
+IM_MONSAR:  TYPINT,$;   /*MONITOR SAR FLAG*/ 
+IM_TRGWINDOW: TYPINT,$;   /*TRIGGER WINDOW (% OF R-R INTERVAL)*/
+IM_REPTIME: TYPFLT,$;   /*CARDIAC REPETITION TIME*/
+IM_IMGPCYC: TYPINT,$;   /*IMAGES PER CARDIAC CYCLE*/
+IM_XMTGAIN: TYPINT,$;   /*ACTUAL TRANSMIT GAIN (.1 DB)*/
+IM_RCVGAIN1:  TYPINT,$;   /*ACTUAL RECEIVE GAIN ANALOG (.1 DB)*/
+IM_RCVGAIN2:  TYPINT,$;   /*ACTUAL RECEIVE GAIN DIGITAL (.1 DB)*/
+IM_MR_FLIP: TYPINT,$;   /*FLIP ANGLE FOR GRASS SCANS (DEG.)*/
+IM_MINDAT:  TYPLON,$;   /*MINIMUM DELAY AFTER TRIGGER (USEC)*/
+IM_CPHASE:  TYPINT,$;   /*TOTAL CARDIAC PHASE PRESCRIBED*/
+IM_SWAPPF:  TYPINT,$;   /*SWAP PHASE/FREQUENCY AXIS*/
+IM_PAUSEINT:  TYPINT,$;   /*PAUSE INTERVAL (SLICES)*/
+IM_PAUSETIME: TYPLON,$;   /*PAUSE TIME*/
+IM_OBPLANE: TYPLON,$;   /*OBLIQUE PLANE*/
+IM_SLOCFOV: TYPFLT,$;   /*SLICE OFFSETS ON FREQ AXIS*/
+IM_XMTFREQ: TYPLON,$;   /*CENTER FREQUENCY (0.1 HZ)*/
+IM_AUTOXMTFREQ: TYPLON,$;   /*AUTO CENTER FREQUENCY (0.1 HZ)*/
+IM_AUTOXMTGAIN: TYPINT,$;   /*AUTO TRANSMIT GAIN (0.1 DB)*/
+IM_PRESCAN_R1:  TYPINT,$;   /*PRESCAN R1 - ANALOG*/
+IM_PRESCAN_R2:  TYPINT,$;   /*PRESCAN R2 - DIGITAL*/
+IM_USER_BITMAP: TYPLON,$;   /*BITMAP DEFINING USER CVS*/
+IM_CENFREQ: TYPINT,$;   /*CENTER FREQUENCY METHOD*/
+IM_IMODE: TYPINT,$;   /*IMAGING MODE*/
+IM_IOPT:  TYPLON,$;   /*IMAGING OPTIONS*/
+IM_PSEQ:  TYPINT,$;   /*PULSE SEQUENCE*/
+IM_PSEQMODE:  TYPINT,$;   /*PULSE SEQUENCE MODE*/
+IM_PSDNAME: BYTARR(34),$;   /*PULSE SEQUENCE NAME*/
+IM_PSD_DATETIME:TYPLON,$;   /*PSD CREATION DATE AND TIME*/
+IM_PSD_INAME: BYTARR(14),$; /*PSD NAME FROM INSIDE PSD*/
+IM_CTYP:  TYPINT,$;   /*COIL TYPE*/
+IM_CNAME: BYTARR(18),$; /*COIL NAME*/
+IM_SURFCTYP:  TYPINT,$;   /*SURFACE COIL TYPE*/
+IM_SURFCEXT:  TYPINT,$;   /*EXTREMITY COIL FLAG*/
+IM_RAWRUNNUM: TYPLON,$;   /*RAWDATA RUN NUMBER*/
+IM_CAL_FLDSTR:  TYPLON,$;   /*CALIBRATED FIELD STR. (X10 UGAUSS)*/
+IM_SUPP_TECH: TYPINT,$;   /*SAT FAT/WATER/NONE*/
+IM_VBW:   TYPLON,$;   /*VARIABLE BANDWIDTH (HZ)*/
+IM_SLQUANT: TYPINT,$;   /*NUMBER OF SLICES IN THIS SCAN GROUP*/
+IM_GPRE:  TYPINT,$;   /*GRAPHICALLY PRESCRIBED*/
+IM_INTR_DEL:  TYPLON,$;   /*INTERIMAGE/INTERLOC DELAY (USEC)*/
+IM_USERCVS: FLTARR(25),$;   /*USER VARIABLES*/
+IM_ALLOC_KEY: BYTARR(14),$; /**/
+IM_LASTMOD: TYPLON,$;   /*DATE/TIME OF LAST CHANGE*/
+IM_VERSCR:  TYPINT,$;   /*GENESIS VERSION - CREATED*/
+IM_VERSCUR: TYPINT,$;   /*GENESIS VERSION - NOW*/
+IM_PDS_A: TYPLON,$;   /*PIXELDATA SIZE - AS STORED*/
+IM_PDS_C: TYPLON,$;   /*PIXELDATA SIZE - COMPRESSED*/
+IM_PDS_U: TYPLON,$;   /*PIXELDATA SIZE - UNCOMPRESSED*/
+IM_CHECKSUM:  TYPLON,$;   /*ACQRECON RECORD CHECKSUM*/
+IM_ARCHIVED:  TYPLON,$;   /*IMAGE ARCHIVE FLAG*/
+IM_COMPLETE:  TYPLON,$;   /*IMAGE COMPLETE FLAG*/
+IM_SATBITS: TYPINT,$;   /*BITMAP OF SAT SELECTIONS*/
+IM_SCIC:  TYPINT,$;   /*SURFACE COIL INT. CORRECTION FLAG*/
+IM_SATXLOC1:  TYPINT,$;   /*R-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATXLOC2:  TYPINT,$;   /*L-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATYLOC1:  TYPINT,$;   /*A-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATYLOC2:  TYPINT,$;   /*P-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATZLOC1:  TYPINT,$;   /*S-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATZLOC2:  TYPINT,$;   /*I-SIDE SAT PULSE LOC REL TO LNDMRK*/
+IM_SATXTHICK: TYPINT,$;   /*THICKNESS OF X-AXIS SAT PULSE*/
+IM_SATYTHICK: TYPINT,$;   /*THICKNESS OF Y-AXIS SAT PULSE*/
+IM_SATZTHICK: TYPINT,$;   /*THICKNESS OF Z-AXIS SAT PULSE*/
+IM_FLAX:  TYPINT,$;   /*PHASE CONTRAST FLOW AXIS*/
+IM_VENC:  TYPINT,$;   /*PHASE CONTRAST VELOCITY ENCODING*/
+IM_THK_DISCLMR: TYPINT,$;   /*SLICE THICKNESS*/
+IM_PS_FLAG: TYPINT,$;   /*AUTO/MANUAL PRESCAN FLAG*/
+IM_PS_STATUS: TYPINT,$;   /*BITMAP OF CHANGED VALUES*/
+IM_IMAGE_TYPE:  TYPINT,$;   /*MAGNITUDE, PHASE, IMAGINARY,OR REAL*/
+IM_VAS_COLLAPSE:  TYPINT, $;    /*COLLAPSE IMAGE*/
+excess:   bytarr(434) }
+
+POOL_HEADER={         $
+  rec:    RDB_HEADER52_REC,$; /2048/  OK
+  per_pass: RDB_PER_PASS_TAB,$; /4096/  OK
+  unlock_raw: RDB_PER_PASS_TAB,$; /4096/  OK
+  data_acq_tab: RDB_DATA_ACQ_TAB,$; /20480/  OK
+  nex_tab:  RDB_NEX_TYPE,$;   /2052/  OK
+  nex_abort_tab:  RDB_NEX_TYPE,$;   /2052/  OK
+  tool:   TOOLSDATA,$;         /* From toolsdata.h  2048 */ OK
+  exam:   EXAMDATATYPE,$;         /* From imagedb.h   1024*/  OK NOW
+  series:   SERIESDATATYPE,$;       /* From imagedb.h   1020*/  OK NOW
+  image:    MRIMAGEDATATYPE,$;        /* From imagedb.h   1022*/ OK NOW
+  dummy_filler: TYPINT $;           /*     2 sparc align */
+}                                     ;   /* 39940 total */
+
+
+
+
+
+return,pool_header
+
+end

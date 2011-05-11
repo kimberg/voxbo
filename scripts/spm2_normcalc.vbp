@@ -1,0 +1,26 @@
+
+# script spm2_normcalc.vbp
+
+# expects globals:
+# xa,ya,za - anatomical voxel sizes in mm
+# xf,yf,zf - functional voxel sizes in mm
+# adir - anatomy directory
+# refvol - reference volume
+# paramfile - just the name, it will be in the anat directory
+# anat - anatomy file name (e.g., Anatomical.cub)
+# func - functional sample name (e.g., Functional.cub)
+# bb_anat - bounding box for anatomical
+# bb_func - bounding box for functional
+# bb_disp - bounding box for display image
+
+# calc params
+runonce spm2_norm_calc $adir $paramfile $anat $refvol $xa $ya $za $bb_anat
+
+# make ndisplay.cub
+runonce spm2_norm_apply3d $adir $adir/$paramfile $anat nDisplay.cub $xa $ya $zf $bb_disp
+
+# apply to scout image
+runonce spm2_norm_apply3d $adir $adir/$paramfile $func n$func $xf $yf $zf $bb_func
+
+# notify
+runonce notify $email "Your normalization job is completely done."

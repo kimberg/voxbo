@@ -1,0 +1,10 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo extractmask (v%1%)
+usage:
+  extractmask takes a whole bunch of arguments
+  try extractmask in.cub out.cub num
+notes:
+  please do not use this program
+

@@ -1,0 +1,85 @@
+# This first section isn't required, but shows the structure of the dataset
+# tree.  Use the display_dataset command in the qt4widgets/vbsequence directory
+# to view the tree.
+
+node1
+node1:suba
+node2
+node2:suba
+node2:subb
+node2:subc
+node3
+node3:suba
+
+# These first 5 variables are in the root dataset node.
+var1=val
+var2=val
+var3=val
+var4=val
+var5=val
+
+# This next variable will overwrite the previous instance of var1 in the root
+# dataset node.
+var1=over_val
+
+node1
+  :var1=val
+  :var2=val
+  :var3=val
+  :var4=val
+  :var5=val
+
+node2
+  :var1=val
+  :var2=val
+  :var3=val
+  :var4=val
+  :var5=val
+
+node3
+  :var1=val
+  :var2=val
+  :var3=val
+  :var4=val
+  :var5="val var6=hello"
+
+node1:suba
+  :var1=val
+  :var2=val
+  :var3=val
+  :var4=val
+  :var5=val
+
+node2:suba
+  :var1=val
+  :var2=val
+  :var3=val
+  :var4=val
+  :var5=val
+
+node3:suba
+  :var1=val
+  :var2=val
+  :var3=val
+  :var4=val
+  :var5=val
+
+node2:subb
+  :var1=val
+  :var2=val
+  :var3=val
+  :var4=val
+  :var5=val
+
+node2:subc
+  :var1=val
+  :var2=val
+  :var3=val
+  :var4=val
+  :var5=val
+  
+node2:suba
+	:var6=val
+
+# This next variable is again in the root dataset node (no leading colon).
+var6=val

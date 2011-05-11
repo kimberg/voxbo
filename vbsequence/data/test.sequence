@@ -1,0 +1,20 @@
+x_my name A
+x_world name B                                   # say, cub
+block parallel waitfor B
+  x_hello name C                                 # tes
+  x_hello name D input_filename="some dir"       # tes
+  x_my name G                                    # cub
+end
+x_hello
+block parallel name Dblock
+  x_hello name C
+  x_hello name D input_filename="some dir"
+  x_my name G
+end
+x_my waitfor A
+x_world nowait name E
+x_my name F
+x_world
+x_hello waitfor Dblock
+x_my name fingers_crossed waitfor Dblock
+x_world

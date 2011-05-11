@@ -1,0 +1,23 @@
+
+shortname vbstatmap
+description Generate VoxBo Stat map
+invocation script
+requires cpu
+
+argument
+ name=dir
+ argdesc=glm directory
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output statmap file name
+ type=string
+end
+argument
+ name=contrast
+ argdesc=contrast values for covariates 
+ type=string
+end
+
+command vbstatmap $(dir) -o $(outfile) -c "$(contrast)"

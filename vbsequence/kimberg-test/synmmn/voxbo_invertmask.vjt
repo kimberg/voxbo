@@ -1,0 +1,26 @@
+
+# Jobtype information
+
+shortname voxbo_invertmask
+description grow a mask
+invocation script
+requires cpu
+
+# Argument section
+
+argument
+ name=infile
+ argdesc=input file
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output file
+ type=string
+end
+
+# File section
+
+# Command section
+
+command vbmaskmunge -z $(infile) -o $(outfile)

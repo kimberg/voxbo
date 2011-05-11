@@ -1,0 +1,20 @@
+
+shortname vbmerge4d
+description merge a 4D file created in parts
+invocation commandline
+requires cpu
+
+argument
+ name=stem
+ argdesc=stem for multi-part 4D files to be merged
+ type=string
+end
+
+argument
+ name=ext
+ argdesc=extension for multi-part 4D files to be merged
+ type=string
+end
+
+command vbmerge4d $(stem).$(ext)_part_* -o $(stem).$(ext)
+command /bin/bash -c "rm $(stem).$(ext)_part_*"

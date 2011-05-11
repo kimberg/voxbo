@@ -1,0 +1,23 @@
+
+# script makerfx_nonorm.vbp
+
+#make the rfx dir, in case it doesn't exist
+runonce shellcommand "/bin/mkdir -p $rfxdir"
+
+# make statmap from each glm
+vbstatmap $glmdir $rfxdir/$tag_map.cub "$contrast" $scale
+
+# copy mask to dir
+shellcommand "vbmaskmunge $glmdir/*.prm -o $rfxdir/$tag_mask.cub"
+
+# merge the masks into the rfx ubermask
+runonce shellcommand "vbmaskmunge $rfxdir/*_mask.cub -i -o $rfxdir/ubermask.cub"
+
+# merge the stat maps into a full.tes
+runonce shellcommand "vb2tes -m $rfxdir/full_$tesname.tes $rfxdir/*_map.cub"
+
+# create coverage map
+runonce shellcommand "vbmaskmunge -n $rfxdir/*_mask.cub -o $rfxdir/coverage_$tesname.cub"
+
+# apply ubermask to full tes
+runonce shellcommand "vbmaskmunge $rfxdir/ubermask.cub -a $rfxdir/full_$tesname.tes -o $rfxdir/$tesname.tes"

@@ -1,0 +1,12 @@
+
+VoxBo glminfo (v%1%)
+usage:
+  glminfo  <flags> <GLM dir>
+flags:
+  -l           long (extra detail)
+  -i           show just independent variables of interest
+  -r           show rmul (collinearity) for all variables of interest
+  -m <fname>   calculate and write the intersection mask for this glm's data
+  -v           version
+  -h           help
+

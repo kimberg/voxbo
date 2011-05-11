@@ -1,0 +1,16 @@
+
+shortname comptraces
+description Make the traces file.
+invocation commandline
+
+argument
+ name=stem
+ argdesc=directory containing glm information
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command comptraces -m $(stem)
+requires cpu

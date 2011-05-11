@@ -1,0 +1,24 @@
+shortname mni_n3
+description MNI's N3 tool for inhomogeneity correction in MRI images
+invocation script
+requires cpu
+
+argument
+ name=infile
+ argdesc=input file
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output file
+ type=string
+end
+
+command vbconv $(infile) $(infile).nii
+command /bin/rm $(infile).mnc
+command nii2mnc $(infile).nii $(infile).mnc
+command nu_correct -clobber $(infile).mnc tmp_$(infile).mnc
+command /bin/rm $(outfile).nii
+command mnc2nii tmp_$(infile).mnc $(outfile).nii
+command vbconv $(outfile).nii $(outfile)
+command /bin/rm -f tmp_$(infile).mnc $(infile).mnc $(infile).nii $(outfile).nii

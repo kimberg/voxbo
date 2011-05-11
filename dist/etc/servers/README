@@ -1,0 +1,66 @@
+
+# If you're not running VoxBo in cluster mode, you can ignore this
+# file.
+
+# Here is a quick tutorial on how to set up servers.  Skim it, then
+# use the example file to get started.
+
+# Each server gets its own file.  Files named "README" or containing
+# the characters ~, #, $, or % are ignored.  Each server file has a
+# bunch of fields, some optional, which describe what that machine can
+# or can't do.
+
+# speed - currently unused, but we set it anyway, so that we can tweak
+# prioritizing.
+
+# avail - specifies when the machine is available for batch jobs.
+# Each line takes a range of days, a range of hours, a priority, and a
+# number of cpus for that time period.  Note that priority 3 means
+# only jobs of pri 3 or greater can run at that time.  So if you want
+# stuff to run more, set the priority lower.
+
+# provides - lists what services the server provides.  These services
+# correspond to the "requires" lines in your jobtypes files.  You can
+# no longer use "all" -- you must name every service.
+
+# Limited resources (like software licenses) are slightly more
+# complicated.  Here's the way the food chain works.  In the jobtype
+# file, a particular jobtype might have a line like "requires idl 6".
+# That means it always requires 6 IDL licenses.  Or it might have a
+# line like "requires idl", which would mean it requires IDL, without
+# saying how many licenses.
+
+# There are three forms for the provides line in the server config:
+
+# provides idl -- provides idl no matter what resources are required
+
+# provides idl license-idl -- provides idl as long as some host has a
+# resource called "license-idl" in enough quantity to satisfy the job
+
+# provides idl license-idl 6 -- same as the above, but requires 6
+# licenses no matter what the jobtype says.
+
+# If you have one central license server, then all your servers'
+# "provides" lines should have a resource listed (not just "provides
+# idl" but "provides idl license-idl" or "provides idl license-idl
+# 6"), but only the license server gets a "resource" line.  If each
+# machine runs its own license server, then you need a resource for
+# each machine (use different names for each, something like
+# idl-hostname).  If you have unlimited licenses, then you don't need
+# any resource lines.
+
+# We use this mechanism mainly for licenses.  You could in principle
+# use it for any limited resource, either to make sure jobs only run
+# on machines with available cpu power, or with no active users logged
+# in.
+
+name myhost
+hostname localhost.localdomain
+speed 500
+avail 1-5 8-17 2 1  ;; 1 cpu at pri 2 weekdays
+avail 1-5 18-7 1 2  ;; 2 cpus at pri 1 weeknights
+avail 6-0 0-23 1 2  ;; 2 cpus at pri 1 weekends
+provides idl license-idl 6
+provides cpu
+provides tapedrive
+resource license-idl /usr/local/VoxBo/bin-Linux/idlfree

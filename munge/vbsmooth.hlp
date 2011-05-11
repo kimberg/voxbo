@@ -1,0 +1,29 @@
+
+VoxBo vbsmooth (v%1%)
+summary:
+  smoothing-related utilities for VoxBo
+usage:
+  vbsmooth [flags] [<file> ...]    smooth all passed files
+  vbsmooth -e <image>              estimate smoothness of image
+flags:
+  -vox <x> <y> <z>    specify fwhm in voxels
+  -mm <x> <y> <z>     specify fwhm in mm
+  -m <file>           mask file, use only for variance maps
+  -r <file>           remask using mask cube or tes mask
+  -s <file>           special remask (see below)
+  -p <tag>            tag to prepend to outfile if not using -o
+  -o <filename>       set output filename
+  -h                  help
+  -v                  version
+notes:
+  default smoothing kernel is 3x3x3 voxels
+
+  default output filename is input filename prepended with an s
+
+  you can override the prepend with -p
+
+  Note that there are three remasking options.  -m divides by the mask
+  (should be used for variance maps).  -r remasks using the mask
+  specified.  -s remasks by smoothing the mask passed, and including
+  any voxel that is more than 50 percent from within the original
+  mask.

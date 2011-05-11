@@ -1,0 +1,35 @@
+
+shortname smooth
+description Gaussian smoothing
+invocation script
+requires cpu
+
+argument
+ name=infile
+ argdesc=input file
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output file
+ type=string
+end
+
+argument
+ name=fwhm_x
+ argdesc=fwhm_x in voxels
+ type=string
+end
+argument
+ name=fwhm_y
+ argdesc=fwhm_y in voxels
+ type=string
+end
+argument
+ name=fwhm_z
+ argdesc=fwhm_z in voxels
+ type=string
+end
+
+
+command vbsmooth -o $(outfile) -vox $(fwhm_x) $(fwhm_y) $(fwhm_z) $(infile)

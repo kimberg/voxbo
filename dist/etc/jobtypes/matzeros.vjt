@@ -1,0 +1,31 @@
+shortname matzeros
+description Efficient Matrix Operations in c (create empty matrix)
+invocation commandline
+
+argument
+ name=name
+ argdesc=file name of matrix to create
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=cols
+ argdesc=number of columns
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=rows
+ argdesc=number of rows
+ type=long
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -zeros $(name) $(cols) $(rows)
+requires cpu

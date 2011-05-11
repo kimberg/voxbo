@@ -1,0 +1,59 @@
+
+// contrast array should have rankg (full rank), with the provided
+// contrast set.  betas is also size rankg.
+
+// create a temporary interestlist of elements of interest for f-test
+
+// iso=double(rankg x interestcount)
+// var_isobetas=iso * f1 * v * transpose(f1) * transpose(iso)
+
+
+// zero the beta vector, fill in the keepers from the prm file
+// if interestcount==1  FIXME PROBABLY NO NEED OUTSIDE OF IDL
+//   isobetas is a vector of just the non-zero-weighted betas
+// else
+//   
+
+
+;***
+; Check for the situation in which just the contrast vals for betas
+;  of interest were passed. If so, reconstruct the entire contrast
+;  array
+;***
+
+  if n_elements(ContrastArray) eq NumBoI and NumBoI lt RankG then begin
+    NewContrastArray=fltarr(RankG)
+    NewContrastArray(BetasOfInterest)=ContrastArray
+    ContrastArray=NewContrastArray
+    NewContrastArray=0
+  endif
+
+
+  if Scale eq 3 then begin
+    NoInterest = where(ContrastArray eq 0, NoInterestCount)
+    Interest = where(ContrastArray ne 0, InterestCount)
+    InterestCount=double(InterestCount)
+    Iso=fltarr(n_elements(ContrastArray),InterestCount)
+    for i=0,InterestCount-1 do $
+      Iso(Interest(i),i)=ContrastArray(Interest(i))
+    Var_IsoBetas=Iso##Fac1##V##transpose(Fac1)##transpose(Iso)
+  endif
+
+
+    3: for Point=0L,BrainCount-1 do begin
+      B = Brain(Point) mod A
+      Betas(KeepBetas) = $
+        reform(ParamTES(0:ParamHeader.T-2, $
+        B mod ParamHeader.X, B / ParamHeader.X, Brain(Point) / A))
+     if InterestCount eq 1 then begin
+       IsoBetas=[Betas(Interest(0))]
+         F_numerator = transpose(IsoBetas)##(1/Var_IsoBetas)## $
+          IsoBetas/InterestCount
+     endif else begin
+       IsoBetas=Iso##Betas
+       F_numerator=transpose(IsoBetas)##invert(Var_IsoBetas)## $
+         IsoBetas/InterestCount
+     endelse
+      StatCub(Brain(Point))=$
+        F_numerator/ErrorCube(Brain(Point))
+     endfor

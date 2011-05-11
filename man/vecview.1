@@ -1,0 +1,43 @@
+.TH vecview 1 "January, 2011 (v1.8.5)" "VoxBo" "The VoxBo Manual"
+.SH NAME
+vecview - graphical viewer for 1D (vector) or 2D (matrix) data
+.SH SYNOPSIS
+.B vecview
+[<flag> ...] <file> ...
+.SH DESCRIPTION
+.B vecview
+is part of the VoxBo suite of tools for brain image analysis.
+.P
+.B vecview
+allows you to view and explore one or more 1D vectors, or a single 2D
+matrix.  Command line options allow you to concatenate vectors.
+Options in the graphical interface allow you to switch among multiple
+vectors or to view them all simultaneously.  You can also view the
+power spectrum of the vector.
+.P
+The following keys are recognized by the grapher.  The up arrow and
+down arrow let you zoom in or out.  The tab key lets you switch
+between vectors when more than one is displayed.  The shift key lets
+you see interpolated values (otherwise, clicking on the graph snaps to
+the nearest point).  F1 through F4 select view modes.
+.P
+To get a list of command line flags, run the program with no
+arguments.
+.SH AVAILABILITY
+Pre-built VoxBo binaries are available for Linux, OSX, and Cygwin, and
+via the NeuroDebian project (neuro.debian.net) for Debian derivatives.
+.SH CAVEATS
+VoxBo is provided with no warranty whatsoever.
+.SH AUTHOR
+For an historical roster of the VoxBo development team, visit
+www.voxbo.org.
+.SH SEE ALSO
+For detailed help on any VoxBo command-line program, run it with no
+arguments.  For graphical programs, use the -h flag.  For more help
+with VoxBo, for information about the mailing list, or to report bugs,
+visit the web site at www.voxbo.org.
+.P
+For information about file format support in VoxBo, see
+.BR voxbo-fileformats (7).
+For general information about VoxBo, see
+.BR voxbo (7).

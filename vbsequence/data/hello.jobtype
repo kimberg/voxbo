@@ -1,0 +1,28 @@
+name=hello
+description=a job with several arguments
+
+argument
+  name=input_filename
+  description=the name of the file used for input
+  types=string
+end
+argument
+  name=count
+  description=the count
+  types=int
+end
+argument
+  name=contrast
+  description=a vector of data
+  types=vector
+end
+argument
+  name=image
+  description=this is an image
+  types=cube
+end
+
+resource
+  name=contrast
+  types=vector
+end

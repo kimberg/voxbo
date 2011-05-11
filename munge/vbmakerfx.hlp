@@ -1,0 +1,12 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vbmakerfx (v%1%)
+usage:
+  vbmakerfx <file>         submit rfx job defined in file
+  vbmakerfx -x <file>      create sample config in file
+  vbmakerfx -h             show help (sample config)
+notes:
+  vbmakerfx has been deprecated and is no longer actively maintained.
+  please use appropriate scripts instead.
+

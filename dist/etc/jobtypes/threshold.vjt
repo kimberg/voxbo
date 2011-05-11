@@ -1,0 +1,32 @@
+
+shortname threshold
+description Threshold a circular flying 4D volume
+invocation commandline
+
+argument
+ name=infile
+ argdesc=input 4D data file 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=outfile
+ argdesc=output file name 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=threshold
+ argdesc=threshold value 
+ type=double
+ default=none
+ low=none
+ high=none
+end
+
+command vbthresh -i $(infile) -o $(outfile) -c $(threshold)
+requires cpu

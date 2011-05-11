@@ -1,0 +1,30 @@
+shortname realign
+description Motion correction ported from SPM96
+invocation commandline
+
+argument
+ name=infile
+ argdesc=file to be realigned
+ type=string
+end
+argument
+ name=outfile
+ argdesc=output file after realignment
+ type=string
+end
+argument
+ name=tolerance
+ argdesc=tolerance for in voxels
+ type=double
+ default=.5
+ low=none
+ high=none
+end
+argument
+ name=refimage
+ argdesc=reference image 
+ type=string
+end
+
+command realign -r $(refimage) -o $(outfile) -t $(tolerance) $(infile)
+requires cpu

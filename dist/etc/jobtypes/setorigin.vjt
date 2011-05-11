@@ -1,0 +1,18 @@
+
+shortname setorigin
+description set appropriate origin
+invocation commandline
+
+argument
+ name=infile
+ argdesc=input volume
+ type=string
+end
+
+argument
+ name=origin
+ argdesc=origin (should be three numbers)
+ type=string
+end
+
+command setorigin -c $(infile) $(origin)

@@ -1,0 +1,38 @@
+
+VoxBo vbconv (v%1%)
+summary:
+  convert file formats by extension
+usage:
+  vbconv  <file> [<file>...] [<flags>]
+flags:
+  -f                 convert to floating point
+  -n                 replace NaNs and Infs with zeros
+  -x                 extract 3D volumes, see notes below
+  -i <range>         include only the specified volumes
+  -e <range>         exclude the specified volumes
+  -o <outfile>       output filename
+  -h                 show help
+  -v                 show version
+notes:
+  If you specify exactly two input files and no -o flag, the first is
+  assumed to be input and the second output.  Otherwise, all will be
+  taken as input (any combination of 3D and 4D files) and you must use
+  the -o flag to specify the output 4D filename.
+
+  If you use the -x flag and the input is a 4D volume, the individual
+  3D volumes are extracted and written to 3D files.  You can also use
+  the -i flag to specify which volumes you want.  The output filename
+  may have the string 'XXX' in it, and that string will be replaced
+  with the volume number.  the range can be of the form
+  6,17,22-29,32,38 with no whitespace.  (if you only need one volume,
+  you don't need to use XXX.)
+
+  The range argument to the -i and -e flags can include multiple
+  volumes, or ranges, separated by commas, e.g., 1-5,7-10 note that
+  the first volume is 0.
+
+  Output filenames specified as "filename[format]" will be written in
+  the specified format.  Use ffinfo to get a list of formats.  Most
+  formats can be identified by extension, but for example imgdir can
+  be used to force a directory of Analyze img/hdr pairs, regardless
+  of.  the directory name.

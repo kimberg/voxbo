@@ -1,0 +1,16 @@
+
+gsession blockglm.G
+
+scan /jet/kimberg/test/testglm/noise.tes 200
+TR 3000
+sampling 100
+length 200
+
+condition /jet/kimberg/test/testglm/block.ref
+newcov intercept
+  type K
+end
+
+newcov diagonal
+  center-norm y
+end

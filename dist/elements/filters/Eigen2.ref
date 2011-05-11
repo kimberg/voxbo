@@ -1,0 +1,28 @@
+;VB98
+;REF1
+;
+;  This is the second Eigenvector from a principal components analysis of
+;    thirteen hemodynamic responses from different subjects. This
+;    component explained 0.22 of the variance. Note that this vector
+;    has been y-shifted and scaled to facilitate its use as a covariate
+;
+;  The values represent a 16 second response (i.e., 8 values at a
+;    TR=2000 msecs).
+;
+;  This vector can be used in conjunction with the first and third
+;    vectors to create a near-basis set for the analysis of event-related
+;    fMRI data. See:
+;
+;       Aguirre, Zarahn and D'Esposito (1998) The Variability of Human
+;         BOLD Hemodynamic Responses. NeuroImage
+;
+
+
+      0.00000
+    -0.604037
+    -0.162439
+     0.760761
+     0.993102
+     0.751719
+     0.404960
+     0.327180

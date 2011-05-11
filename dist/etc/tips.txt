@@ -1,0 +1,148 @@
+# tips.txt
+
+# This file contains tips for use with "vbtool tip".  Tips are
+# separated with lines that begin with at least three dashes (I also
+# like to separate them with some space for clarity).  New releases of
+# VoxBo may update this file.  If you want to maintain your own local
+# tips separately, you can put them in a separate file called
+# localtips.txt.  User-specific tips can go in HOME/.voxbo/tips.txt or
+# HOME/voxbotips.txt.
+
+# Note that the first line of a new tip cannot be all whitespace and
+# cannot begin with a #.  Thus, this is a comment.
+
+------------------------------------------------------------------------
+
+VoxBo programs that can use 3D files can also use special syntax to
+access subvolumes of 4D files without having to first extract them.
+For example, foo.nii.gz:7 is short for the 8th volume in foo.nii.gz
+(the first volume is 0), and foo.tes:mask gives you the mask of all
+voxels that have non-zero data at any time point in foo.tes.
+
+------------------------------------------------------------------------
+
+vbbatch can help you run repetitive commands in parallel.  Specify a
+command with the string FILE in it and a list of files.  That command
+will be run separately for each file, using multiple CPUs if
+available.  For example,
+  vbbatch -c "myscript.sh FILE" /mydir/data/subjects/* -r
+will run myscript.sh on all your subjects.
+
+------------------------------------------------------------------------
+
+vbbatch is often useful for things that have nothing to do with
+imaging.
+
+------------------------------------------------------------------------
+
+vbbatch works just fine with filenames that don't exist, and you can
+even use the -d flag to generate new filenames.  The following will
+create 100 new files with random data:
+  vbbatch -c "vbsim -d 20 20 20 0 randIND.nii.gz" -d 100
+The result will be 100 files with names like rand87.nii.gz
+
+------------------------------------------------------------------------
+
+If you're on a VoxBo cluster and you'd like your job to run right now
+on the machine you're sitting at, instead of going to the queue, you
+can set the VOXBO_CORES environment variable to the number of CPU
+cores you'd like to use.
+
+------------------------------------------------------------------------
+
+For help with just about any VoxBo command, run it with no arguments.
+If the help scrolls by too quickly, pipe it through less: vbim | less
+
+------------------------------------------------------------------------
+
+See your tip here!  Post it to the mailing list or send it in by
+private email and enjoy the adulation of future generations of
+grateful VoxBo users (anonymously if you wish).
+
+------------------------------------------------------------------------
+
+You don't need a "cluster" to run VoxBo anymore.  For more information,
+visit:
+  http://voxbo.org/index.php/Desktop_mode
+
+------------------------------------------------------------------------
+
+Want to flip back and forth between two overlays (stat maps, masks,
+whatever) in vbview2?  Select one layer.  Then select the other layer.
+Then use CTRL-L to flip back and forth.
+
+------------------------------------------------------------------------
+
+VoxBo's realign and norm commands were written in 1998 and haven't
+been updated since.  Realign may still do a decent job most of the
+time, but norm doesn't.  We recommend replacing both, e.g., FLIRT for
+realign and ANTS for norm.  VoxBo also includes scripts called
+spm8_realign, spm8_segment, spm8_coreg, and spm8_warp that will
+automate using SPM8 to realign and normalize.
+
+------------------------------------------------------------------------
+
+Want to test some new analysis strategy using random noise?  You can
+use vbsim to create files with Gaussian noise.  Similar functions are
+available in vbim (using the -newvol and -addnoise flags).  In
+combination with vbim's mask-related functions, you can create useful
+fake data.
+
+------------------------------------------------------------------------
+
+Enjoying these tips?  Then make your own!  Create a text file in your
+home directory called voxbotips.txt, and add as many tips as you like.
+Separate your tips with lines that have at least 3 dashes.  (You can
+also call the file .voxbotips to hide it, or .voxbo/etc/tips.txt.)
+
+------------------------------------------------------------------------
+
+If you're running a program in a shell and you want to get the shell
+back, hit CTRL-Z to suspend the process and then type "bg" to run the
+suspended process in the background.
+
+------------------------------------------------------------------------
+
+vbi can give you useful information about vector, matrix, 3D, and 4D
+files.  To get information about the VoxBo-readable files in your
+current directory, just type vbi *.  Fore more info, use vbi -l *.
+
+------------------------------------------------------------------------
+
+You can re-run any VoxBo GLM by running vbmakeglm with the .glm file
+inside the GLM directory.  Edit that file (or preferably a copy you
+put somewhere else) to tweak the analysis.
+
+------------------------------------------------------------------------
+
+Please post questions, suggestions, concerns, and tips about using
+VoxBo to the mailing list.  To subscribe, visit:
+  http://www.voxbo.org/mailman/listinfo/voxbo-general
+
+------------------------------------------------------------------------
+
+All VoxBo programs understand NIfTI, Analyze, DICOM, and VoxBo's own
+formats.  You don't need to vbconv your file and then run a second
+command on the converted file.  Just run that second command directly.
+
+------------------------------------------------------------------------
+
+Duck!
+
+------------------------------------------------------------------------
+
+How to do functional connectivity analysis in five commands:
+vbim -newvol 20 20 20 200 float -tr 2000 -addnoise 10 4 -smoothvox 3 3 3\
+     -write4d data.nii.gz -include 0 -mult 0 -add 1 -write anat.nii.gz
+vbfilter -lp 0.08 data.nii.gz -o data.nii.gz
+vbxts -t data.nii.gz -p 10 10 10 -o seed.ref
+vbvolregress -dv data.nii.gz -iv seed.ref -int -c "foo t vec 1 0"\
+     -mapfile map.nii.gz
+vbview2 anat.nii.gz -s map.nii.gz
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+------------------------------------------------------------------------

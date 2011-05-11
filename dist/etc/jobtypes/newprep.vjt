@@ -1,0 +1,20 @@
+
+shortname newprep
+description run the newprep script to prepare the anatomy directory
+invocation commandline
+
+argument
+ name=adir
+ argdesc=directory containing Anatomy directories 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command newprep.sh $(adir)
+requires cpu
+
+
+
+

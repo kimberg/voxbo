@@ -1,0 +1,25 @@
+
+shortname avants_warp
+description avants warp
+invocation script
+requires cpu
+
+argument
+ name=instem
+ argdesc=stem name for input
+ type=string
+end
+
+argument
+ name=map
+ argdesc=map root
+ type=string
+end
+
+argument
+ name=outstem
+ argdesc=stem name for output
+ type=string
+end
+
+command /home/avants/bin/3D/WarpImageBackward $(instem).hdr $(map) $(outstem).hdr

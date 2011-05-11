@@ -1,0 +1,58 @@
+
+script bigprep.vbp
+
+# subject data
+
+SEQUENCENAME "sequence name for job queue"
+EMAIL nobody@nowhere.com
+PRIORITY 2
+LOGGING 1
+
+# DIR should be the root for that subject's data
+DIR /jet/kimberg/newdemo/data/sample
+
+# where the raw data are
+globals rawdir=/jet/raw/kimberg/stability/n1_scan1
+# for thresholding
+globals thresh=200
+globals firstrun=ch1/ch1.tes
+# name of anatomical in raw data dir
+globals anat=0006_t1_mpr_AX_MPRAGE
+# name of sample functional in raw data dir
+globals func=0007_ep2d_pace
+# list of dummy scans to be excluded (e.g., 0-4 for six dummies)
+globals dummies=0-4
+
+# SPM2 NORMALIZATION-RELATED
+# desired voxel sizes in mm for normalized functional data
+globals xa=1
+globals ya=1
+globals za=1
+# desired voxel sizes in mm for normalized anatomical data
+globals xf=3
+globals yf=3
+globals zf=3
+# anatomy directory (full path or relative to DIR)
+globals adir=/jet/kimberg/demo/data/aaa/Anatomy
+# reference T1 for normalization
+globals refvol=/usr/local/spm2/templates/T1.mnc
+globals paramfile=spm2_norm_params.mat
+globals anat=Anatomical.cub
+globals func=Functional.cub
+
+# below bounding boxes are for 1x1x1/3x3x3 -- if that's not you, good
+# luck!
+
+globals "bb_anat=[-79,-112,-51;79,76,86]"
+globals "bb_func=[-78,-111,-50;78,75,85]"
+globals "bb_disp=[-79,-112,-50;79,76,85]"
+globals email=$EMAIL
+
+# each FILE line has a run name and a source in the raw data dir.  if
+# you set run=foo, then your tes file will end up called
+# DIR/foo/foo.tes
+
+FILE run=ch1 src=0010_MoCoSeries
+FILE run=ch2 src=0012_MoCoSeries
+FILE run=perf src=0014_MoCoSeries
+FILE run=ch3 src=0016_MoCoSeries

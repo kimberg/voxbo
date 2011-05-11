@@ -1,0 +1,16 @@
+
+VoxBo sumrfx (v%1%)
+summary: summarize a few relevant aspects of a subject series volume
+usage:
+  sumrfx -t <thresh> -m <maskfile> [-d] <4D file> [<4D file> ...]
+flags:
+  -m <maskfile>       mask file indicating which voxels to include
+  -t <thresh>         values below thresh (incl negatives) will be excluded
+  -nz                 exclude values exactly equal to zero
+  -d                  include details about each contiguous region
+  -c                  compare regions pairwise by t-test
+  -sm <maskfile>      t-test single mask (all non-zero values)
+  -mm <maskfile>      t-test multimask (each mask included separately)
+notes:
+  The -sm and -mm flags allow you to specify region masks to be compared by
+  unpaired two-sample t-tests on the voxel values in the rfx map.

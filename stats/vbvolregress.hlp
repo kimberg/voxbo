@@ -1,0 +1,74 @@
+
+VoxBo vbvolregress (v%1%)
+usage:
+  vbvolregress
+flags:
+  -dv <file>         dependent variable
+  -iv <file>         independent variable
+  -m <mask>          mask file
+  -gv <...>          generate group covariates (see below)
+  -int               include an intercept
+  -c <contrast>      desired contrast
+  -sp <mat> <ind>    do a single sign permutation
+  -op <mat> <ind>    do a single order permutation
+  -spx <mat>         do all sign permutations
+  -opx <mat>         do all order permutations
+  -p <part> <nparts> do just part of the volume
+  -q <val>           q value for an FDR threshold calculation
+  -mapfile <fname>   set stat map file name (-o works too)
+  -prmfile <fname>   set parameter estimate file name (implies -prm)
+  -resfile <fname>   set residual file name (implies -res)
+  -distfile <fname>  see below
+  -s <suffix>        suffix for statmap (e.g., nii or img), default is cub
+  -x                 don't regress, just list variables
+  -h                 show help
+  -v                 show version
+
+notes:
+
+  vbvolregress carries out regression analyses using a combination of
+  vector and volume data.  Any independent or dependent variable can
+  be either a 1D vector or a 4D volume.  If any 4D volume is
+  specified, then a separate regression is carried out in each voxel.
+  Otherwise, a single regression analysis is carried out.
+
+  Note that nothing will be done unless you specify at least one
+  contrast using -c.  Typical syntax is -c "foo t vec 1 0 1 0", where
+  "foo" is an arbitrary name for the contrast, t indicates a t
+  statistic, "vec" is something you should just include and not worry
+  about, and the weights correspond to the independent variables
+  (including intercept) in the order provided.
+
+  The -op, -opx, -sp, and -spx arguments allow you to carry out
+  permutation tests.  To do so, you must previously have created a
+  permutation matrix using vbpermmat.
+
+  vbvolregress produces output only if you tell it to, using the
+  -mapfile, -prmfile, -resfile, and -distfile flags.
+
+  The filenames you specify with mapfile, prmfile, and resfile will
+  have several substrings replaced when appropriate:
+    PERM - the index of the permutation
+    PART - the index of the subvolume
+    CONT - the name of the contrast
+  i.e., stat_CONT_PERM.nii.gz might become stat_effect_000021.nii.gz
+
+  If a distfile is specified, then the results of the regression are
+  placed in the specified file, where the result is a stat value for
+  vector regression or a maximum value for volume regression.  If
+  we're only doing one regression, the value is appended.  If we're
+  doing multiple permutations, the file is first cleared and then each
+  value is appended.  No variable substitution is done with distfile,
+  so you should probably only be doing one contrast.
+
+  To create group covariates automatically using -gv, specify the
+  number of groups followed by the size of each group.  n-1 covariates
+  will be generated.  So if you have two groups of sizes 12 and 14,
+  you would specify -gv 2 12 14, and a single covariate will be
+  generated.
+
+  Because the command-line options are a little involved, we recommend
+  first running the program with the -x option, to make sure you know
+  what covariates are in your model.  Then run it again without -x,
+  specifying an appropriate contrast.
+

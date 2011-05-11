@@ -1,0 +1,52 @@
+######################################################################
+# $0 - the matrix stem name.                                         #
+# $1 - the number of steps in the regression.                        #
+# $2 - the step index.                                               #
+# $3 - mean norm flag. Will be the literal "-n", passed by vbmakeglm.#
+# $4 - exclude error norm flag. Will be the literal "-e", passed by  #
+#      vbmakeglm.                                                    #
+# $5 - driftcorrect flag. Will be the literal "-d".                  #
+# NOTE: It's certainly possible that the exclude error flag is used, #
+# but the mean norm flag is not. In such a case, $3 will be the      #
+# exclude error flag (and $4 will not be used). It does not matter   #
+# to tesregstep in which order it gets its options.                  #
+######################################################################
+shortname tesregstep
+description Carries out one of the regression steps.
+invocation commandline
+
+argument
+ name=stem
+ argdesc=matrix stem name
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=steps
+ argdesc=number of steps for the regression
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=index
+ argdesc=step index 
+ type=long
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=flags
+ argdesc=misc flags, including drift correction and mean normalization
+ type=string
+ default=""
+ low=none
+ high=none
+end
+
+command tesregstep -m $(stem) -s $(steps) -i $(index) $(flags)
+requires cpu

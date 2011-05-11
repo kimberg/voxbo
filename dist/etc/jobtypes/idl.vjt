@@ -1,0 +1,19 @@
+
+shortname idl
+description An IDL job of unspecified nature
+invocation script
+requires cpu
+requires idl 6
+
+argument
+ name=commandline
+ argdesc=full IDL command line
+ type=string
+end
+
+command idl
+| @vsb
+| .run VoxBo_Jobs.pro
+| code=999
+| code=runjob('idl',"$(commandline)")
+| exit,status=code

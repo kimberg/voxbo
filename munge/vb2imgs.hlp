@@ -1,0 +1,21 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vb2imgs (v%1%)
+usage:
+  vb2imgs <4D file/dir> <dirname> <flags>
+flags:
+  -p <prefix>    prefix for output files
+  -f             convert to floating point
+  -f             replace NaNs and Infs with zeros
+  -h             show help
+  -v             show version
+notes:
+
+  vb2imgs has been deprecated and is no longer actively maintained.
+  please use vbconv or vbim instead, e.g.:
+
+    vbconv foo.tes foo[imgdir]
+
+  (the part in the brackets won't be in the output directory name)
+

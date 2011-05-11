@@ -1,0 +1,14 @@
+
+VoxBo calcperf (v%1%)
+summary:
+  carry out calculation for perfusion factor
+usage:
+  calcperf <file> [<flags>]
+flags:
+  -t           specify TR in ms
+  -m <file>    specify white matter mask
+  -h                 show help
+  -v                 show version
+notes:
+  None yet.
+

@@ -1,0 +1,19 @@
+
+*** DEPRECATION WARNING -- SEE NOTES ***
+
+VoxBo vbmunge (v%1%)
+usage:
+   vbmunge [flags] <file> [<file> ...]
+flags:      -x           flip x
+            -y           flip y
+            -z           flip z
+            -s           strip origin (set to 0,0,0)
+            -l           extract the left (zero the right)
+            -r           extract the right (zero the left)
+            -a <cub>     add img to infile image
+notes:
+  that's left and right of the image, not hemispheres
+
+  vbmunge has been deprecated and is no longer actively maintained.
+  please use vbim instead.
+

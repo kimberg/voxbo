@@ -1,0 +1,30 @@
+;VB98
+;REF1
+;
+;  This vector is a Poisson (parameter=8 secs) function presented by
+;    Friston et al. (1994) to model the hemodynamic response function.
+;
+;  These values represent time points collected at a TR=2000 msecs
+;
+;  Subsequent work has shown that it is a poor model of the actual response
+;    so it should not generally be used for the analysis of fMRI data.
+;
+;  see:
+;
+;    Friston, K.J., Jezzard, P., Turner, R. 1994. Analysis of functional MRI
+;      time-series. Human Brain Mapping 1: 153-171.
+;
+;
+
+      0.00000
+     0.299804
+     0.699542
+     0.966036
+     0.966036
+     0.752838
+     0.468584
+     0.224933
+    0.0624991
+   -0.0277417
+   -0.0710573
+   -0.0894336

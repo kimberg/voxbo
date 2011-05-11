@@ -1,0 +1,20 @@
+set NAME=this name
+set DIR=~/something
+
+defblock x_blocktypeA
+  shellcommand cmd="echo $(var1)" name j3
+  block name b2 using sub*
+  	shellcommand cmd="echo $(var2)" name j8 nowait
+    shellcommand cmd="echo $(var3)" name j9 nowait
+    shellcommand cmd="echo $(var3)" name j10 nowait
+  end
+  shellcommand cmd="echo $(var2)" name j4
+  shellcommand cmd="echo $(var3)" name j5
+end
+
+x_world cmd="echo $(var1)" name j1
+shellcommand cmd="echo $(var2)" name j2
+x_blocktypeA name b1 using node*
+x_blocktypeA name b2
+shellcommand cmd="echo $(var3)" name j6 waitfor j2
+shellcommand cmd="echo $(var4)" name j7

@@ -1,0 +1,26 @@
+ <!DOCTYPE RCC><RCC version="1.0">
+ <qresource>
+     <file>icons/b_cross.png</file>
+     <file>icons/b_draw.png</file>
+     <file>icons/b_erase.png</file>
+     <file>icons/b_fill.png</file>
+     <file>icons/b_mask.png</file>
+     <file>icons/b_origin.png</file>
+     <file>icons/b_fliph.png</file>
+     <file>icons/b_flipv.png</file>
+     <file>icons/b_iso.png</file>
+     <file>icons/visible.png</file>
+     <file>icons/t_aux.png</file>
+     <file>icons/m_aux.png</file>
+     <file>icons/t_corr.png</file>
+     <file>icons/m_corr.png</file>
+     <file>icons/t_glm.png</file>
+     <file>icons/m_glm.png</file>
+     <file>icons/t_mask.png</file>
+     <file>icons/m_mask.png</file>
+     <file>icons/t_stat.png</file>
+     <file>icons/m_stat.png</file>
+     <file>icons/t_struct.png</file>
+     <file>icons/m_struct.png</file>
+ </qresource>
+ </RCC>

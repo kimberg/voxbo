@@ -1,0 +1,31 @@
+shortname matimxy
+description Efficient Matrix Operations in c (compute I-XY)
+invocation commandline
+
+argument
+ name=in1
+ argdesc=first matrix
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=in2
+ argdesc=second matrix
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=out
+ argdesc=I-XY in core 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+command vbmm2 -imxy $(in1) $(in2) $(out)
+requires cpu

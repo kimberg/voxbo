@@ -1,0 +1,67 @@
+shortname spm2_realign
+
+description SPM2 Realignment for 4D
+invocation script
+requires cpu
+requires matlab
+retry_tag Try again later
+setenv MATLABPATH=$(SPM2_PATH)
+setenv HOME=/tmp
+
+argument
+ name=dir
+ argdesc=directory 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=refvolume
+ argdesc=full path to reference cube 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=infile
+ argdesc=input tes file name 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+argument
+ name=outfile
+ argdesc=output tes file name 
+ type=string
+ default=none
+ low=none
+ high=none
+end
+
+# command tes2cub $(dir)/$(infile) $(dir)/$(infile)_hdrsave.cub
+command vbconv $(dir)/$(infile) $(dir)/$(infile)_hdrsave.tes -i 0
+command vb2img $(refvolume) $(dir)/$(infile)_ref.img
+command vb2imgs $(dir)/$(infile) $(dir)/$(infile)_tmpspm
+command $(SPM2_MATLAB_CMD)
+| cd $(dir)
+| spm_defaults;
+| global defaults;
+| P=spm_get('files','$(infile)_tmpspm','$(infile)_tmpspm*.img');
+| P=strvcat('$(infile)_ref.img',P)
+#| V=spm_vol(P);
+| rflags=struct('quality',1,'fwhm',5,'interp',7,'graphics',0,'rtm',0);
+| spm_realign(P,rflags)
+| rflags=struct('interp',7,'which',1);
+| spm_reslice(P,rflags)
+| exit
+command /bin/rm -f $(dir)/$(outfile)
+command vb2tes -n $(dir)/$(infile)_tmpspm/r$(infile)_tmpspm $(dir)/$(outfile)
+command vbhdr -c $(dir)/$(infile)_hdrsave.tes $(dir)/$(outfile)
+#command mv $(dir)/$(infile)_tmpspm/*.txt $(dir)
+command /bin/rm -r $(dir)/$(infile)_tmpspm $(dir)/$(infile)_hdrsave.tes $(dir)/$(infile)_ref.[hi]*
+command vbhdr -a "spm2_realign_date: {DATE}" $(dir)/$(outfile)
+command vbhdr -a "spm2_realign_ref: $(refvolume)" $(dir)/$(outfile)
+command test -e $(dir)/$(outfile)

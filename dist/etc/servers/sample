@@ -1,0 +1,44 @@
+
+# Don't worry about this file unless you're trying to configure a
+# cluster.  A server file must be present in the servers directory for
+# each server in the cluster (typically in
+# /usr/local/VoxBo/etc/servers).
+
+# "name" is the short name by which this server will be known
+# (defaults to the first part of the actual machine name.  "hostname"
+# is the fully qualified domain name, the name the scheduler will use
+# to contact it.
+
+name sample
+hostname sample.university.edu
+
+# speed and rank are used to decide which servers to use next.
+# currently only rank is used.
+
+speed 1800
+rank 1
+
+# each avail line describes a period of time during which this machine
+# is available.  each line has fields for day (0-7), hours (0-23),
+# priority, and ncpus.
+
+avail 1-5 8-17 2 1  ;; pri 2 weekdays
+avail 1-5 18-7 1 1  ;; pri 1 weeknights
+avail 6-0 0-23 1 1  ;; pri 1 weekends
+
+# provides lines describe resources provided by this CPU and can be
+# limited to restrict which jobs may run here.
+
+provides cpu
+provides mailagent
+provides idl idl-license 6
+
+# resource lines describe cluster-wide resources, and should generally
+# only be specified only on one machine each.  They can either
+# described a fixed quantity:
+
+resource idl 20
+
+# or an excutable that will print the available amount to the terminal:
+
+resource idl /usr/local/VoxBo/bin/idlfree
