@@ -479,6 +479,9 @@ public:
   VB_Vector& operator<<(size_t i); // QQ tested
   VB_Vector& operator>>(size_t i); // QQ tested
 
+  // DYK conversion to bitmask
+  operator bitmask();
+
   /*********************************************************************
    * Misc. overloaded operators.                                        *
    *********************************************************************/

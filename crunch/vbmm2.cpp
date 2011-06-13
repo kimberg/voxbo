@@ -33,6 +33,7 @@ using namespace std;
 #include <ctype.h>
 #include <string>
 #include "vbutil.h"
+#include "glmutil.h"
 #include "vbio.h"
 
 void do_print(tokenlist &args);
@@ -56,6 +57,7 @@ int do_xyz(tokenlist &args);
 int do_reshape(tokenlist &args);
 // vector stuff
 int do_applyfilter(tokenlist &args);
+int do_deriv(tokenlist &args);
 
 void vbmm_help();
 
@@ -115,6 +117,8 @@ main(int argc,char *argv[])
     do_compare(args);
   else if (cmd=="-applyfilter")
     do_applyfilter(args);
+  else if (cmd=="-deriv")
+    do_deriv(args);
   else {
     printf("[E] vbmm2: unknown operation %s",cmd.c_str());
     exit(10);
@@ -906,6 +910,34 @@ do_applyfilter(tokenlist &args)
 
 }
 
+int
+do_deriv(tokenlist &args)
+{
+  if (args.size()!=2) {
+    cout << "[E] vbmm2: deriv takes 2 arguments\n";
+    exit(5);
+  }
+  VB_Vector signal,exofilt;
+  signal.ReadFile(args[0]);
+  uint32 len=signal.size();
+  if (len<1) {
+    cout << "[E] vbmm2: problem reading file\n";
+    exit(5);
+  }
+  VB_Vector *deriv=derivative(&signal);
+  if (!deriv) {
+    cout << "[E] vbmm2: error calculating derivative\n";
+    exit(5);
+  }
+  if (deriv->WriteFile(args[1])) {
+    cout << "[E] vbmm2: error writing " << args[1] << endl;
+    exit(5);
+  }
+  cout << "[I] vbmm2: wrote derivative vector " << args[1] << endl;
+  exit(0);
+
+}
+
 void
 vbmm_help()
 {
@@ -937,6 +969,7 @@ vbmm_help()
   printf("  vbmm2 -compare <mat1> <mat2>                compare two matrices\n");
   printf("  vbmm2 -reshape <in> <out> <n> <rows/cols>   reshape an input vector into a matrix\n");
   printf("  vbmm2 -applyfilter <in> <filter> <out>      apply \"ExoFilt\" filter to vector\n");
+  printf("  vbmm2 -deriv <in> <out>                     calculate derivative of a vector\n");
   printf("notes:\n");
   printf("  -assemblerows and -assemblecols, given a single argument, will try\n");
   printf("  to find the pieces for that file, and will delete those pieces when\n");

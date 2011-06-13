@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # some defaults
+CMD=vbtmap
 DEST=permdir              # destination for permutations
 PERMS=0                   # number of permutations
 LESIONFILE=lesions.nii.gz # name of the 4D file containing lesion maps
@@ -27,12 +28,19 @@ printhelp() {
   echo "  -n <num>    set minimum number of patients per voxel (default: 2)"
   echo "  -m <mask>   set inclusion mask (nonzero voxels are included)"
   echo "  -f          flip sign of t map"
+  echo "  -x          use chi-squared instead of t-test"
+  echo "  -y          apply yates correction to chi-squared"
   echo "notes:"
   echo "  Look at the defaults above.  If you're happy with them, then you can"
-  echo "  just run makevlsm with no arguments."
+  echo "  just run makevlsm with no arguments.  Note that by default makevlsm"
+  echo "  uses vbtmap to carry out a t-test.  If you need a chi-squared, use"
+  echo "  the -x flag and it will use vbxmap instead."
   echo "  "
   echo "  The -q option causes vbtmap to print an FDR threshold at the terminal."
   echo "  Usually you wouldn't use it along with -b."
+  echo "  "
+  echo "  The -w option is incompatible with the chi-squared test, and the -y"
+  echo "  option is incompatible with the t-test."
   echo "  "
 }
 
@@ -41,7 +49,7 @@ if [[ $# -lt 1 ]] ; then
   exit;
 fi
 
-while getopts hbd:p:s:l:n:wzm:fgq:o: opt; do
+while getopts hbd:p:s:l:n:wzm:fyxgq:o: opt; do
   case "$opt" in
     h) printhelp; exit;  ;;
     g) ;;
@@ -57,6 +65,8 @@ while getopts hbd:p:s:l:n:wzm:fgq:o: opt; do
     n) FLAGS+="-n $OPTARG " ;;
     f) FLAGS+="-f " ;;
     q) FLAGS+="-q $OPTARG " ;;
+    x) CMD=vbxmap ;;
+    y) FLAGS+="-y " ;;
     \\?) echo "argh!" ;;
   esac
 done
@@ -77,16 +87,16 @@ fi
 
 if [[ BATCH -gt 0 ]] ; then
   vbbatch -f vlsmbatch
-  vbbatch -m 500 -a vlsmbatch -c "vbtmap $LESIONFILE $SCOREFILE ${TRUE} $FLAGS" x
-  vbbatch -m 500 -a vlsmbatch -c "vbtmap $LESIONFILE $SCOREFILE $DEST/cube_IND.nii.gz $FLAGS -op perms.mat IND" -d $PERMS 
+  vbbatch -m 500 -a vlsmbatch -c "$CMD $LESIONFILE $SCOREFILE ${TRUE} $FLAGS" x
+  vbbatch -m 500 -a vlsmbatch -c "$CMD $LESIONFILE $SCOREFILE $DEST/cube_IND.nii.gz $FLAGS -op perms.mat IND" -d $PERMS 
   vbbatch -m 500 -s vlsmbatch
 else
   echo "[I] makevlsm: Building unpermuted volume as ${TRUE}"
-  vbtmap $LESIONFILE $SCOREFILE ${TRUE} $FLAGS
+  $CMD $LESIONFILE $SCOREFILE ${TRUE} $FLAGS
   for (( IND=0 ; IND < $PERMS ; IND++ ))
   do
     indstr=`printf %05d $IND`
     echo "[I] makevlsm: Building permuted volume $IND as $DEST/cube_${indstr}.nii.gz"
-    vbtmap $LESIONFILE $SCOREFILE $DEST/cube_${indstr}.nii.gz $FLAGS -op perms.mat $IND
+    $CMD $LESIONFILE $SCOREFILE $DEST/cube_${indstr}.nii.gz $FLAGS -op perms.mat $IND
   done
 fi

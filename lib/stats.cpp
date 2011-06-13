@@ -28,6 +28,7 @@
 using namespace std;
 
 #include <gsl/gsl_cdf.h>
+#include <gsl/gsl_sf_gamma.h>
 #include "vbutil.h"
 #include "vbio.h"
 #include "stats.h"
@@ -106,6 +107,93 @@ calc_welchs(VB_Vector &v1,VB_Vector &v2)
     (pow(var1,2)/((double)(n1*n1)*(n1-1))
      + pow(var2,2.0)/((double)(n2*n2)*(n2-1)) );
   return tval(t,df);
+}
+
+x2val
+calc_chisquared(bitmask groups,bitmask deficit,bool yatesflag)
+{
+  x2val res;
+  if (groups.size()!=deficit.size())
+    return res;
+  double a=0,b=0,c=0,d=0;
+  for (size_t i=0; i<groups.size(); i++) {
+    if (groups[i]) {
+      if (deficit[i])
+        a+=1.0;
+      else
+        b+=1.0;
+    }
+    else {
+      if (deficit[i])
+        c+=1.0;
+      else
+        d+=1.0;
+    }
+  }
+  double x2=((a*d)-(b*c));
+  if (yatesflag) {
+    double N=a+b+c+d;
+    x2=fabs(x2)-(N/2.0);
+    x2*=x2*N;
+    x2/=(a+b)*(c+d)*(a+c)*(b+d);
+  }
+  else {
+    x2*=x2*(groups.size());
+    x2/=(a+b)*(c+d)*(a+c)*(b+d);
+  }
+  res.x2=x2;
+  res.df=1;
+  res.p=gsl_cdf_chisq_Q(x2,1)/2.0;
+  res.c00=d;
+  res.c01=c;
+  res.c10=b;
+  res.c11=a;
+  return res;
+}
+
+x2val
+calc_fisher(bitmask groups,bitmask deficit)
+{
+  x2val res;
+  res.p=-1;
+  if (groups.size()!=deficit.size())
+    return res;
+  double a=0,b=0,c=0,d=0;
+  for (size_t i=0; i<groups.size(); i++) {
+    if (groups[i]) {
+      if (deficit[i])
+        a+=1.0;
+      else
+        b+=1.0;
+    }
+    else {
+      if (deficit[i])
+        c+=1.0;
+      else
+        d+=1.0;
+    }
+  }
+  res.x2=0;
+  res.df=1;
+  res.c00=d;
+  res.c01=c;
+  res.c10=b;
+  res.c11=a;
+
+  uint32 k=res.c11;
+  uint32 n1=res.c11+res.c01;
+  uint32 n2=res.c10+res.c00;
+  uint32 t=res.c11+res.c10;
+  cout << gsl_cdf_hypergeometric_Q(k,n1,n2,t) << endl;
+  cout << gsl_cdf_hypergeometric_Q(k,n2,n1,t) << endl;
+  cout << gsl_cdf_hypergeometric_P(k,n1,n2,t) << endl;
+  cout << gsl_cdf_hypergeometric_P(k,n2,n1,t) << endl;
+  double fisher=gsl_sf_fact(a+b)*gsl_sf_fact(c+d)*gsl_sf_fact(a+c)*gsl_sf_fact(b+d);
+  fisher/=gsl_sf_fact(a)*gsl_sf_fact(b)*gsl_sf_fact(c)*gsl_sf_fact(d)*gsl_sf_fact(groups.size());
+  cout << fisher << endl;
+
+  res.p=gsl_cdf_hypergeometric_Q(res.c11,res.c10+res.c11,res.c00+res.c01,res.c11);
+  return res;
 }
 
 void

@@ -1,7 +1,7 @@
 
 // stats.h
 // prototypes, etc. for use by voxbolib
-// Copyright (c) 2008-2009 by The VoxBo Development Team
+// Copyright (c) 2008-2011 by The VoxBo Development Team
 
 // This file is part of VoxBo
 // 
@@ -23,7 +23,6 @@
 // see the VoxBo home page at: http://www.voxbo.org/
 // 
 // original version written by Dan Kimberg
-// substantial code merged in from Kosh Banerjee
 
 #ifndef VBSTATS_H
 #define VBSTATS_H
@@ -46,10 +45,23 @@ public:
   double halfci;
 };
 
+class x2val {
+public:
+  x2val() {x2=df=p=z=0.0;}
+  x2val(double xx2,double xdf) {x2=xx2;df=xdf;}
+  double x2;
+  double df;
+  double p;
+  double z;
+  int c00,c01,c10,c11;
+};
+
 tval calc_ttest(VB_Vector &vec,bitmask &bm);
 tval calc_ttest(VB_Vector &v1,VB_Vector &v2);
 tval calc_welchs(VB_Vector &vec,bitmask &bm);
 tval calc_welchs(VB_Vector &v1,VB_Vector &v2);
+x2val calc_chisquared(bitmask bm1,bitmask bm2,bool yatesflag=0);
+x2val calc_fisher(bitmask bm1,bitmask bm2);
 void t_to_p_z(tval &res,bool twotailed=0);
 VBVoxel find_fdr_thresh(Tes &vol,double q);
 

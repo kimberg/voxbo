@@ -1,6 +1,12 @@
+Welcome to the VoxBo source tree.  VoxBo is free software for brain
+imaging.  As of June 2011, VoxBo is no longer actively maintained.  It
+is passively maintained by Dan Kimberg.  If you think you might be
+interested in working on VoxBo, preparing releases, or doing anything
+else useful to help keep the software alive, please send email to
+dan@kimberg.com.
 
-Welcome to the VoxBo source distribiton.  For documentation, binaries,
-or other VoxBo-related information, visit the web site at:
+For documentation, binaries, or other VoxBo-related information, visit
+the web site at:
 
   http://voxbo.org/
 
@@ -8,8 +14,7 @@ For information on building and installing VoxBo from source, see the
 file "INSTALL" in this directory.
 
 For information on the licensing of this software, see the file
-"COPYING".  All other documentation has been moved to the web site.
-Support is provided via the VoxBo mailing lists, see this page for
-details:
+"COPYING".  Support is provided via the VoxBo mailing lists -- see
+this page for details:
 
   http://voxbo.org/mailman/listinfo/voxbo-general

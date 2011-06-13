@@ -1,0 +1,14 @@
+
+# The VoxBo server, configuration file for xinetd
+
+service vbsrvd
+{
+	socket_type	= stream
+	protocol	= tcp
+	wait		= no
+	user		= root
+	server		= /usr/local/VoxBo/bin/vbsrvd
+	instances	= 200
+	disable		= no
+	log_on_success	=
+}

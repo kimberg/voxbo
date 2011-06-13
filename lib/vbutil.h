@@ -36,6 +36,7 @@
 #include <sys/types.h>
 #include <zlib.h>
 #include <limits.h>
+#include <float.h>
 #include <unistd.h> // For getopt().
 #include <termios.h> // For definition of struct winsize.
 #include <sys/ioctl.h> // For definition of struct winsize.

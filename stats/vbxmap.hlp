@@ -1,0 +1,38 @@
+
+VoxBo vbcmap (v%1%)
+usage:
+  vbcmap <4D file> <1D file> <outfile> <flags>
+flags:
+  -op <mat> <ind>    order permutation
+  -m <maskfile>      specify inclusion mask file
+  -n <min>           minimum number of lesions for inclusion (default:2)
+  -q <q>             calculate FDR thresh for q
+  -pfile             write p values, lowest to highest, to this file
+  -pmap              write p map to this file
+  -nodup             omit duplicate voxels from FDR calculation
+#  -f                 flip sign of stat values
+  -2                 use two-tailed test when calculating ps
+  -y                 apply yates continuity correction to X2
+#  -x                 use fisher exact test instead of chi-squared
+  -h                 show help
+  -v                 show version
+notes:
+  vbcmap calculates a chi-squared test to test the hypothesis that the
+  proportion of deficit is higher in the injured group than in the
+  intact group, separately for each voxel.  By default it calculates a
+  one-tailed test.
+
+  vbcmap assumes that a nonzero value in the lesion map means damage,
+  and that a nonzero value in the dependent variable means a deficit.
+
+  The minimum number of lesions can't be set to less than 2.
+
+  The -nodup flag allows groups of identical voxels (i.e., voxels
+  lesioned in exactly the same set of patients) to be counted only
+  once for the FDR comparison.  I'm not sure if this is a good, bad,
+  or indifferent idea.  But it's important to consider that when you
+  do this, the FDR rate applies to regions (contiguous or otherwise)
+  of identical voxels, not to voxels per se.
+
+  If you provide a q value of 0 (-q 0), vbcmap will give you FDR
+  thresholds for a range of commonly requested q values.

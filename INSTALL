@@ -1,16 +1,214 @@
 
-You could try just:
+If you're fortunate enough to have all the needed development
+libraries installed, you could try:
 
   make
   make install
 
-If you have slightly more complicated needs, preface that with:
+If you have slightly more complicated needs, first do:
 
   ./configure.py
 
 and then run it again with whatever arguments you need.
 
-For more detailed build notes and other documentation, visit the web
-site at:
+Here's the list of libraries required to build VoxBo:
 
-  http://www.voxbo.org/
+  gsl
+  zlib
+  libpng
+  readline
+  boost
+  QT4
+  octave
+  libgpg-error
+  libgcrypt
+  gnutls
+  BerkeleyDB
+
+##########################################
+# library notes
+##########################################
+
+# Below is my cheat sheet for how to build the various libraries and
+# tools that go into building VoxBo for distribution.  If you just
+# want to build VoxBo for a single machine, or for a bunch of machines
+# configured similarly, then you probably don't need to do any of
+# this, you just need to install the development packages for all the
+# libraries.
+
+##########################################
+# gcc-related -- not for windows or OSX
+##########################################
+
+# gmp and mpfr are required to build gcc.  Most modern distributions
+# have them installed or available, but I've had to build them myself
+# for older build boxes.
+
+# gmp 5.0.1 (prereq for gcc)
+# ftp://ftp.gnu.org/gnu/gmp
+./configure
+make
+make install
+
+# mpfr 2.4.2 (prereq for gcc)
+# ftp://ftp.gnu.org/gnu/mpfr
+./configure
+make
+make install
+
+# gcc 4.4.4
+# ftp://ftp.gnu.org/gnu/gcc
+mkdir gcc444
+cd gcc444
+../gcc-4.4.4/configure --disable-shared
+make -j3
+make install
+
+##########################################
+# other libraries
+##########################################
+
+# gsl 1.14
+# ftp://ftp.gnu.org/gnu/gsl
+./configure --disable-shared
+make
+make install
+
+# zlib 1.2.5 (note that it's always static)
+# http://zlib.net/
+./configure --static
+make
+make install
+# on mingw, move libz.a, zlib.h, and zconf.h to /c/mingw/lib and /c/mingw/include
+
+# libpng 1.4.2
+# http://sourceforge.net/projects/libpng/
+./configure --disable-shared
+make -j3
+make install
+
+# readline 6.1
+# ftp://ftp.gnu.org/gnu/readline/
+./configure --disable-shared --without-curses
+make -j5
+make install
+
+# boost 1.42
+# http://www.boost.org/users/download/
+# no need to compile anything, just put the boost subdir in the include path
+cp -r boost /usr/local/include
+
+# QT4 4.6.2 (linux)
+# http://get.qt.nokia.com/qt/source/
+# -no-tablet -no-xshape
+./configure -release -opensource -static -no-opengl -no-sm -no-xinerama\
+  -no-xcursor -no-xfixes -no-xrandr -no-glib\
+  -no-dbus -no-openssl -qt-libpng -qt-libjpeg -qt-gif -qt-libtiff
+o
+yes
+make -j5
+make install
+ln -sf /usr/local/TrollTech/Qt-4.5.3 /usr/local/qt4
+# link qt4 to /usr/local/TrollTech
+
+# QT4 4.5.3 (osx)
+./configure -opensource -static -fast -no-largefile -no-xmlpatterns -no-phonon -no-phonon-backend -no-scripttools -no-libmng -no-openssl -qt-libjpeg -qt-gif -qt-libtiff -qt-libpng
+
+# QT4 4.6.3 (osx)
+./configure -opensource -static -release -no-phonon -no-phonon-backend -no-webkit -no-javascript-jit -no-script -no-scripttools -no-libmng -no-openssl -qt-libjpeg -qt-gif -qt-libtiff -qt-libpng
+
+# octave 3.2.4
+# ftp://ftp.che.wisc.edu/pub/octave
+./configure --with-f77=gfortran --disable-shared --enable-static\
+  --without-blas --without-lapack --disable-readline --disable-dl
+make -j3 libcruft
+make -j3 liboctave
+make -C libcruft install
+make -C liboctave install
+cp -f config.h src/*.h /usr/local/include/octave*/octave
+ln -s /usr/local/include/octave*/octave /usr/local/include/octave
+ln -s /usr/local/lib/octave* /usr/local/lib/octave
+
+# libgpg-error 1.8 (required for gnutls)
+# ftp://ftp.gnupg.org/gcrypt/libgpg-error/
+./configure --disable-shared
+make -j3
+make install
+
+# libgcrypt 1.4.5 (required for gnutls)
+# ftp://ftp.gnupg.org/gcrypt/libgcrypt/
+./configure --disable-shared
+make -j3
+make install
+
+# gnutls 2.8.6
+# ftp://ftp.gnu.org/gnu/gnutls
+# On OSX, it will error out on the example code after the library is
+# built.  That's okay for now, just check the dates in /usr/local/lib/*tls*
+# and /usr/local/include/*tls*.
+./configure --disable-shared --disable-camellia --with-included-libtasn1
+make -j3
+make install
+
+# db 4.8.30
+# http://www.oracle.com/technology/software/products/berkeley-db/db/index.html
+cd build_unix
+../dist/configure --disable-shared --enable-cxx
+make -j3
+make install
+# copy stuff from /usr/local/BerkeleyDB.4.8 to lib and include in /usr/local
+
+##########################################
+# platform: MinGW
+##########################################
+
+# Things will work much better with mingw if you build as a user
+# without spaces in the username.  I build within the MSYS shell,
+# although you can probably do it within cygwin if you set your target
+# manually.  Also had to edit MinGW's libstdc++.la file (in
+# lib/gcc...) to remove dll bit.
+
+##########################################
+# GNUlib
+##########################################
+# http://www.gnu.org/software/gnulib/
+
+
+# Here are some notes on using GNUlib to provide implementations for
+# various library functions.  We don't use it currently, but we
+# probably should.
+
+
+# Gnulib is supposed to be a source library, but if you're not using
+# autoconf (we aren't), it's much easier to use it to build a binary
+# library and just link that.  gnulib doesn't have versions, but the
+# latest repository code is usually pretty stable.  Supposedly you can
+# fetch it with:
+#
+# git clone git://git.savannah.gnu.org/gnulib.git
+#
+
+# The following commands executed within the gnulib directory will
+# extract what we need for VoxBo and build the library and header
+# files.  After which they need to be put somewhere useful.  MSYS
+# doesn't have autoconf, so you might have to do the first step under
+# cygwin or on a linux box or somewhere else.  I guess I could just
+# distribute what's needed.
+
+# currently we use:
+#  glob (for glob)
+#  unistd (for pwd stuff, probably more)
+#  stdlib (realpath?)
+#  lstat
+#  NOT winsz-termios (for termios)
+#  NOT ioctl (for winsize)
+#  connect accept bind select
+
+./gnulib-tool --create-testdir --dir=mygnulib glob unistd stdlib lstat connect accept bind select
+cd mygnulib
+./configure
+make
+mkdir -p /usr/local/include/gnulib
+cp -r gllib/*.h gllib/sys /usr/local/include/gnulib
+cp gllib/libgnu.a /usr/local/lib
+

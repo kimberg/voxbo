@@ -24,19 +24,26 @@ notes:
     voxel <name> <x> <y> <z>
     mask <name> <fname>
 
-  Then, there are the following primitives for describing the
-  relationship between the lesion data and the behavioral score.
+  Each voxel you define uses the value of that voxel for each subject.
+  Each mask you define uses the average value of all the in-mask
+  voxels for each subject.  So if you have 0/1 lesion maps, a mask
+  line will give you the proportion of damage in that region.
 
-    ifvoxel <voxelname>    # damaged iff that voxel is damaged
-    ifvoxeland <v1> <v2>   # damaged iff both are damaged
-    region <regionname>    # damaged iff any voxel in that region is damaged
-    regionor <r1> <r2>     # damaged iff any voxel in either region is damaged
-    regionand <r1> <r2>    # just what it sounds like
-    regionpct <r1>         # pct damage to r1 is used to create score
-    regionpctor <r1> <r2>  # 
-    regionpctand <r1> <r2> # 
+  Finally, several primitives can be used to describe the relationship
+  between the lesion data and the behavioral score.  The first three
+  make a discrete decision about whether each subject's score should
+  be drawn from the intact or damaged distribution:
 
-  Finally, a line to spew out the file should be included after any one of the above:
+    if <v1> <thresh> <outfile>        # damaged iff that voxel is damaged
+    ifand <v1> <v2> <thresh> <outfile>   # damaged iff both are damaged
+    ifor <v1> <v2> <thresh> <outfile>    # damaged iff either is damaged
 
-    generate <refname>
+  The following three draw proportionally from the two distributions,
+  using the proportion of damage in a single voxel or region, the
+  minimum proportion from two voxels/regions, or the maximum
+  proportion, respectively:
+
+    pct <v1> <outfile>
+    pctmin <v1> <v2> <outfile>
+    pctmax <v1> <v2> <outfile>
 

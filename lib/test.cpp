@@ -44,10 +44,17 @@ extern "C" {
 int
 main(int argc,char **argv)
 {
-  GLMInfo glmi;
-  glmi.setup(argv[1]);
-  glmi.loadcombinedmask();
-  glmi.mask.WriteFile("x.cub");
+  VB_Vector a("a.ref");
+  VB_Vector b("b.ref");
+  x2val tt=calc_chisquared((bitmask)a,(bitmask)b);
+  cout << format("x2=%g df=%d p=%g\n")%tt.x2%tt.df%tt.p;
+  tt=calc_chisquared((bitmask)a,(bitmask)b,1);
+  cout << format("x2(corr)=%g df=%d p=%g\n")%tt.x2%tt.df%tt.p;
+  tt=calc_fisher((bitmask)a,(bitmask)b);
+  cout << format("fisher p=%g\n")%tt.p;
+
+  cout << "  lesion (0/1): " << tt.c10 << " " << tt.c11 << endl;
+  cout << "nolesion (0/1): " << tt.c00 << " " << tt.c01 << endl;
   exit(0);
   Tes foo;
   Cube cb;

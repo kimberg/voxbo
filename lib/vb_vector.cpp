@@ -759,7 +759,8 @@ VB_Vector::VB_Vector(const vector<double> *theVector)
 
 } // VB_Vector::VB_Vector(const vector<double> *theVector)
 
-// DYK: constructor from a binary bitmask
+// DYK: constructor from a binary bitmask, FIXME should probably be
+// declared explicit
 VB_Vector::VB_Vector(const bitmask &bm)
 {
   this->init(false,vb_double,"ref1");
@@ -1720,6 +1721,21 @@ ostream& operator<<(ostream& outStream, const VB_Vector *V)
   return outStream;
 
 } // ostream& operator<<(ostream& outStream, const VB_Vector *V)
+
+
+VB_Vector::operator bitmask()
+{
+  bitmask bm;
+  bm.resize(size());
+  bm.clear();
+  for (size_t i=0; i<size(); i++)
+    if (fabs((*this)[i])>FLT_MIN)
+      bm.set(i);
+  return bm;
+}
+
+
+
 
 /*********************************************************************
 * This method scales the elements of this instance of VB_Vector by   *

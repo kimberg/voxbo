@@ -11,7 +11,7 @@ VBLIBS=$(VBLIBS2)
 LIBS = $(LDFLAGS) $(LIBDIRS) -lm -lvbprefs -lvbglm -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS)
 
 ALLBINS=vbvolregress vbmakeregress vbstatmap vbdumpstats glminfo vbperminfo
-ALLBINS+=vbxts vbtmap vbmakeresid vbfdr vbpermvec vbscoregen vbmap
+ALLBINS+=vbxts vbtmap vbxmap vbmakeresid vbfdr vbpermvec vbscoregen vbmap
 
 ifeq ($(VB_TARGET),all)
 	BINS=$(ALLBINS)
@@ -20,7 +20,7 @@ else ifeq ($(VB_TARGET),spm)
 else ifeq ($(VB_TARGET),db)
     BINS=
 else
-	BINS=vbvolregress vbperminfo vbxts vbtmap vbfdr vbpermvec vbscoregen
+	BINS=vbvolregress vbperminfo vbxts vbtmap vbxmap vbfdr vbpermvec vbscoregen
 endif
 
 all: $(BINS)
@@ -51,6 +51,9 @@ vbstatmap: vbstatmap.cpp glmutil.cpp vbstatmap.hlp.h $(VBLIBS)
 
 vbtmap: vbtmap.cpp vbtmap.hlp.h $(VBLIBS)
 	$(CXX) $(CXXFLAGS) -o vbtmap vbtmap.cpp $(LIBS)
+
+vbxmap: vbxmap.cpp vbxmap.hlp.h $(VBLIBS)
+	$(CXX) $(CXXFLAGS) -o vbxmap vbxmap.cpp $(LIBS)
 
 glminfo: glminfo.cpp glminfo.hlp.h $(VBLIBS)
 	$(CXX) $(CXXFLAGS) -o glminfo glminfo.cpp -lvbglm $(LIBS)

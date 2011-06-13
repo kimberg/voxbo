@@ -2001,8 +2001,11 @@ int readTxt(const char *inputFile, std::vector< VB_Vector *> txtCov)
   return 0;    // no error!
 }
 
-/* derivative() is a function that simulates Geoff's derivative() function in IDL 
- * Reference: VoxBo_Fourier.pro */
+// derivative() is a function that simulates Geoff's derivative()
+// function in IDL Reference: VoxBo_Fourier.pro.  FIXME possibly this
+// should be rewritten to avoid heap allocations, unless it turns out
+// we sometimes have really huge vectors.
+
 VB_Vector * derivative(VB_Vector *inputVec)
 {
   unsigned vecLength = inputVec->getLength();
