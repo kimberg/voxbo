@@ -26,7 +26,7 @@
 
 #ifndef VBVERSION_H
 #define VBVERSION_H
-const string vbversion="1.8.5pre16/"+(string)__DATE__;
+const string vbversion="1.8.5/"+(string)__DATE__;
 // the below probably not used for anything now that we're not using
 // binary plug-ins anymore
 const int vbversion_major=1;
