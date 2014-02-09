@@ -8,7 +8,7 @@ VBLIBS=$(VBLIBS2)
 
 # miscellaneous flags and such
 
-LIBS = $(LDFLAGS) $(LIBDIRS) -lm -lvbprefs -lvbglm -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS)
+LIBS = $(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) -lm -lvbprefs -lvbglm -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS) -lboost_system
 
 ALLBINS=vbvolregress vbmakeregress vbstatmap vbdumpstats glminfo vbperminfo
 ALLBINS+=vbxts vbtmap vbxmap vbmakeresid vbfdr vbpermvec vbscoregen vbmap

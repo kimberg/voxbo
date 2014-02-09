@@ -23,7 +23,7 @@ PERFMASKOBJECTS = perfmask.o realignutils.o utils.o smoothutils.o matrixutils.o\
 INCDIRS += -I/usr/local/include/octave
 LIBDIRS += -L/usr/local/lib/octave
 
-LIBS =$(LDFLAGS) $(LIBDIRS) -lm -lvbglm -lvbprefs -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS)
+LIBS =$(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) -lm -lvbglm -lvbprefs -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS) -lboost_system
 OCTLIBS = $(LIBS) -loctave -lcruft $(FORTLIB)
 
 ALLBINS=vbmm2 vbmakeglm vbmakefilter #realign norm

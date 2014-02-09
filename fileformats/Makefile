@@ -6,7 +6,7 @@ include ../make_stuff.txt
 
 SHAREDFLAG=-shared
 
-LIBS=$(LDFLAGS) $(LIBDIRS) -lvbio -lvbutil -lvbprefs -lz -lpng -lgsl -lgslcblas
+LIBS=$(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) -lvbio -lvbutil -lvbprefs -lz -lpng -lgsl -lgslcblas -lboost_system
 
 ALLBINS=dcmsplit dicominfo ffinfo vbrename analyzeinfo niftiinfo
 BINS=$(ALLBINS)

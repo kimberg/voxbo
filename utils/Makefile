@@ -7,7 +7,7 @@ include ../make_stuff.txt
 # Some variables
 MYLIBVOXBO=../lib
 
-LIBS = $(LDFLAGS) $(LIBDIRS) -lvbglm -lvbprefs -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS)
+LIBS = $(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) -lvbglm -lvbprefs -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS) -lboost_system
 
 ALLBINS=vbfit vbcfx txt2num gcheck sortmvpm
 ifeq ($(VB_TARGET),all)

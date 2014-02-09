@@ -57,43 +57,43 @@ libvbio.a: $(IOOBJECTS) $(FFOBJECTS)
 	ranlib libvbio.a
 
 libvbio.so: $(IOOBJECTS) $(FFOBJECTS) libvbprefs.so libvbutil.so
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. -lc -lz -lgsl -lpng -lvbprefs -lvbutil $^
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lz -lgsl -lpng -lvbprefs -lvbutil -lboost_system
 
 libvbutil.a: $(UTILOBJECTS)
 	ar rc libvbutil.a $^
 	ranlib libvbutil.a
 
 libvbutil.so: $(UTILOBJECTS)
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -lc -lz $^
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) $^ -lc -lz -lboost_system
 
 libvbprefs.a: $(VBPOBJECTS)
 	ar rc libvbprefs.a $^
 	ranlib libvbprefs.a
 
 libvbprefs.so: $(VBPOBJECTS) libvbutil.so
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. -lc -lvbutil $^
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lvbutil -lboost_system
 
 libvbscripts.a: $(SCRIPTOBJECTS)
 	ar rc libvbscripts.a $^
 	ranlib libvbscripts.a
 
 libvbscripts.so: $(SCRIPTOBJECTS) libvbprefs.so libvbutil.so
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. -lc -lvbprefs -lvbutil $^
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lvbprefs -lvbutil
 
 libvbglm.a: $(GLMOBJECTS)
 	ar rc libvbglm.a $^
 	ranlib libvbglm.a
 
 libvbglm.so: $(GLMOBJECTS) libvbio.so libvbutil.so libvbprefs.so
-#	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. -lc -lgsl -lvbio -lvbutil -lvbscripts -lvbprefs $^
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. -lc -lgsl -lvbio -lvbutil -lvbprefs $^
+#	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lgsl -lvbio -lvbutil -lvbscripts -lvbprefs
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lgsl -lvbio -lvbutil -lvbprefs -lboost_system
 
 libdbutil.a: $(DBOBJECTS)
 	ar rc libdbutil.a $^
 	ranlib libdbutil.a
 
 libdbutil.so: $(DBOBJECTS) libvbio.so libvbutil.so
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. -lc -lvbio -lvbutil $^
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lvbio -lvbutil
 
 # and now for the building blocks
 

@@ -8,7 +8,7 @@ VBLIBS=$(VBLIBS2)
 
 # miscellaneous flags and such
 
-LIBS =$(LDFLAGS) $(LIBDIRS) $(LIBPATHS) -lvbglm -lvbprefs -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS)
+LIBS =$(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) $(LIBPATHS) -lvbglm -lvbprefs -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS) -lboost_system
 
 CONVERTERS=tes2cub vb2cub vb2img vb2imgs vb2tes vb2vmp vbconv
 MUNGERS=vbmunge vbcmp vbshift vbsmooth vbmaskmunge vecsplit vbinterpolate vbthresh
