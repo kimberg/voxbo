@@ -11,7 +11,7 @@ VBTRANSFORMOBJECTS = vbtransform.o
 
 # miscellaneous flags and such
 
-LIBS = $(LDFLAGS) $(LIBDIRS) -lm -lvbprefs -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS)
+LIBS = $(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) -lm -lvbprefs -lvbio -lvbutil -lz -lpng $(DLLIB) $(GSL_LIBS) -lboost_system
 
 # resample is in all packages
 BINS=resample

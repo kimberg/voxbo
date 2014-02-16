@@ -11,7 +11,7 @@ CXXFLAGS += -DQT3_SUPPORT $(QTLIBDIRS) $(QTINCDIRS)
 VBVIEW_SUBOBJECTS=vbview.o vbview_ts.o vbview_layers.o vbview_render.o vbview_io.o vbqt_masker.o vbqt_canvas.o vbqt_glmselect.o vbqt_scalewidget.o vbview_widgets.o rsrc.o
 VBVIEW_OBJECTS=vbviewmain.o $(VBVIEW_SUBOBJECTS)
 
-LIBS=$(LDFLAGS) $(LIBDIRS) $(QTLIBDIRS) -L../vbwidgets $(QTLIBS) -lvbglm -lvbprefs -lvbio -lvbutil -lz $(DLLIB) -lgsl -lgslcblas
+LIBS=$(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) $(QTLIBDIRS) -L../vbwidgets $(QTLIBS) -lvbglm -lvbprefs -lvbio -lvbutil -lz $(DLLIB) -lgsl -lgslcblas -lboost_system
 
 # right now all three programs are in all packages, so we just
 # conditionalize on ARCH

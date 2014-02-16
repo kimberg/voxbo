@@ -13,7 +13,7 @@ ONEOVERFDIR=../utils
 GDS_OBJECTS = gds_main.o gds.o
 
 # miscellaneous flags and such
-LIBS = $(LDFLAGS) $(LIBDIRS) $(DLLIB) -lm -lvbprefs -lvbglm -lvbio -lvbutil -lz -lpng $(GSL_LIBS)
+LIBS = $(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) $(DLLIB) -lm -lvbprefs -lvbglm -lvbio -lvbutil -lz -lpng $(GSL_LIBS) -lboost_system
 
 ALLBINS=gds
 ifeq ($(VB_TARGET),all)

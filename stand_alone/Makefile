@@ -13,7 +13,7 @@ TESJOIN_OBJECTS=$(TESPLIT_OBJECTS)
 REGRESSION_OBJECTS=regression.o utils.o koshutil.o
 PERMUTATION_OBJECTS=perm.o utils.o time_series_avg.o koshutil.o
 
-LIBS=$(LDFLAGS) $(LIBDIRS) -lvbglm -lvbprefs -lvbio -lvbutil -lz -lpng $(GSL_LIBS) $(DLLIB)
+LIBS=$(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) -lvbglm -lvbprefs -lvbio -lvbutil -lz -lpng $(GSL_LIBS) $(DLLIB) -lboost_system
 
 ALLBINS= calcgs calcps sliceacq tesplit tesjoin makematkg makematk\
 		comptraces permstep vbregress vbpermmat

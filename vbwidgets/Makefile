@@ -47,7 +47,7 @@ libvbwidgets.a: $(VBWIDGET_OBJECTS)
 	ranlib libvbwidgets.a
 
 libvbwidgets.so: $(VBWIDGET_OBJECTS)
-	g++ -shared -Wl,-soname,$@ $(LDFLAGS) -o $@ -lc $^ -L../lib -lvbio -lvbutil -lvbprefs -lvbglm -lQtCore -lQt3Support -lQtGui -lgsl
+	g++ -shared -Wl,-soname,$@ $(LDFLAGS) -o $@ -lc $^ -L../lib -lvbio -lvbutil -lvbprefs -lvbglm -lQtCore -lQt3Support -lQtGui -lgsl -lboost_system
 
 moc_%.cpp : %.h
 	$(MOC) $< -o $@

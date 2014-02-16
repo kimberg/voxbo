@@ -20,7 +20,7 @@ TCALC_OBJECTS= vbtcalc.o
 PERMGEN_OBJECTS= vbpermgen.o
 
 # miscellaneous flags and such
-LIBS=$(LDFLAGS) $(LIBDIRS) $(QTLIBDIRS) $(QTLIBS) -lz -lvbglm -lvbprefs -lvbio -lvbutil -lz $(GSL_LIBS) $(DLLIB)
+LIBS=$(LDFLAGS) -Wl,--no-as-needed $(LIBDIRS) $(QTLIBDIRS) $(QTLIBS) -lz -lvbglm -lvbprefs -lvbio -lvbutil -lz $(GSL_LIBS) $(DLLIB) -lboost_system
 
 ALLBINS= glm gdw vecview vbpermgen vbtcalc
 OSXTRA=glm.app glm.dmg gdw.app gdw.dmg vecview.app vecview.dmg vbpermgen.app vbpermgen.dmg vbtcalc.app vbtcalc.dmg
