@@ -15,14 +15,12 @@ ifdef VB_SHARED
   LIBSUFFIX=so
   VBLIBS=libvbutil.so libvbio.so libvbprefs.so
   VBQTLIBS=libvbwidgets.so
-  VBLIBSDB=libvbutil.so libvbio.so libvbprefs.so libdbutil.so
   VBLIBS2=libvbutil.so libvbio.so libvbprefs.so libvbglm.so
   VBLIBS3=libvbutil.so libvbio.so libvbprefs.so libvbglm.so libvbscripts.so
 else
   LIBSUFFIX=a
   VBLIBS=libvbutil.a libvbio.a libvbprefs.a
   VBQTLIBS=libvbwidgets.a
-  VBLIBSDB=libvbutil.a libvbio.a libvbprefs.a libdbutil.a
   VBLIBS2=libvbutil.a libvbio.a libvbprefs.a libvbglm.a
   VBLIBS3=libvbutil.a libvbio.a libvbprefs.a libvbglm.a libvbscripts.a
 endif

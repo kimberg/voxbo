@@ -17,7 +17,6 @@ UTILOBJECTS=vbutil.o endian.o connect.o tokenlist.o vbreports.o genericexcep.o
 SCRIPTOBJECTS=vbscripttools.o vbsequence.o vbdataset.o vbexecdef.o
 VBPOBJECTS=vbjobspec.o vbprefs.o vbhost.o vbx.o
 GLMOBJECTS=makestatcub.o glmutil.o glm_stats.o statthreshold.o regress1.o trialavg.o stats.o
-DBOBJECTS=db_util.o dbdata.o mydb.o mydefs.o dbdate.o bdb_tab.o brain_tab.o
 
 ifdef VB_SHARED
   EXT=so
@@ -27,14 +26,10 @@ endif
 
 TARGETS=libvbutil.$(EXT) libvbprefs.$(EXT) libvbio.$(EXT) libvbglm.$(EXT)
 
-ifneq ($(VB_TARGET),spm)
-	TARGETS+=libdbutil.$(EXT)
-endif
-
 #ifdef VB_SHARED
-#  TARGETS=libvbutil.so libvbprefs.so libvbio.so libvbglm.so libdbutil.so libdbutil.so
+#  TARGETS=libvbutil.so libvbprefs.so libvbio.so libvbglm.so
 #else
-#  TARGETS=libvbutil.a libvbprefs.a libvbio.a libvbglm.a libdbutil.a libdbutil.a
+#  TARGETS=libvbutil.a libvbprefs.a libvbio.a libvbglm.a
 #endif
 
 all: $(TARGETS)
@@ -87,13 +82,6 @@ libvbglm.a: $(GLMOBJECTS)
 libvbglm.so: $(GLMOBJECTS) libvbio.so libvbutil.so libvbprefs.so
 #	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lgsl -lvbio -lvbutil -lvbscripts -lvbprefs
 	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lgsl -lvbio -lvbutil -lvbprefs -lboost_system
-
-libdbutil.a: $(DBOBJECTS)
-	ar rc libdbutil.a $^
-	ranlib libdbutil.a
-
-libdbutil.so: $(DBOBJECTS) libvbio.so libvbutil.so
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lvbio -lvbutil
 
 # and now for the building blocks
 
@@ -213,33 +201,6 @@ ff_ge.o: ff_ge.cpp
 ff_vmp3d.o: ff_vmp3d.cpp
 	$(CXX) $(CXXFLAGS) -c ff_vmp3d.cpp
 
-# db stuff
-
-mydb.o: mydb.h mydb.cpp
-	$(CXX) $(CXXFLAGS) -c mydb.cpp
-
-dbdate.o: dbdate.h dbdate.cpp
-	$(CXX) $(CXXFLAGS) -c dbdate.cpp
-
-bdb_tab.o: bdb_tab.h bdb_tab.cpp
-	$(CXX) $(CXXFLAGS) -c bdb_tab.cpp	
-
-mydefs.o: mydefs.h mydefs.cpp
-	$(CXX) $(CXXFLAGS) -c mydefs.cpp
-
-db_util.o: db_util.h db_util.cpp
-	$(CXX) $(CXXFLAGS) -c db_util.cpp
-
-dbdata.o: dbdata.h dbdata.cpp
-	$(CXX) $(CXXFLAGS) -c dbdata.cpp
-
-# brain region related stuff
-brain_tab.o: mydb.h brain_tab.h brain_tab.cpp
-	$(CXX) -c $(CXXFLAGS) -o brain_tab.o brain_tab.cpp
-
-brain_util.o: $(HEADERS) brain_util.cpp
-	$(CXX) -c $(CXXFLAGS) -o brain_util.o brain_util.cpp
-
 # rule that should be good for most of our .o files
 
 %.o : %.cpp vbio.h vbutil.h vb_vector.h
@@ -247,5 +208,5 @@ brain_util.o: $(HEADERS) brain_util.cpp
 
 # test program
 
-test:	libvbio.a test.cpp libvbprefs.a libvbglm.a libdbutil.a
+test:	libvbio.a test.cpp libvbprefs.a libvbglm.a
 	$(CXX) $(CXXFLAGS) -o test test.cpp $(LIBS)

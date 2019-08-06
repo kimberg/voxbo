@@ -2,7 +2,7 @@
 from optparse import OptionParser
 import sys,os,glob
 
-# possible targets include: all, db, vlsm, spm
+# possible targets include: all, vlsm, spm
 
 def printhelp():
     print "  "
@@ -58,9 +58,6 @@ elif opts.package=="spm":
 elif opts.package=="vlsm":
     print "Configured VLSM subpackage"
     optstring+="VB_TARGET?=vlsm\n"
-elif opts.package=="db":
-    print "Configured DB subpackage"
-    optstring+="VB_TARGET?=db\n"
 else:
     print "Configured full package"
 

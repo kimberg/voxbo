@@ -11,30 +11,22 @@ COMMANDLINEDIRS=fileformats munge stats crunch stand_alone utils resample gdscri
 
 ifeq ($(VB_TARGET),spm)
   GUIDIRS= qtglm vbview
-  DBDIRS=
-else ifeq ($(VB_TARGET),db)
-  COMMANDLINEDIRS=
-  GUIDIRS=
-  DBDIRS=client server dbutil
 else
   GUIDIRS=qtglm vbview vbsequence qtvlsm
-  DBDIRS=client server dbutil
 endif
 
 VOXBODIRS = $(COMMANDLINEDIRS) $(GUIDIRS)
 INSTALLDIRS = $(COMMANDLINEDIRS) $(GUIDIRS)
-MAKEDIRS = $(VOXBODIRS) $(DBDIRS)
+MAKEDIRS = $(VOXBODIRS)
 CLEANDIRS = lib vbwidgets $(MAKEDIRS)
-OUT=getput qa brainBrowser db_import
+OUT=getput qa
 
 # PHONY declaration makes life easier
-.PHONY: clean install lib vbwidgets subdirs db nogui voxbo showconfig $(VOXBODIRS) $(DBDIRS)
+.PHONY: clean install lib vbwidgets subdirs nogui voxbo showconfig $(VOXBODIRS)
 
-subdirs: lib $(VOXBODIRS) $(DBDIRS)
+subdirs: lib $(VOXBODIRS)
 
 nogui: $(COMMANDLINEDIRS)
-
-db: $(DBDIRS)
 
 voxbo: $(VOXBODIRS)
 
@@ -70,4 +62,3 @@ showconfig:
 
 clean:
 	+for dir in $(CLEANDIRS) ; do make -C $$dir clean ; done
-
