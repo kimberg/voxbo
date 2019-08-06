@@ -2,27 +2,25 @@
 using namespace std;
 
 // #include <stdio.h>
-#include <string>
 #include <sys/stat.h>
+#include <string>
 #include "dlfcn.h"
-#include "vbprefs.h"
 #include "vbio.h"
+#include "vbprefs.h"
 
-int
-main(int argc,char **argv)
-{
+int main(int argc, char **argv) {
   stringstream tmps;
-  string thisdir,prevdir;
+  string thisdir, prevdir;
 
   VBFF::LoadFileTypes();
 
-  if (argc>1) {
+  if (argc > 1) {
     tokenlist args;
-    args.Transfer(argc-1,argv+1);
-    for (size_t i=0; i<args.size(); i++) {
+    args.Transfer(argc - 1, argv + 1);
+    for (size_t i = 0; i < args.size(); i++) {
       cout << "Eligible filetypes for file " << args[i] << endl;
-      vector<VBFF> types=EligibleFileTypes(args[i]);
-      for (size_t j=0; j<types.size(); j++) {
+      vector<VBFF> types = EligibleFileTypes(args[i]);
+      for (size_t j = 0; j < types.size(); j++) {
         cout << "  " << types[j].getName() << endl;
       }
     }
@@ -30,14 +28,13 @@ main(int argc,char **argv)
   }
 
   if (!VBFF::filetypelist.size()) {
-    printErrorMsg(VB_INFO,"No filetypes found.");
+    printErrorMsg(VB_INFO, "No filetypes found.");
     exit(0);
   }
   printf("[I] ffinfo: found the following file formats:\n");
   vector<VBFF>::iterator ff;
-  for (ff=VBFF::filetypelist.begin(); ff!=VBFF::filetypelist.end(); ff++) {
-    if (ff->getSignature()=="NONE")
-      continue;
+  for (ff = VBFF::filetypelist.begin(); ff != VBFF::filetypelist.end(); ff++) {
+    if (ff->getSignature() == "NONE") continue;
     // following commented out while we're using all built-ins
     //     if ((thisdir=xdirname(VBFF::filetypelist[i].getPath())) != prevdir) {
     //       prevdir=thisdir;
@@ -45,10 +42,8 @@ main(int argc,char **argv)
     //       tmps << "In directory " << thisdir << ":";
     //       printErrorMsg(VB_INFO,tmps.str());
     //     }
-    printf("[I]   %s (%s) id=%s ext=%s support=",
-           ff->getName().c_str(),
-           ff->getPath().c_str(),
-           ff->getSignature().c_str(),
+    printf("[I]   %s (%s) id=%s ext=%s support=", ff->getName().c_str(),
+           ff->getPath().c_str(), ff->getSignature().c_str(),
            ff->extension.c_str());
     if (ff->read_1D) printf("read1d ");
     if (ff->write_1D) printf("write1d ");

@@ -7,15 +7,15 @@
 // under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // VoxBo is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with VoxBo.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 // For general information on VoxBo, including the latest complete
 // source code and binary distributions, manual, and associated files,
 // see the VoxBo home page at: http://www.voxbo.org/
@@ -27,27 +27,27 @@
 using namespace std;
 
 #include <stdio.h>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
-#include "vbutil.h"
+#include <sys/wait.h>
+#include "vbio.h"
 #include "vbjobspec.h"
 #include "vbprefs.h"
-#include "vbio.h"
-#include <sys/wait.h>
+#include "vbutil.h"
 
 VBPrefs vbp;
 
 class FilterParams {
-public:
+ public:
   string exofiltname;
   string noisename;
-  int lows,highs;           // low and high frequencies to remove
-  vector<int> middles;      // middle frequencies to remove
-  string kernelname;        // temporal smoothing kernel
-  double kerneltr;          // sampling interval of kernel file
-  string noisemodel;        // noise model
+  int lows, highs;      // low and high frequencies to remove
+  vector<int> middles;  // middle frequencies to remove
+  string kernelname;    // temporal smoothing kernel
+  double kerneltr;      // sampling interval of kernel file
+  string noisemodel;    // noise model
   int pri;
   double TR;
   int orderg;
@@ -59,76 +59,61 @@ public:
 void vbmakefilter_help();
 void vbmakefilter_version();
 
-int
-main(int argc,char **argv)
-{
+int main(int argc, char **argv) {
   tokenlist args;
 
-  args.Transfer(argc-1,argv+1);
+  args.Transfer(argc - 1, argv + 1);
   if (args.size() == 0) {
     vbmakefilter_help();
     exit(0);
   }
-  if (args[0]=="-h") {
+  if (args[0] == "-h") {
     vbmakefilter_help();
     exit(0);
   }
-  if (args[0]=="-v") {
+  if (args[0] == "-v") {
     vbmakefilter_version();
   }
 
   FilterParams fp;
-  if (fp.init(args))
-    exit(5);
-  if (fp.MakeNoise())
-    exit(6);
-  if (fp.MakeExoFilt())
-    exit(7);
+  if (fp.init(args)) exit(5);
+  if (fp.MakeNoise()) exit(6);
+  if (fp.MakeExoFilt()) exit(7);
   exit(0);
 }
 
 // this is the sole constructor, it chews on the passed arguments
 
-int
-FilterParams::init(tokenlist &args)
-{
-  exofiltname="";
-  noisename="";
-  lows=highs=0;
+int FilterParams::init(tokenlist &args) {
+  exofiltname = "";
+  noisename = "";
+  lows = highs = 0;
   middles.clear();
-  kernelname="";
-  kerneltr=2000.0;
-  noisemodel="";
-  pri=2;
-  TR=2000.0;
-  orderg=100;
-  for (size_t i=0; i<args.size(); i++) {
-    if (args[i]=="-i" && i<args.size()-1) {
-      noisename=args[++i];
-    }
-    else if (args[i]=="-e" && i<args.size()-1) {
-      exofiltname=args[++i];
-    }
-    else if (args[i]=="-t" && i<args.size()-2) {
-      orderg=strtol(args[++i]);
-      TR=strtod(args[++i]);
-    }
-    else if (args[i]=="-lf" && i<args.size()-1) {
-      lows=strtol(args[++i]);
-    }
-    else if (args[i]=="-mf" && i<args.size()-1) {
-      middles=numberlist(args[++i]);
-    }
-    else if (args[i]=="-hf" && i<args.size()-1) {
-      highs=strtol(args[++i]);
-    }
-    else if (args[i]=="-k" && i<args.size()-1) {
-      kernelname=args[++i];
-    }
-    else if (args[i]=="-n" && i<args.size()-1) {
-      noisemodel=args[++i];
-    }
-    else {
+  kernelname = "";
+  kerneltr = 2000.0;
+  noisemodel = "";
+  pri = 2;
+  TR = 2000.0;
+  orderg = 100;
+  for (size_t i = 0; i < args.size(); i++) {
+    if (args[i] == "-i" && i < args.size() - 1) {
+      noisename = args[++i];
+    } else if (args[i] == "-e" && i < args.size() - 1) {
+      exofiltname = args[++i];
+    } else if (args[i] == "-t" && i < args.size() - 2) {
+      orderg = strtol(args[++i]);
+      TR = strtod(args[++i]);
+    } else if (args[i] == "-lf" && i < args.size() - 1) {
+      lows = strtol(args[++i]);
+    } else if (args[i] == "-mf" && i < args.size() - 1) {
+      middles = numberlist(args[++i]);
+    } else if (args[i] == "-hf" && i < args.size() - 1) {
+      highs = strtol(args[++i]);
+    } else if (args[i] == "-k" && i < args.size() - 1) {
+      kernelname = args[++i];
+    } else if (args[i] == "-n" && i < args.size() - 1) {
+      noisemodel = args[++i];
+    } else {
       printf("[E] vbmakefilter: error processing arguments\n");
       return 101;
     }
@@ -136,73 +121,66 @@ FilterParams::init(tokenlist &args)
   return 0;
 }
 
-int
-FilterParams::MakeNoise()
-{
+int FilterParams::MakeNoise() {
   if (!noisename.size())  // need output filename
     return 0;
   int i;
-  double TRs=(double)TR/1000.0;
+  double TRs = (double)TR / 1000.0;
 
   // if no noisemodel file specified, we assume uncolored noise
   if (!noisemodel.size()) {
     VB_Vector tmpv(orderg);
-    tmpv[0]=1.0;
-    for (i=1; i<orderg; i++)
-      tmpv[i]=0.0;
-    tmpv.AddHeader("[I] vbmakefilter: no noise model specified, assuming uncolored noise");
+    tmpv[0] = 1.0;
+    for (i = 1; i < orderg; i++) tmpv[i] = 0.0;
+    tmpv.AddHeader(
+        "[I] vbmakefilter: no noise model specified, assuming uncolored noise");
     tmpv.WriteFile(noisename.c_str());
-    return 0;    // error == 0 is good 
+    return 0;  // error == 0 is good
   }
 
-  VB_Vector x(orderg/2);
+  VB_Vector x(orderg / 2);
   VB_Vector p(noisemodel.c_str());
   if (p.size() < 3) {
-    printf("[E] vbmakefilter: ill-formed 1/f spec in %s\n",noisemodel.c_str());
+    printf("[E] vbmakefilter: ill-formed 1/f spec in %s\n", noisemodel.c_str());
     return 101;
   }
-  for (i=0; i<(int)x.getLength(); i++)
-    x(i)=((double)i+1) / (double) (TRs*orderg);
-  VB_Vector halff(orderg/2);
-  for (i=0; i<(int)halff.getLength(); i++)
-    halff[i]=(1.0/(p(0)*(x(i)+p(2))))+p(1);
+  for (i = 0; i < (int)x.getLength(); i++)
+    x(i) = ((double)i + 1) / (double)(TRs * orderg);
+  VB_Vector halff(orderg / 2);
+  for (i = 0; i < (int)halff.getLength(); i++)
+    halff[i] = (1.0 / (p(0) * (x(i) + p(2)))) + p(1);
 
   // now make full array
   VB_Vector f(orderg);
-  for (i=0; i<(int)halff.getLength(); i++)
-    f[i+1]=halff(i);
-  for (i=1; i<orderg/2; i++)
-    f[orderg-i]=halff(i);
-  if (halff.getLength() % 2)    // if it's odd, duplicate the middle one?
-    f[i]=halff(i-1);
-  f[0]=0.0;
-  double fmax=f.getMaxElement();
+  for (i = 0; i < (int)halff.getLength(); i++) f[i + 1] = halff(i);
+  for (i = 1; i < orderg / 2; i++) f[orderg - i] = halff(i);
+  if (halff.getLength() % 2)  // if it's odd, duplicate the middle one?
+    f[i] = halff(i - 1);
+  f[0] = 0.0;
+  double fmax = f.getMaxElement();
   if (fmax == 0.0) {
     printf("[E] vbmakefilter: ill-formed filter\n");
     return 102;
   }
-  for (int i=0; i<(int)f.getLength(); i++)
-    f(i)=f(i)/fmax;
-  VB_Vector ff(f.getLength()),imagp(f.getLength());
-  f.ifft(ff,imagp);
+  for (int i = 0; i < (int)f.getLength(); i++) f(i) = f(i) / fmax;
+  VB_Vector ff(f.getLength()), imagp(f.getLength());
+  f.ifft(ff, imagp);
   ff.normMag();
 
   // write it out
-  ff.AddHeader((string)"noisemodel: "+noisemodel);
+  ff.AddHeader((string) "noisemodel: " + noisemodel);
   if (ff.WriteFile(noisename.c_str())) {
-    printf("[E] vbmakefilter: error writing noise model %s\n",noisename.c_str());
+    printf("[E] vbmakefilter: error writing noise model %s\n",
+           noisename.c_str());
     return 105;
   }
-  printf("[I] vbmakefilter: wrote noise model %s\n",noisename.c_str());
-  return 0;    // error == 0 is good
+  printf("[I] vbmakefilter: wrote noise model %s\n", noisename.c_str());
+  return 0;  // error == 0 is good
 }
 
-int
-FilterParams::MakeExoFilt()
-{
-  if (!exofiltname.size())
-    return 0;
-  double total=0;
+int FilterParams::MakeExoFilt() {
+  if (!exofiltname.size()) return 0;
+  double total = 0;
   VB_Vector exofilt(orderg);
   int i;
   VB_Vector IRF;
@@ -210,43 +188,41 @@ FilterParams::MakeExoFilt()
   if (kernelname.size()) {
     VB_Vector xxx;
     xxx.ReadFile(kernelname.c_str());
-    string trline=GetHeader(xxx.header,"TR(msecs)");
+    string trline = GetHeader(xxx.header, "TR(msecs)");
     if (trline.size()) {
       tokenlist tmpl;
       tmpl.ParseLine(trline);
-      if (tmpl.size()>1)
-        kerneltr=strtod(tmpl[1]);
+      if (tmpl.size() > 1) kerneltr = strtod(tmpl[1]);
     }
-    printf("[I] vbmakefilter: using kernel TR of %.2f\n",kerneltr);
+    printf("[I] vbmakefilter: using kernel TR of %.2f\n", kerneltr);
   }
-  printf("[I] vbmakefilter: using data TR of %.2f\n",TR);
+  printf("[I] vbmakefilter: using data TR of %.2f\n", TR);
 
-  for (i=0; i<orderg; i++)
-    exofilt(i)=0.0;
-  exofilt(0)=1.0;
+  for (i = 0; i < orderg; i++) exofilt(i) = 0.0;
+  exofilt(0) = 1.0;
 
   if (kernelname.size() > 0) {
     if (IRF.ReadFile(kernelname.c_str())) {
-      printf("[E] vbmakefilter: couldn't read kernel file %s\n",kernelname.c_str());
-      return 101;   // error!
+      printf("[E] vbmakefilter: couldn't read kernel file %s\n",
+             kernelname.c_str());
+      return 101;  // error!
     }
   }
 
   // interpolate the HRF to the resolution of your data
-  if (kernelname.size()>0 && TR != kerneltr) {
-    IRF=cspline_resize(IRF,kerneltr/TR);
+  if (kernelname.size() > 0 && TR != kerneltr) {
+    IRF = cspline_resize(IRF, kerneltr / TR);
   }
 
   // set exofilt to irf padded with zeros, scaled
   if (IRF.getLength()) {
-    total=0.0;
-    for (i=0; i<(int)IRF.getLength(); i++) {
-      exofilt[i]=IRF[i];
-      total+=IRF[i];
+    total = 0.0;
+    for (i = 0; i < (int)IRF.getLength(); i++) {
+      exofilt[i] = IRF[i];
+      total += IRF[i];
     }
     total /= orderg;
-    for (i=0; i<orderg; i++)
-      exofilt(i) -= total;
+    for (i = 0; i < orderg; i++) exofilt(i) -= total;
   }
 
   // do the notch filter
@@ -256,49 +232,46 @@ FilterParams::MakeExoFilt()
   // note that the first element of the fft is the mean.  the second
   // and last elements are the first frequency.  etc.
   if (lows || highs || middles.size()) {
-    int nfreq=orderg/2;
-    VB_Vector realp(orderg),imagp(orderg);
-    exofilt.fft(realp,imagp);
-    realp(0)=imagp(0)=0.0;
+    int nfreq = orderg / 2;
+    VB_Vector realp(orderg), imagp(orderg);
+    exofilt.fft(realp, imagp);
+    realp(0) = imagp(0) = 0.0;
     if (lows) {
-      for (i=0; i<lows; i++) {
-        if (i+1>nfreq) continue;
-        realp(i+1)=imagp(i+1)=0.0;
-        realp(orderg-i-1)=imagp(orderg-i-1)=0.0;
+      for (i = 0; i < lows; i++) {
+        if (i + 1 > nfreq) continue;
+        realp(i + 1) = imagp(i + 1) = 0.0;
+        realp(orderg - i - 1) = imagp(orderg - i - 1) = 0.0;
       }
     }
-    for (size_t m=0; m<middles.size(); m++) {
-      if (middles[m]>nfreq) continue;
-      realp(middles[m])=imagp(middles[m])=0.0;
-      int ind=orderg-middles[m];
-      realp(ind)=imagp(ind)=0.0;
+    for (size_t m = 0; m < middles.size(); m++) {
+      if (middles[m] > nfreq) continue;
+      realp(middles[m]) = imagp(middles[m]) = 0.0;
+      int ind = orderg - middles[m];
+      realp(ind) = imagp(ind) = 0.0;
     }
     if (highs) {
-      for (i=0; i<highs; i++) {
-        int ind=nfreq-i;
-        realp(ind)=imagp(ind)=0.0;
-        ind=orderg-nfreq+i;
-        realp(ind)=imagp(ind)=0.0;
+      for (i = 0; i < highs; i++) {
+        int ind = nfreq - i;
+        realp(ind) = imagp(ind) = 0.0;
+        ind = orderg - nfreq + i;
+        realp(ind) = imagp(ind) = 0.0;
       }
     }
-    VB_Vector::complexIFFTReal(realp,imagp,exofilt);
+    VB_Vector::complexIFFTReal(realp, imagp, exofilt);
   }
 
   // mean center it
-  total=0.0;
-  for (i=0; i<orderg; i++)
-    total+=exofilt(i);
+  total = 0.0;
+  for (i = 0; i < orderg; i++) total += exofilt(i);
   total /= orderg;
-  for (i=0; i<orderg; i++)
-    exofilt(i)=exofilt(i)-total;
+  for (i = 0; i < orderg; i++) exofilt(i) = exofilt(i) - total;
 
   // remove any phase component
   VB_Vector PS(exofilt.getLength());
   exofilt.getPS(PS);
-  for (i=0; i<(int)PS.getLength(); i++)
-    PS(i)=sqrt(PS(i));
+  for (i = 0; i < (int)PS.getLength(); i++) PS(i) = sqrt(PS(i));
   VB_Vector imagp(PS.getLength());
-  PS.ifft(exofilt,imagp);
+  PS.ifft(exofilt, imagp);
 
   // norm mag it
   exofilt.normMag();
@@ -316,14 +289,12 @@ FilterParams::MakeExoFilt()
   exofilt.AddHeader(tmps.str());
 
   exofilt.WriteFile(exofiltname.c_str());
-  printf("[I] vbmakefilter: wrote filter %s\n",exofiltname.c_str());
-  return 0;   // no error
+  printf("[I] vbmakefilter: wrote filter %s\n", exofiltname.c_str());
+  return 0;  // no error
 }
 
-void
-vbmakefilter_help()
-{
-  printf("\nVoxBo vbmakefilter (v%s)\n",vbversion.c_str());
+void vbmakefilter_help() {
+  printf("\nVoxBo vbmakefilter (v%s)\n", vbversion.c_str());
   printf("usage: vbmakefilter [flags]\n");
   printf("flags:\n");
   printf("    -e <fname>          create exofilt\n");
@@ -338,9 +309,6 @@ vbmakefilter_help()
   printf("    -v                  version\n");
 }
 
-
-void
-vbmakefilter_version()
-{
-  printf("VoxBo vb2tes (v%s)\n",vbversion.c_str());
+void vbmakefilter_version() {
+  printf("VoxBo vb2tes (v%s)\n", vbversion.c_str());
 }

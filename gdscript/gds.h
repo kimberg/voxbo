@@ -3,37 +3,37 @@
 // Copyright (c) 1998-2010 by The VoxBo Development Team
 
 // This file is part of VoxBo
-// 
+//
 // VoxBo is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // VoxBo is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with VoxBo.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 // For general information on VoxBo, including the latest complete
 // source code and binary distributions, manual, and associated files,
 // see the VoxBo home page at: http://www.voxbo.org/
-// 
+//
 // original version written by Dongbo Hu
 
 #ifndef GDS_H
 #define GDS_H
 
 #include <stdio.h>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
+#include "glmutil.h"
+#include "vbio.h"
 #include "vbprefs.h"
 #include "vbutil.h"
-#include "vbio.h"
-#include "glmutil.h"
 
 class Covar {
  public:
@@ -55,7 +55,7 @@ class Contrast {
   void init();
 
   bool scaleFlag, centerFlag;
-  vector <VB_Vector> matrix;  
+  vector<VB_Vector> matrix;
 };
 
 class diagonalSet {
@@ -68,15 +68,14 @@ class diagonalSet {
 };
 
 /*****************************************************************
- *  gHeaderInfo class: written to load G matrix info for reading 
+ *  gHeaderInfo class: written to load G matrix info for reading
  *****************************************************************/
-class gHeaderInfo
-{
+class gHeaderInfo {
  public:
   gHeaderInfo();
-  gHeaderInfo(VBMatrix );
+  gHeaderInfo(VBMatrix);
   ~gHeaderInfo();
-  void getInfo(VBMatrix );
+  void getInfo(VBMatrix);
   int chkInfo();
 
  private:
@@ -99,12 +98,12 @@ class gSession {
   void reInit();
 
   void writeG();
-  int  chkSessionName(const char *);
-  int  chkdirname(const char *);
-  int  chkinfile(const char *);
-  char chkType(string );
-  int chkCovName(string );
-  bool chkUniName(string );
+  int chkSessionName(const char *);
+  int chkdirname(const char *);
+  int chkinfile(const char *);
+  char chkType(string);
+  int chkCovName(string);
+  bool chkUniName(string);
   void end();
   void chkEnd();
   void reset();
@@ -119,7 +118,7 @@ class gSession {
   void addContrast();
   void chkCondition();
   void chkCondKey();
-  int chkKeyName(string );
+  int chkKeyName(string);
 
   void addVarTrialfx();
   void chkTrialFile();
@@ -140,10 +139,10 @@ class gSession {
   void mcNonZero(VB_Vector &);
   void unitExcursion(VB_Vector &);
   void modConvolve(VB_Vector &);
-  int  chkOption(const char *);
-  int  chkConvol(tokenlist );
-  int  getCovID(string );
-  string getFullName(unsigned );
+  int chkOption(const char *);
+  int chkConvol(tokenlist);
+  int getCovID(string);
+  string getFullName(unsigned);
 
   void cpCov();
   void derivMod();
@@ -159,9 +158,9 @@ class gSession {
   void fourierSet();
   void insertFS();
   void insertCovDC(int windowWidth);
-  VB_Vector * fs_getFFT(VB_Vector *, VB_Vector *);
-  char chkOrthType(string );
-  void getOrthID(char );
+  VB_Vector *fs_getFFT(VB_Vector *, VB_Vector *);
+  char chkOrthType(string);
+  void getOrthID(char);
   void orthogonalize(VB_Vector &);
   void delCov();
   void delAllCov();
@@ -175,17 +174,17 @@ class gSession {
   void buildCovList(const char *gdsName, const char *matName);
   void saveLabel(const char *);
   void saveCov(int, const char *);
-  int chkDS(string );
+  int chkDS(string);
   void resetEff();
-  char chkEffType(string );
-  bool typeMatch(char, int );
+  char chkEffType(string);
+  bool typeMatch(char, int);
   void chkEffVar();
   void exeEff();
   // bool effMatch(unsigned );
   VB_Vector getFilterVec();
-  double getRawEff(unsigned );
+  double getRawEff(unsigned);
   double getBold(VB_Vector);
-  double getSquareSum(VB_Vector );
+  double getSquareSum(VB_Vector);
 
   int startLine;
   int TR, totalReps, tmpResolve;
@@ -195,8 +194,8 @@ class gSession {
   string dirname, gFilename, condfxn, condLabFile;
   VB_Vector condVec;
   tokenlist teslist, condKey, userCondKey, scanLen, covName;
-  vector <long> lenList;
-  vector <bool> tesReal;
+  vector<long> lenList;
+  vector<bool> tesReal;
   bool fakeTes;
 
   Covar newVar;
@@ -210,7 +209,7 @@ class gSession {
   Contrast newContrast;
   diagonalSet newDS;
   string singleFile, trialFile, txtFile;
-  vector <int> spike;
+  vector<int> spike;
   bool gsessionFlag, samplingFlag;
   bool doneCommon, doneCondition;
 
@@ -220,7 +219,7 @@ class gSession {
   double expnNum;
 
   bool modPlusFlag, esFlag, firFlag, fsFlag;
-  vector <Covar> newList;
+  vector<Covar> newList;
   int esIndex, firIndex, fsIndex;
   int firNum, fsPeriod, fsHarmonics;
   bool fsZeroFreq, fsDeltaCov;
@@ -228,9 +227,9 @@ class gSession {
   int multiplyID;
   bool orthFlag, orthTypeFlag, orthNameFlag;
   char orthType;
-  vector <int> orthID;
-  vector <int> delID;
-  //vector <int> multiID;
+  vector<int> orthID;
+  vector<int> delID;
+  // vector <int> multiID;
 
   bool effFlag, effTypeFlag, dsFlag, cutoffFlag, filterFlag;
   bool meanAll;
@@ -241,17 +240,17 @@ class gSession {
   double cutoff;
   string effFilter;
 
-  vector <Covar> covList;
+  vector<Covar> covList;
 };
 
 class scriptReader {
  public:
   scriptReader();
   ~scriptReader();
-  bool parseFile(string , int inLineNum = 0);
+  bool parseFile(string, int inLineNum = 0);
   void makeAllG();
 
-  vector <gSession> sessionList;
+  vector<gSession> sessionList;
   bool validity, validateOnly;
   int gcounter;
 };

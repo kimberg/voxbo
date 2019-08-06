@@ -3,45 +3,45 @@
 // Copyright (c) 1998-2010 by The VoxBo Development Team
 
 // This file is part of VoxBo
-// 
+//
 // VoxBo is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // VoxBo is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with VoxBo.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 // For general information on VoxBo, including the latest complete
 // source code and binary distributions, manual, and associated files,
 // see the VoxBo home page at: http://www.voxbo.org/
-// 
+//
 // original version written by Dongbo Hu
 
 #ifndef GDW_H
 #define GDW_H
 
-#include "plotscreen.h"
-#include "glmutil.h"
+#include "block.h"
 #include "fitOneOverF.h"
 #include "gheaderinfo.h"
-#include "vbprefs.h"
-#include "block.h"
+#include "glmutil.h"
 #include "paired.h"
+#include "plotscreen.h"
+#include "vbprefs.h"
 
+#include <q3mainwindow.h>
+#include <qcheckbox.h>
 #include <string>
 #include <vector>
-#include <qcheckbox.h>
-#include <q3mainwindow.h>
-//Added by qt3to4:
-#include <QLabel>
+// Added by qt3to4:
 #include <Q3PopupMenu>
 #include <QCloseEvent>
+#include <QLabel>
 
 class QAction;
 class QComboBox;
@@ -61,16 +61,16 @@ class tokenlist;
 /***************************************************************************
  *                  Gdw class: G Design Workshop
  ***************************************************************************/
-class Gdw: public Q3MainWindow
-{
+class Gdw : public Q3MainWindow {
   Q_OBJECT
 
-public:
-  Gdw(int inputNumerOfPoints = 0, int inputTR = 2000, int inputMode = 0, QString analDir = QString::null);
+ public:
+  Gdw(int inputNumerOfPoints = 0, int inputTR = 2000, int inputMode = 0,
+      QString analDir = QString::null);
   ~Gdw();
   void cpGlmView(Q3ListView *);
   void cpCovList(vector<VB_Vector *>);
-  void readG(const string );
+  void readG(const string);
   void calcNoiseModel();
   void setTesList(Q3ListBox *);
   void setGUpdateFlag(bool);
@@ -81,7 +81,7 @@ public:
 
   Q3ListView *varListView;
 
-private slots:
+ private slots:
   /* "File" slots */
   void fileOpen();
   void fileSave();
@@ -90,9 +90,10 @@ private slots:
 
   /* Edit: Add Interest */
   void add_I_Contrasts();
-  void showContrasts(Q3TextEdit *, int, int, bool, VB_Vector *, double, QString &);
+  void showContrasts(Q3TextEdit *, int, int, bool, VB_Vector *, double,
+                     QString &);
   void add_I_DS();
-  void showDS(int, int, bool, VB_Vector*, double, QString&);
+  void showDS(int, int, bool, VB_Vector *, double, QString &);
 
   void add_I_Single();
   void add_I_Trial();
@@ -121,7 +122,7 @@ private slots:
   void delCov();
   void modC2D();
   void modConv();
-  void showConv(VB_Vector *, double, QString&);
+  void showConv(VB_Vector *, double, QString &);
   void modMean();
   void meanNonZero();
   void modMult();
@@ -135,7 +136,7 @@ private slots:
   void showDeriv(unsigned numDeriv, int varType);
   void modES();
   void modExpn();
-  void showExpn(double, int);  
+  void showExpn(double, int);
   void modFIR();
   void modFS();
   void showFS(int, int, int, int);
@@ -188,33 +189,34 @@ private slots:
 
   void dbClick(Q3ListViewItem *);
   void renameUpdate();
-  void setVarType(int );
+  void setVarType(int);
 
-signals:
+ signals:
   void newCovLoaded(VB_Vector *);
   void cancelSignal(bool);
-  void doneSignal(vector <VB_Vector *>, Q3ListView *, int, QString, tokenlist, bool);
+  void doneSignal(vector<VB_Vector *>, Q3ListView *, int, QString, tokenlist,
+                  bool);
 
-private:  
+ private:
   // private functions
   void init(int, int);
-  void setMode(int );
+  void setMode(int);
   void setupMenu();
   void setStatusText();
   void setupWidgets();
-  void setTR(int );
-  void setTimePoints(int );
+  void setTR(int);
+  void setTimePoints(int);
   void reInit(bool condFlag);
   void initGrpCount();
 
-  VB_Vector * calcPS();
+  VB_Vector *calcPS();
   bool chkPSstat();
   bool chkGSstat();
   tokenlist getMPFiles();
   int getUpsampling();
 
   void cpGlmItem(Q3ListViewItem *);
-  Q3ListViewItem * findOrgParent(Q3ListViewItem *);
+  Q3ListViewItem *findOrgParent(Q3ListViewItem *);
 
   void cpCondInfo();
   void setGname(string);
@@ -226,17 +228,17 @@ private:
   bool cmpTR(int);
   bool cmpTotalReps(int);
   Q3ListViewItem *searchDepth0(QString);
-  void plotCov(unsigned );
+  void plotCov(unsigned);
 
   bool chkItemName();
   bool chkGrpName(Q3ListViewItem *);
   void singleSaveAs(QString &);
 
-  // Generic functions for both "interest" and "no interest" 
+  // Generic functions for both "interest" and "no interest"
   void addContrasts(QString varType);
   void addDS(QString, bool, bool);
   void addDS(QString);
-  
+
   void addSingle(QString varType);
   void addTrialFx(QString varType);
   void addVarTrial(QString varType);
@@ -244,7 +246,7 @@ private:
 
   bool chkTR_imgNum();
   bool chkTR_imgNum_condfx();
-  bool chkSpike(vector <int>);
+  bool chkSpike(vector<int>);
 
   void cpItem(Q3ListViewItem *);
   void cpGrp(Q3ListViewItem *);
@@ -269,7 +271,7 @@ private:
 
   void fs_set_covList(int, int, int, int);
   void fs_set_view(int, int);
-  void insertCovDC(int , int, int);
+  void insertCovDC(int, int, int);
   VB_Vector *fs_getFFT(VB_Vector *, VB_Vector *, int);
 
   void es_set_covList();
@@ -302,21 +304,21 @@ private:
   void loadSingleCov(Q3ListViewItem *, int);
   void multiCovUpdate(int);
 
-  int  convtType(QString);
+  int convtType(QString);
   void closeEvent(QCloseEvent *);
 
   bool chkIntercept();
   bool chkBlockUI();
   bool chkPairUI();
-  
+
   // private variables
-  vector < VB_Vector *> covList; 
+  vector<VB_Vector *> covList;
   bool psFlag, fitFlag;
   Q3PopupMenu *fileMenu;
-  enum gdw_mode {SINGLE, COMBO} mode;
+  enum gdw_mode { SINGLE, COMBO } mode;
   Q3Action *fileSaveAction;
-  bool gUpdateFlag;                  
-  int tesNum;                        
+  bool gUpdateFlag;
+  int tesNum;
   Q3ListBox *tesList;
   Q3VBox *tab3_main;
   PlotScreen *upperWindow;
@@ -329,27 +331,27 @@ private:
   int trialfx_count, var_len_count;
   int scanfx_count, global_count;
   int mvpr_count, spike_count, txt_var_count;
-  QLabel *trString, *samplingStr, *numberString; 
-  VB_Vector *timeVector, *fftVector; 
+  QLabel *trString, *samplingStr, *numberString;
+  VB_Vector *timeVector, *fftVector;
   VB_Vector *noiseVec;
-  VB_Vector *condVector;             
+  VB_Vector *condVector;
 
   QSlider *magSlider;
   int xMagnification;
   QRadioButton *timePlotButt, *secButt;
-  int fftFlag;                        
-  int secFlag;                        
+  int fftFlag;
+  int secFlag;
   Q3ListBox *keyList;
   QLineEdit *keyEditor;
-  QString varType; 
-  
+  QString varType;
+
   int itemCounter, d_index;
-  vector< int > interceptID;
-  vector< int > selID;
+  vector<int> interceptID;
+  vector<int> selID;
   QComboBox *typeCombo;
-  
-  QString condRef;                   
-  tokenlist condKey;                 
+
+  QString condRef;
+  tokenlist condKey;
   QString gFileName;
   QString filterPath;
   QCheckBox *meanAll;
@@ -363,17 +365,17 @@ private:
 };
 
 /*****************************************************************************
- *                       Contrast Interface 
+ *                       Contrast Interface
  *****************************************************************************/
-class G_Contrast: public QWidget
-{
+class G_Contrast : public QWidget {
   Q_OBJECT
 
-public:
-  G_Contrast(int keyNum, int inputResolve, QWidget *parent = 0, const char *name = 0);
+ public:
+  G_Contrast(int keyNum, int inputResolve, QWidget *parent = 0,
+             const char *name = 0);
   ~G_Contrast();
 
-private:
+ private:
   void loadMatrix();
   void closeEvent(QCloseEvent *);
   bool chkConvolve();
@@ -395,7 +397,7 @@ private:
   VB_Vector *convVector;
   double samplingVal;
 
-private slots:
+ private slots:
   void makeDiagMat();
   void addZeroLine();
   void noScaleClicked();
@@ -404,28 +406,27 @@ private slots:
   void centerClicked();
 
   void convClicked();
-  void filterSelected(int );
+  void filterSelected(int);
 
   void cancelClicked();
   void doneClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
-  void doneSignal(Q3TextEdit *, int, int, bool, VB_Vector *, double, QString&);
+  void doneSignal(Q3TextEdit *, int, int, bool, VB_Vector *, double, QString &);
 };
 
 /*****************************************************************************
- *                       Diagonal Set Interface 
+ *                       Diagonal Set Interface
  *****************************************************************************/
-class G_DS: public QWidget
-{
+class G_DS : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   G_DS(int, QWidget *parent = 0, const char *name = 0);
   ~G_DS();
 
-private:
+ private:
   void closeEvent(QCloseEvent *);
   bool chkConvolve();
 
@@ -445,35 +446,34 @@ private:
   VB_Vector *convVector;
   double samplingVal;
 
-private slots:
+ private slots:
   void noScaleClicked();
   void scaleClicked();
   void offsetClicked();
   void centerClicked();
 
   void convClicked();
-  void filterSelected(int );
+  void filterSelected(int);
 
   void cancelClicked();
   void doneClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
-  void doneSignal(int, int, bool, VB_Vector *, double, QString&);
+  void doneSignal(int, int, bool, VB_Vector *, double, QString &);
 };
 
 /*****************************************************************************
- *                       Convolution Interface 
+ *                       Convolution Interface
  *****************************************************************************/
-class G_Convolve: public QWidget
-{
+class G_Convolve : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   G_Convolve(int tmpResolve, QWidget *parent = 0, const char *name = 0);
   ~G_Convolve();
 
-private:
+ private:
   void closeEvent(QCloseEvent *);
   VB_Vector *convVector;
   QComboBox *combo;
@@ -483,136 +483,132 @@ private:
   QLineEdit *samplingEditor;
   QLineEdit *tagEditor;
 
-private slots:
-  void filterSelected(int );
+ private slots:
+  void filterSelected(int);
   void cancelClicked();
-  void doneClicked(); 
+  void doneClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
-  void doneSignal(VB_Vector *, double, QString&); // This signal doesn't include deltaFlag!
+  void doneSignal(VB_Vector *, double,
+                  QString &);  // This signal doesn't include deltaFlag!
 };
 
 /*****************************************************************************
- *                       Derivative Interface 
+ *                       Derivative Interface
  *****************************************************************************/
-class G_Deriv: public QWidget
-{
+class G_Deriv : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   G_Deriv(QWidget *parent = 0, const char *name = 0);
   ~G_Deriv();
 
-private:
+ private:
   void closeEvent(QCloseEvent *);
   QLineEdit *derivEdit;
   int varType;
 
-private slots:
-  void setVarType(int );
+ private slots:
+  void setVarType(int);
   void cancelClicked();
-  void doneClicked(); 
+  void doneClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
   void doneSignal(unsigned, int);
 };
 
 /*****************************************************************************
- *                       Orthogonalize Interface 
+ *                       Orthogonalize Interface
  *****************************************************************************/
-class G_Orth: public QWidget
-{
+class G_Orth : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   G_Orth(Q3ListView *inputView, QWidget *parent = 0, const char *name = 0);
   ~G_Orth();
 
-private:
+ private:
   void cpItem(Q3ListViewItem *);
-  Q3ListViewItem * findParent(Q3ListViewItem *);
+  Q3ListViewItem *findParent(Q3ListViewItem *);
   void closeEvent(QCloseEvent *);
 
   Q3ListView *covView;
   std::vector<int> orthID;
   int covGroup;
 
-private slots:
-  void selectCov(int );
+ private slots:
+  void selectCov(int);
   void cancelClicked();
-  void doneClicked(); 
+  void doneClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
-  void doneSignal(std::vector <int>);
+  void doneSignal(std::vector<int>);
 };
 
 /*****************************************************************************
- *                       Exponential Interface 
+ *                       Exponential Interface
  *****************************************************************************/
-class G_Expn: public QWidget
-{
+class G_Expn : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   G_Expn(QWidget *parent = 0, const char *name = 0);
   ~G_Expn();
 
-private:
+ private:
   void closeEvent(QCloseEvent *);
   QLineEdit *inputBox;
   int centerFlag;
 
-private slots:
-  void setFlag(int );
+ private slots:
+  void setFlag(int);
   void cancelClicked();
-  void doneClicked(); 
+  void doneClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
   void doneSignal(double, int);
 };
 
 /*****************************************************************************
- *                       Multiply Interface 
+ *                       Multiply Interface
  *****************************************************************************/
-class G_Multiply: public QWidget
-{
+class G_Multiply : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   G_Multiply(Q3ListView *inputView, QWidget *parent = 0, const char *name = 0);
   ~G_Multiply();
 
-private:
+ private:
   void cpItem(Q3ListViewItem *);
   Q3ListViewItem *findParent(Q3ListViewItem *);
   void closeEvent(QCloseEvent *);
   Q3ListView *covView;
 
-private slots:
+ private slots:
   void cancelClicked();
-  void doneClicked(); 
+  void doneClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
   void doneSignal(int);
 };
 
 /*****************************************************************************
- *                       Fourier Set Interface 
+ *                       Fourier Set Interface
  *****************************************************************************/
-class G_Fourier: public QWidget
-{
+class G_Fourier : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   G_Fourier(double timeLength, QWidget *parent = 0, const char *name = 0);
   ~G_Fourier();
 
-private:
+ private:
   void closeEvent(QCloseEvent *);
   QLineEdit *periodEditor;
   QLineEdit *numberEditor;
@@ -620,31 +616,30 @@ private:
   int addFlag;
   int deltaFlag;
 
-private slots:
+ private slots:
   void setAddZero(int);
-  void setDelta(int); 
+  void setDelta(int);
   void cancelClicked();
-  void doneClicked(); 
+  void doneClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
   void doneSignal(int, int, int, int);
 };
 
 /*****************************************************************************
- *                     Efficiency Evaluation Interface 
+ *                     Efficiency Evaluation Interface
  *****************************************************************************/
-class G_Eff: public QWidget
-{
+class G_Eff : public QWidget {
   Q_OBJECT
 
-public:
-  G_Eff(Q3ListView *inputView, std::vector<VB_Vector *> covList, 
-	int TR, int totalReps, int tmpResolve,
-	QWidget *parent = 0, const char *name = 0);
+ public:
+  G_Eff(Q3ListView *inputView, std::vector<VB_Vector *> covList, int TR,
+        int totalReps, int tmpResolve, QWidget *parent = 0,
+        const char *name = 0);
   ~G_Eff();
 
-private:
+ private:
   void init(int, int, int, int);
   void cpView(Q3ListView *);
   void cpItem(Q3ListViewItem *);
@@ -668,10 +663,10 @@ private:
   QLabel *filterLabel;
   Q3ListView *covView;
   QLineEdit *cutoffEdit;
-  std::vector< VB_Vector *> covList;
-  std::vector< double > rawEff;
+  std::vector<VB_Vector *> covList;
+  std::vector<double> rawEff;
 
-private slots:
+ private slots:
   void setDownFlag(int);
   void filterSelected(int);
   void selectCovType(int);
@@ -679,33 +674,32 @@ private slots:
   void delClicked();
   void cancelClicked();
 
-signals:
+ signals:
   void cancelSignal(bool);
   void delSignal(std::vector<int> delList);
 };
 
 /*****************************************************************************
- * Some functions called by both glm and gdw (originally written in gdw) 
+ * Some functions called by both glm and gdw (originally written in gdw)
  *****************************************************************************/
 bool cmpG2preG(gHeaderInfo gInfo, gHeaderInfo pregInfo);
 bool cmpArray(tokenlist, tokenlist);
 bool cmpArray(deque<string>, deque<string>);
- 
+
 QString getFilterPath();
 void cpView(Q3ListView *source, Q3ListView *target);
 void cpItem(Q3ListViewItem *source, Q3ListView *target);
-Q3ListViewItem * findOrgParent(Q3ListViewItem *source, Q3ListView *target);
-Q3ListViewItem * findGrp(Q3ListViewItem *, QString);
-Q3ListViewItem * getLastChild(Q3ListView *parentView);
-Q3ListViewItem * getLastChild(Q3ListViewItem *parent);
+Q3ListViewItem *findOrgParent(Q3ListViewItem *source, Q3ListView *target);
+Q3ListViewItem *findGrp(Q3ListViewItem *, QString);
+Q3ListViewItem *getLastChild(Q3ListView *parentView);
+Q3ListViewItem *getLastChild(Q3ListViewItem *parent);
 void getInterceptID(Q3ListView *, vector<int>);
 
-VB_Vector * fftNyquist(VB_Vector *);
+VB_Vector *fftNyquist(VB_Vector *);
 int getLowFreq(VB_Vector *);
-void writeG(string stemname, int, int, int, vector<VB_Vector *>, 
-	    Q3ListView *, QString &, tokenlist, bool);
+void writeG(string stemname, int, int, int, vector<VB_Vector *>, Q3ListView *,
+            QString &, tokenlist, bool);
 void getCovInfo(QStringList &nameList, QStringList &typeList, Q3ListView *);
 QString getCovName(Q3ListViewItem *);
-
 
 #endif

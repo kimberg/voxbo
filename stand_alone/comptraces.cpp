@@ -3,24 +3,24 @@
 // Copyright (c) 1998-2010 by The VoxBo Development Team
 
 // This file is part of VoxBo
-// 
+//
 // VoxBo is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // VoxBo is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with VoxBo.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 // For general information on VoxBo, including the latest complete
 // source code and binary distributions, manual, and associated files,
 // see the VoxBo home page at: http://www.voxbo.org/
-// 
+//
 // original version written by Kosh Banerjee
 
 #include <iostream>
@@ -33,22 +33,21 @@ void usage(const unsigned short exitValue, char *progName);
 int main(int argc, char *argv[]) {
   SEGV_HANDLER
   string matrixStemName;
-  if (argc == 1)
-    usage(1, argv[0]);
+  if (argc == 1) usage(1, argv[0]);
 
-/*********************************************************************
-* Now processing the command line options.                           *
-*                                                                    *
-* -h ==> Display usage information.                                  *
-* -m ==> Specifies the matrix stem name.                             *
-* -v ==> Print out the gobal VoxBo version number.                   *
-*                                                                    *
-* VARIABLES:                                                         *
-* printHelp - a flag, used to determine if the "-h" command line     *
-*             option was used or not.                                *
-* printVersion - a flag, used to determine if the "-v" command line  *
-*                option was used or not.                             *
-*********************************************************************/
+  /*********************************************************************
+   * Now processing the command line options.                           *
+   *                                                                    *
+   * -h ==> Display usage information.                                  *
+   * -m ==> Specifies the matrix stem name.                             *
+   * -v ==> Print out the gobal VoxBo version number.                   *
+   *                                                                    *
+   * VARIABLES:                                                         *
+   * printHelp - a flag, used to determine if the "-h" command line     *
+   *             option was used or not.                                *
+   * printVersion - a flag, used to determine if the "-v" command line  *
+   *                option was used or not.                             *
+   *********************************************************************/
   arghandler a;
   a.setArgs("-h", "--help", 0);
   a.setArgs("-m", "--matrixstemname", 1);
@@ -56,15 +55,13 @@ int main(int argc, char *argv[]) {
   a.parseArgs(argc, argv);
   string errstring = a.badArg();
   if (errstring.size()) {
-     errstring = "[E] unknown flag: " + errstring;
-     printErrorMsg(VB_ERROR, errstring.c_str());
-     exit(-1);
+    errstring = "[E] unknown flag: " + errstring;
+    printErrorMsg(VB_ERROR, errstring.c_str());
+    exit(-1);
   }
-  if (a.flagPresent("-h"))
-     usage(0, argv[0]);
+  if (a.flagPresent("-h")) usage(0, argv[0]);
   matrixStemName = a.getFlaggedArgs("-m")[0];
-  if (a.flagPresent("-v"))
-    printf("\nVoxBo v%s\n",vbversion.c_str());
+  if (a.flagPresent("-v")) printf("\nVoxBo v%s\n", vbversion.c_str());
   if (matrixStemName.size() == 0) {
     ostringstream errorMsg;
     errorMsg << "Must specify the matrix stem name, using the \"-m\" option.";
@@ -73,17 +70,20 @@ int main(int argc, char *argv[]) {
   computeTraces(matrixStemName);
   printf("[I] comptraces: success\n");
   return 0;
-} 
+}
 
 void usage(const unsigned short, char *) {
-  printf("\nVoxBo comptraces (v%s)\n",vbversion.c_str());
+  printf("\nVoxBo comptraces (v%s)\n", vbversion.c_str());
   printf("summary: ");
   printf("  Write out the traces file for regression.\n");
   printf("usage:\n");
   printf(" comptraces -h -m[matrix stem name] -v\n");
   printf("flags:\n");
   printf(" -h                        Print usage information. Optional.\n");
-  printf(" -m <matrix stem name>                       Specify the matrix stem name. Required.\n");
-  printf(" -v                        Global VoxBo version number. Optional.\n\n");
+  printf(
+      " -m <matrix stem name>                       Specify the matrix stem "
+      "name. Required.\n");
+  printf(
+      " -v                        Global VoxBo version number. Optional.\n\n");
   exit(-1);
-} 
+}
