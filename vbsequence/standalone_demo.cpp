@@ -1,27 +1,25 @@
-#include "libvoxbo/vbsequence.h"
-#include "libvoxbo/vbdataset.h"
 #include <iostream>
+#include "libvoxbo/vbdataset.h"
+#include "libvoxbo/vbsequence.h"
 
 using namespace std;
 
 VBPrefs vbp;
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
   vbp.init();
   vbp.read_jobtypes();
   VB::Definitions::Init();
   VB::Definitions::Import_JobType_Folder();
-  
+
   // Check for the right number of arguments.
-  if (argc < 4) 
-  {
+  if (argc < 4) {
     cerr << endl;
     cerr << "not enough arguments" << endl;
     cerr << argv[0] << " seq_file ds_file[:sub:node:path] out_dir" << endl;
     return 1;
   }
-  
+
   // Construct the sequence (first argument)
   cerr << "creating the sequence..." << endl;
   ifstream seq_file;
@@ -37,16 +35,17 @@ int main(int argc, char* argv[])
   if (colpos == string::npos) // Come here if there is no colon on the line.
   {
     ds = new VB::DataSet(ds_arg);
-//    seq->set_dataset(ds);
+    //    seq->set_dataset(ds);
   }
   else // Come here if there is a colon (i.e. a child dataset is specified).
   {
-    string dsfile_name = ds_arg.substr(0,colpos);
-    string child_name = ds_arg.substr(colpos+1);
-    if (child_name != "");
+    string dsfile_name = ds_arg.substr(0, colpos);
+    string child_name = ds_arg.substr(colpos + 1);
+    if (child_name != "")
+      ;
     {
       ds = (new VB::DataSet(dsfile_name))->get_child(child_name);
-//      if (ds) seq->set_dataset(ds);
+      //      if (ds) seq->set_dataset(ds);
     }
   }
   

@@ -3,24 +3,24 @@
  * Copyright (c) 1998-2010 by The VoxBo Development Team
  *
  * This file is part of VoxBo
- * 
+ *
  * VoxBo is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * VoxBo is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with VoxBo.  If not, see <http:*www.gnu.org/licenses/>.
- * 
+ *
  * For general information on VoxBo, including the latest complete
  * source code and binary distributions, manual, and associated files,
  * see the VoxBo home page at: http:*www.voxbo.org/
- * 
+ *
  * Original version written by Dongbo Hu
  *
  ***************************************************************************************/
@@ -28,21 +28,17 @@
 using namespace std;
 
 #include "brain_tab.h"
-#include "vbutil.h"
-#include <string.h>
 #include <arpa/inet.h>
+#include <string.h>
+#include "vbutil.h"
 
 // Default constructor
-namespaceRec::namespaceRec() 
-{ 
-
-}
+namespaceRec::namespaceRec() {}
 
 // Constructor that parses input buffer and assigns data members
-namespaceRec::namespaceRec(void* inputBuf) 
-{
+namespaceRec::namespaceRec(void* inputBuf) {
   int32 bufLen = 0;
-  char* c_buf_in = (char*) inputBuf;
+  char* c_buf_in = (char*)inputBuf;
   name = c_buf_in + bufLen;
   bufLen += name.size() + 1;
 
@@ -51,52 +47,41 @@ namespaceRec::namespaceRec(void* inputBuf)
 }
 
 // Initialize data members
-void namespaceRec::clear() 
-{
-  name = description = "";
-}
+void namespaceRec::clear() { name = description = ""; }
 
 // Set a single contiguous memory location that holds values of data members
-void namespaceRec::serialize(char* outBuf) const
-{
+void namespaceRec::serialize(char* outBuf) const {
   int32 bufLen = 0;
   memcpy(outBuf + bufLen, name.c_str(), name.size() + 1);
   bufLen += name.size() + 1;
-  
+
   memcpy(outBuf + bufLen, description.c_str(), description.size() + 1);
   bufLen += description.size() + 1;
 }
 
 // Return the size of the buffer
-int32 namespaceRec::getSize() const
-{ 
+int32 namespaceRec::getSize() const {
   int32 bufLen = 0;
   bufLen += name.size() + 1;
   bufLen += description.size() + 1;
-  return bufLen; 
+  return bufLen;
 }
 
 // Show contents of data members
-void namespaceRec::show() const 
-{
+void namespaceRec::show() const {
   printf("Namespace name: %s\n", name.c_str());
   printf("Namespace description: %s\n", description.c_str());
 }
 
 // Default constructor
-atlasRec::atlasRec() : ID(0), primaryFlag(0)
-{ 
-
-}
+atlasRec::atlasRec() : ID(0), primaryFlag(0) {}
 
 // Constructor that parses input buffer and assigns data members
-atlasRec::atlasRec(void* inputBuf) 
-{
+atlasRec::atlasRec(void* inputBuf) {
   int32 bufLen = 0;
-  char* c_buf_in = (char*) inputBuf;
-  ID = *((int32 *) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&ID);
+  char* c_buf_in = (char*)inputBuf;
+  ID = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&ID);
   bufLen += sizeof(int32);
 
   name = c_buf_in + bufLen;
@@ -114,27 +99,24 @@ atlasRec::atlasRec(void* inputBuf)
   space = c_buf_in + bufLen;
   bufLen += space.size() + 1;
 
-  primaryFlag = *((uint8 *) (c_buf_in + bufLen));
-  bufLen += sizeof(uint8); 
+  primaryFlag = *((uint8*)(c_buf_in + bufLen));
+  bufLen += sizeof(uint8);
 }
 
 // Initialize data members
-void atlasRec::clear() 
-{
+void atlasRec::clear() {
   ID = 0;
   name = ref = type = image = space = "";
   primaryFlag = 0;
 }
 
 // Set a single contiguous memory location that holds values of data members
-void atlasRec::serialize(char* outBuf) const 
-{
+void atlasRec::serialize(char* outBuf) const {
   memset(outBuf, 0, 1000);
   int32 bufLen = 0;
 
   int32 foo = ID;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, sizeof(int32));
   bufLen += sizeof(int32);
 
@@ -158,8 +140,7 @@ void atlasRec::serialize(char* outBuf) const
 }
 
 // Return size of buffer
-int32 atlasRec::getSize() const
-{ 
+int32 atlasRec::getSize() const {
   int32 bufLen = 0;
   bufLen += sizeof(int32);
   bufLen += name.size() + 1;
@@ -168,12 +149,11 @@ int32 atlasRec::getSize() const
   bufLen += image.size() + 1;
   bufLen += space.size() + 1;
   bufLen += sizeof(uint8);
-  return bufLen; 
+  return bufLen;
 }
 
 // Print out data members
-void atlasRec::show() const
-{
+void atlasRec::show() const {
   printf("Region atlas ID: %d\n", ID);
   printf("Atlas name: %s\n", name.c_str());
   printf("Atlas reference: %s\n", ref.c_str());
@@ -187,25 +167,17 @@ void atlasRec::show() const
 }
 
 // Default constructor
-regionRec::regionRec() : ID(0), orgID(0), addDate(0), modDate(0)
-{ 
-
-}
+regionRec::regionRec() : ID(0), orgID(0), addDate(0), modDate(0) {}
 
 // Constructor that parses input buffer and assigns data members
-regionRec::regionRec(void* inputBuf) 
-{ 
-  deserialize(inputBuf); 
-}
+regionRec::regionRec(void* inputBuf) { deserialize(inputBuf); }
 
-// Set data members based on input buffer 
-void regionRec::deserialize(void* inputBuf) 
-{
+// Set data members based on input buffer
+void regionRec::deserialize(void* inputBuf) {
   int32 bufLen = 0;
-  char* c_buf_in = (char*) inputBuf;
-  ID = *((int32*) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&ID);
+  char* c_buf_in = (char*)inputBuf;
+  ID = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&ID);
   bufLen += sizeof(int32);
 
   name_space = c_buf_in + bufLen;
@@ -217,11 +189,10 @@ void regionRec::deserialize(void* inputBuf)
   abbrev = c_buf_in + bufLen;
   bufLen += abbrev.size() + 1;
 
-  orgID = *((int32*) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&orgID);
+  orgID = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&orgID);
   bufLen += sizeof(int32);
-    
+
   source = c_buf_in + bufLen;
   bufLen += source.size() + 1;
 
@@ -234,23 +205,20 @@ void regionRec::deserialize(void* inputBuf)
   creator = c_buf_in + bufLen;
   bufLen += creator.size() + 1;
 
-  addDate = *((int32*) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&addDate);
+  addDate = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&addDate);
   bufLen += sizeof(int32);
 
   modifier = c_buf_in + bufLen;
   bufLen += modifier.size() + 1;
 
-  modDate = *((int32 *) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&modDate);
+  modDate = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&modDate);
   bufLen += sizeof(int32);
 }
 
 // Initialize data members
-void regionRec::clear() 
-{
+void regionRec::clear() {
   ID = 0;
   name_space = name = abbrev = "";
   orgID = 0;
@@ -260,14 +228,12 @@ void regionRec::clear()
 }
 
 // Set a single contiguous memory location that holds values of data members
-void regionRec::serialize(char* outBuf) const
-{
+void regionRec::serialize(char* outBuf) const {
   int32 bufLen = 0;
   int32 varLen = sizeof(int32);
 
   int32 foo = ID;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -281,8 +247,7 @@ void regionRec::serialize(char* outBuf) const
   bufLen += abbrev.size() + 1;
 
   foo = orgID;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -299,8 +264,7 @@ void regionRec::serialize(char* outBuf) const
   bufLen += creator.size() + 1;
 
   foo = addDate;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -308,17 +272,15 @@ void regionRec::serialize(char* outBuf) const
   bufLen += modifier.size() + 1;
 
   foo = modDate;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 }
 
 // Return size of buffer
-int32 regionRec::getSize() const
-{ 
+int32 regionRec::getSize() const {
   int32 bufLen = 0;
-  bufLen += sizeof (int32);
+  bufLen += sizeof(int32);
   bufLen += name_space.size() + 1;
   bufLen += name.size() + 1;
   bufLen += abbrev.size() + 1;
@@ -331,12 +293,11 @@ int32 regionRec::getSize() const
   bufLen += sizeof(int32);
   bufLen += sizeof(int32);
 
-  return bufLen; 
-}   
+  return bufLen;
+}
 
 // Print out all data members
-void regionRec::show() const
-{
+void regionRec::show() const {
   printf("Region ID: %d\n", ID);
   printf("Region namespace: %s\n", name_space.c_str());
   printf("Region name: %s\n", name.c_str());
@@ -349,33 +310,26 @@ void regionRec::show() const
   if (addDate) {
     time_t tmpTime = addDate;
     printf("Region added on: %s", ctime(&tmpTime));
-  }
-  else 
+  } else
     printf("Region added on:\n");
 
   printf("Modified by: %s\n", modifier.c_str());
   if (modDate) {
     time_t tmpTime = modDate;
     printf("Last modified on: %s", ctime(&tmpTime));
-  }
-  else
+  } else
     printf("Last modified on:\n");
 }
 
 // Default constructor
-synonymRec::synonymRec() : ID(0), sourceID(0), addDate(0), modDate(0)
-{ 
-
-}
+synonymRec::synonymRec() : ID(0), sourceID(0), addDate(0), modDate(0) {}
 
 // Constructor that parses input buffer and assigns data members
-synonymRec::synonymRec(void* inputBuf) 
-{
+synonymRec::synonymRec(void* inputBuf) {
   int32 bufLen = 0;
-  char* c_buf_in = (char*) inputBuf;
-  ID = *((int32 *) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&ID);
+  char* c_buf_in = (char*)inputBuf;
+  ID = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&ID);
   bufLen += sizeof(int32);
 
   name = c_buf_in + bufLen;
@@ -387,9 +341,8 @@ synonymRec::synonymRec(void* inputBuf)
   name_space = c_buf_in + bufLen;
   bufLen += name_space.size() + 1;
 
-  sourceID = *((int32 *)(c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&sourceID);
+  sourceID = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&sourceID);
   bufLen += sizeof(int32);
 
   qualifier = c_buf_in + bufLen;
@@ -398,17 +351,15 @@ synonymRec::synonymRec(void* inputBuf)
   creator = c_buf_in + bufLen;
   bufLen += creator.size() + 1;
 
-  addDate = *((int32 *)(c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&addDate);
+  addDate = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&addDate);
   bufLen += sizeof(int32);
 
   modifier = c_buf_in + bufLen;
   bufLen += modifier.size() + 1;
 
-  modDate = *((int32 *)(c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&modDate);
+  modDate = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&modDate);
   bufLen += sizeof(int32);
 
   comments = c_buf_in + bufLen;
@@ -416,8 +367,7 @@ synonymRec::synonymRec(void* inputBuf)
 }
 
 // Initialize data members
-void synonymRec::clear() 
-{
+void synonymRec::clear() {
   ID = 0;
   name = "";
   primary = name_space = "";
@@ -429,14 +379,12 @@ void synonymRec::clear()
 }
 
 // Set a single contiguous memory location that holds values of data members
-void synonymRec::serialize(char* outBuf) const
-{
+void synonymRec::serialize(char* outBuf) const {
   int32 bufLen = 0;
   int32 varLen = sizeof(int32);
 
   int32 foo = ID;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -450,8 +398,7 @@ void synonymRec::serialize(char* outBuf) const
   bufLen += name_space.size() + 1;
 
   foo = sourceID;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -462,8 +409,7 @@ void synonymRec::serialize(char* outBuf) const
   bufLen += creator.size() + 1;
 
   foo = addDate;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -471,8 +417,7 @@ void synonymRec::serialize(char* outBuf) const
   bufLen += modifier.size() + 1;
 
   foo = modDate;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -481,8 +426,7 @@ void synonymRec::serialize(char* outBuf) const
 }
 
 // Return size of buffer
-int32 synonymRec::getSize() const
-{ 
+int32 synonymRec::getSize() const {
   int32 bufLen = 0;
   bufLen += sizeof(ID);
   bufLen += sizeof(sourceID);
@@ -496,12 +440,11 @@ int32 synonymRec::getSize() const
   bufLen += sizeof(modDate);
   bufLen += comments.size() + 1;
 
-  return bufLen; 
+  return bufLen;
 }
 
 // Print out data members
-void synonymRec::show() const 
-{
+void synonymRec::show() const {
   printf("Synonym ID: %d\n", ID);
   printf("Synonym name: %s\n", name.c_str());
   printf("Primary structure: %s\n", primary.c_str());
@@ -513,51 +456,43 @@ void synonymRec::show() const
     printf("ID in source file:\n");
 
   printf("Qualifier: %s\n", qualifier.c_str());
-  
+
   printf("Added by: %s\n", creator.c_str());
   if (addDate) {
     time_t tmpTime = addDate;
     printf("Added on: %s", ctime(&tmpTime));
-  }
-  else
+  } else
     printf("Added on: NA\n");
 
   printf("Modified by: %s\n", modifier.c_str());
   if (modDate) {
     time_t tmpTime = modDate;
     printf("Last modified on: %s", ctime(&tmpTime));
-  }
-  else
+  } else
     printf("Last modified on: NA\n");
 
   printf("Comments: %s\n", comments.c_str());
 }
 
 // Default constructor
-regionRelationRec::regionRelationRec() : ID(0), region1(0), region2(0), addDate(0), modDate(0)
-{ 
-
-}
+regionRelationRec::regionRelationRec()
+    : ID(0), region1(0), region2(0), addDate(0), modDate(0) {}
 
 // Constructor that parses input buffer and assigns data members
-regionRelationRec::regionRelationRec(void* inputBuf) 
-{
+regionRelationRec::regionRelationRec(void* inputBuf) {
   int32 varLen = sizeof(int32);
   int32 bufLen = 0;
-  char* c_buf_in = (char*) inputBuf;
-  ID = *((int32 *) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&ID);
-  bufLen += varLen;
-    
-  region1 = *((int32 *) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&region1);
+  char* c_buf_in = (char*)inputBuf;
+  ID = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&ID);
   bufLen += varLen;
 
-  region2 = *((int32 *) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&region2);
+  region1 = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&region1);
+  bufLen += varLen;
+
+  region2 = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&region2);
   bufLen += varLen;
 
   relationship = c_buf_in + bufLen;
@@ -565,21 +500,19 @@ regionRelationRec::regionRelationRec(void* inputBuf)
 
   qualifier = c_buf_in + bufLen;
   bufLen += qualifier.size() + 1;
-    
+
   creator = c_buf_in + bufLen;
   bufLen += creator.size() + 1;
 
-  addDate = *((int32 *) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&addDate);
+  addDate = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&addDate);
   bufLen += sizeof(int32);
 
   modifier = c_buf_in + bufLen;
   bufLen += modifier.size() + 1;
 
-  modDate = *((int32 *) (c_buf_in + bufLen));
-  if (ntohs(1) == 1)
-    swap(&modDate);
+  modDate = *((int32*)(c_buf_in + bufLen));
+  if (ntohs(1) == 1) swap(&modDate);
   bufLen += sizeof(int32);
 
   comments = c_buf_in + bufLen;
@@ -587,8 +520,7 @@ regionRelationRec::regionRelationRec(void* inputBuf)
 }
 
 // Initialize data members
-void regionRelationRec::clear() 
-{
+void regionRelationRec::clear() {
   ID = 0;
   region1 = region2 = 0;
   relationship = qualifier = "";
@@ -598,26 +530,22 @@ void regionRelationRec::clear()
 }
 
 // Set a single contiguous memory location that holds values of data members
-void regionRelationRec::serialize(char* outBuf) const
-{
+void regionRelationRec::serialize(char* outBuf) const {
   int32 bufLen = 0;
   int32 varLen = sizeof(int32);
 
   int32 foo = ID;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
   foo = region1;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
   foo = region2;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -631,8 +559,7 @@ void regionRelationRec::serialize(char* outBuf) const
   bufLen += creator.size() + 1;
 
   foo = addDate;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -640,8 +567,7 @@ void regionRelationRec::serialize(char* outBuf) const
   bufLen += modifier.size() + 1;
 
   foo = modDate;
-  if (ntohs(1) == 1)
-    swap(&foo);
+  if (ntohs(1) == 1) swap(&foo);
   memcpy(outBuf + bufLen, &foo, varLen);
   bufLen += varLen;
 
@@ -650,8 +576,7 @@ void regionRelationRec::serialize(char* outBuf) const
 }
 
 // Return size of buffer
-int32 regionRelationRec::getSize() const
-{ 
+int32 regionRelationRec::getSize() const {
   int32 bufLen = 0;
   bufLen += sizeof(ID);
   bufLen += sizeof(region1);
@@ -662,13 +587,12 @@ int32 regionRelationRec::getSize() const
   bufLen += sizeof(addDate);
   bufLen += modifier.size() + 1;
   bufLen += sizeof(modDate);
-  bufLen += comments.size() + 1;		  
-  return bufLen; 
+  bufLen += comments.size() + 1;
+  return bufLen;
 }
 
 // Print out all data members
-void regionRelationRec::show() const
-{
+void regionRelationRec::show() const {
   printf("Relation ID: %d\n", ID);
   printf("Region 1 ID: %d\n", region1);
   printf("Region 2 ID: %d\n", region2);
@@ -679,21 +603,15 @@ void regionRelationRec::show() const
   if (addDate) {
     time_t tmpTime = addDate;
     printf("Relation added on: %s", ctime(&tmpTime));
-  }
-  else
+  } else
     printf("Relation added on:\n");
 
   printf("Modified by: %s\n", modifier.c_str());
   if (modDate) {
     time_t tmpTime = modDate;
     printf("Last modified on: %s", ctime(&tmpTime));
-  }
-  else
+  } else
     printf("Last modified on:\n");
 
   printf("Comments: %s\n", comments.c_str());
 }
-
-
-
-

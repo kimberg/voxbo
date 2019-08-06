@@ -1,26 +1,27 @@
 /***************************************************************************************
- * This header file includes classes used to brain region records in Berkeley DB tables.
+ * This header file includes classes used to brain region records in Berkeley DB
+ tables.
  * Copyright (c) 1998-2010 by The VoxBo Development Team
 
  * This file is part of VoxBo
- * 
+ *
  * VoxBo is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * VoxBo is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with VoxBo.  If not, see <http:*www.gnu.org/licenses/>.
- * 
+ *
  * For general information on VoxBo, including the latest complete
  * source code and binary distributions, manual, and associated files,
  * see the VoxBo home page at: http:*www.voxbo.org/
- * 
+ *
  * Original version written by Dongbo Hu
 
  ***************************************************************************************/
@@ -29,12 +30,11 @@
 
 using namespace std;
 
-#include "typedefs.h"
 #include <string>
+#include "typedefs.h"
 
 // Brain region namespace record class
-class namespaceRec
-{
+class namespaceRec {
  public:
   namespaceRec();
   namespaceRec(void*);
@@ -43,18 +43,17 @@ class namespaceRec
   int32 getSize() const;
   void show() const;
 
-   void setName(const string& inputStr) { name = inputStr; }
-   void setDescription(const string& inputStr) { description = inputStr; }
-   string getName() const { return name; }
-   string getDescription() const { return description; }
+  void setName(const string& inputStr) { name = inputStr; }
+  void setDescription(const string& inputStr) { description = inputStr; }
+  string getName() const { return name; }
+  string getDescription() const { return description; }
 
  private:
   string name, description;
 };
 
 // Atlas record
-class atlasRec
-{
+class atlasRec {
  public:
   atlasRec();
   atlasRec(void*);
@@ -86,8 +85,7 @@ class atlasRec
 };
 
 // Brain region name record class
-class regionRec
-{
+class regionRec {
  public:
   regionRec();
   regionRec(void*);
@@ -126,15 +124,15 @@ class regionRec
  private:
   int32 ID;
   string name_space, name, abbrev;
-  int32 orgID; // original ID from input file, such as ID field in NN2002's hierarchy table
+  int32 orgID;  // original ID from input file, such as ID field in NN2002's
+                // hierarchy table
   string source, pFlag, link;
   string creator, modifier;
   int32 addDate, modDate;
 };
 
 // Synonym record class
-class synonymRec
-{
+class synonymRec {
  public:
   synonymRec();
   synonymRec(void*);
@@ -177,8 +175,7 @@ class synonymRec
 };
 
 // Region relationship record class
-class regionRelationRec
-{
+class regionRelationRec {
  public:
   regionRelationRec();
   regionRelationRec(void*);
@@ -187,27 +184,27 @@ class regionRelationRec
   int32 getSize() const;
   void show() const;
 
-   void setID(int32 inputVal) { ID = inputVal; }
-   void setRegion1(int32 inputVal) { region1 = inputVal; }
-   void setRegion2(int32 inputVal) { region2 = inputVal; }
-   void setRelationship(const string& inputStr) { relationship = inputStr; }
-   void setQualifier(const string& inputStr) { qualifier = inputStr; }
-   void setCreator(const string& inputStr) { creator = inputStr; }
-   void setAddDate(int32 inputVal) { addDate = inputVal; }
-   void setModifier(const string& inputStr) { modifier = inputStr; }
-   void setModDate(int32 inputVal) { modDate = inputVal; }
-   void setComments(const string& inputStr) { comments = inputStr; }
+  void setID(int32 inputVal) { ID = inputVal; }
+  void setRegion1(int32 inputVal) { region1 = inputVal; }
+  void setRegion2(int32 inputVal) { region2 = inputVal; }
+  void setRelationship(const string& inputStr) { relationship = inputStr; }
+  void setQualifier(const string& inputStr) { qualifier = inputStr; }
+  void setCreator(const string& inputStr) { creator = inputStr; }
+  void setAddDate(int32 inputVal) { addDate = inputVal; }
+  void setModifier(const string& inputStr) { modifier = inputStr; }
+  void setModDate(int32 inputVal) { modDate = inputVal; }
+  void setComments(const string& inputStr) { comments = inputStr; }
 
-   int32 getID() const { return ID; }
-   int32 getRegion1() const { return region1; }
-   int32 getRegion2() const { return region2; }
-   string getRelationship() const { return relationship; }
-   string getQualifier() const { return qualifier; }
-   string getCreator() const { return creator; }
-   int32 getAddDate() const { return addDate; }
-   string getModifier() const { return modifier; }
-   int32 getModDate() const { return modDate; }
-   string getComments() const { return comments; }
+  int32 getID() const { return ID; }
+  int32 getRegion1() const { return region1; }
+  int32 getRegion2() const { return region2; }
+  string getRelationship() const { return relationship; }
+  string getQualifier() const { return qualifier; }
+  string getCreator() const { return creator; }
+  int32 getAddDate() const { return addDate; }
+  string getModifier() const { return modifier; }
+  int32 getModDate() const { return modDate; }
+  string getComments() const { return comments; }
 
  private:
   int32 ID, region1, region2;
@@ -218,4 +215,3 @@ class regionRelationRec
 };
 
 #endif
-

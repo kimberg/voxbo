@@ -1,40 +1,40 @@
 
 // vbpreplib.h
-// class definitions for classes used in vbprep.cpp 
+// class definitions for classes used in vbprep.cpp
 // Copyright (c) 1998-2002 by The VoxBo Development Team
 
 // This file is part of VoxBo
-// 
+//
 // VoxBo is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // VoxBo is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with VoxBo.  If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 // For general information on VoxBo, including the latest complete
 // source code and binary distributions, manual, and associated files,
 // see the VoxBo home page at: http://www.voxbo.org/
-// 
+//
 // original version written by Tom King based on code by Daniel Y. Kimberg
 
 #include <stdio.h>
+#include <fstream>
 #include <string>
 #include <vector>
-#include <fstream>
-#include "vbprefs.h"
-#include "vbutil.h"
 #include "vbio.h"
 #include "vbjobspec.h"
+#include "vbprefs.h"
+#include "vbutil.h"
 
 class VBPJob {
-public:
+ public:
   VBPJob();
   string jobtype;
   tokenlist args;
@@ -45,18 +45,18 @@ public:
 };
 
 class VBVariable {
-  public:
+ public:
   VBVariable(){};
   string name;
   string type;
   string defaultValue;
   string currentValue;
   string description;
-  vector <string> value;
+  vector<string> value;
 };
 
 class VBPFile {
-public:
+ public:
   VBPFile();
   tokenlist filename;
   string filetype;
@@ -65,7 +65,7 @@ public:
 };
 
 class VBPrep {
-public:
+ public:
   VBPrep();
   VBSequence seq;
   int BuildJobs(VBPrefs &vbp);
@@ -82,17 +82,17 @@ public:
 };
 
 class VBPData {
-public:
+ public:
   VBPData(const VBPrefs &vbp);
   VBPrep study;
   vector<VBVariable> varlist;
-  vector <VBPrep> data;
+  vector<VBPrep> data;
   int StoreDataFromFile(string fname, string selectedSequence);
   string GetDocumentation(string fname);
   int Clear();
-private:
+
+ private:
   int ParseFile(string fname, string selectedSequence);
   string ScriptName(string name);
   VBPrefs vbp;
 };
-

@@ -1,27 +1,26 @@
 
 using namespace std;
 
-#include <sys/wait.h>
+#include <limits.h>
 #include <math.h>
+#include <omp.h>
+#include <pwd.h>
 #include <sys/time.h>
 #include <sys/types.h>
-#include <pwd.h>
+#include <sys/wait.h>
 #include <zlib.h>
 #include <limits>
-#include "vbprefs.h"
-#include "vbutil.h"
-#include "vbio.h"
 #include <map>
 #include "glmutil.h"
 #include "gsl/gsl_complex.h"
 #include "gsl/gsl_complex_math.h"
-#include "makestatcub.h"
-#include "glmutil.h"
 #include "imageutils.h"
+#include "makestatcub.h"
 #include "mydefs.h"
+#include "vbio.h"
+#include "vbprefs.h"
+#include "vbutil.h"
 #include "vbx.h"
-#include <omp.h>
-#include <limits.h>
 
 // #include <sys/sysinfo.h>
 #include "stats.h"
@@ -33,7 +32,7 @@ using namespace boost::gregorian;
 VBPrefs vbp;
 extern char **environ;
 
-int ReadMATFileHeader(VBMatrix &m,string fname);
+int ReadMATFileHeader(VBMatrix &m, string fname);
 
 extern "C" {
 #include "dicom.h"
@@ -41,17 +40,15 @@ extern "C" {
 #include "nifti.h"
 }
 
-int
-main(int argc,char **argv)
-{
+int main(int argc, char **argv) {
   VB_Vector a("a.ref");
   VB_Vector b("b.ref");
-  x2val tt=calc_chisquared((bitmask)a,(bitmask)b);
-  cout << format("x2=%g df=%d p=%g\n")%tt.x2%tt.df%tt.p;
-  tt=calc_chisquared((bitmask)a,(bitmask)b,1);
-  cout << format("x2(corr)=%g df=%d p=%g\n")%tt.x2%tt.df%tt.p;
-  tt=calc_fisher((bitmask)a,(bitmask)b);
-  cout << format("fisher p=%g\n")%tt.p;
+  x2val tt = calc_chisquared((bitmask)a, (bitmask)b);
+  cout << format("x2=%g df=%d p=%g\n") % tt.x2 % tt.df % tt.p;
+  tt = calc_chisquared((bitmask)a, (bitmask)b, 1);
+  cout << format("x2(corr)=%g df=%d p=%g\n") % tt.x2 % tt.df % tt.p;
+  tt = calc_fisher((bitmask)a, (bitmask)b);
+  cout << format("fisher p=%g\n") % tt.p;
 
   cout << "  lesion (0/1): " << tt.c10 << " " << tt.c11 << endl;
   cout << "nolesion (0/1): " << tt.c00 << " " << tt.c01 << endl;
@@ -65,25 +62,19 @@ main(int argc,char **argv)
 
   cout << argc << argv[0] << endl;
 
-//   struct sysinfo si;
-//   sysinfo(&si);
-//   cout << "load " << si.loads[0] << endl;
-//   cout << "load " << si.loads[1] << endl;
-//   cout << "load " << si.loads[2] << endl;
-//   cout << "totalram " << si.totalram*si.mem_unit/1024/1024 << endl;
-//   cout << "freeram " << si.freeram*si.mem_unit/1024/1024 << endl;
-//   cout << "sharedram " << si.sharedram*si.mem_unit/1024/1024 << endl;
-//   cout << "bufferram " << si.bufferram*si.mem_unit/1024/1024 << endl;
-//   cout << "totalswap " << si.totalswap*si.mem_unit/1024/1024 << endl;
-//   cout << "freeswap " << si.freeswap*si.mem_unit/1024/1024 << endl;
+  //   struct sysinfo si;
+  //   sysinfo(&si);
+  //   cout << "load " << si.loads[0] << endl;
+  //   cout << "load " << si.loads[1] << endl;
+  //   cout << "load " << si.loads[2] << endl;
+  //   cout << "totalram " << si.totalram*si.mem_unit/1024/1024 << endl;
+  //   cout << "freeram " << si.freeram*si.mem_unit/1024/1024 << endl;
+  //   cout << "sharedram " << si.sharedram*si.mem_unit/1024/1024 << endl;
+  //   cout << "bufferram " << si.bufferram*si.mem_unit/1024/1024 << endl;
+  //   cout << "totalswap " << si.totalswap*si.mem_unit/1024/1024 << endl;
+  //   cout << "freeswap " << si.freeswap*si.mem_unit/1024/1024 << endl;
   exit(0);
 }
-
-
-
-
-
-
 
 // void
 // find_nearby_nonzero(Cube &cb,int xx,int yy,int zz)
@@ -119,15 +110,9 @@ main(int argc,char **argv)
 //     // FIXME
 //     // now pop it off the front and iterate
 //     mymap.erase(mymap.begin());
-    
+
 //   }
 // }
-
-
-
-
-
-
 
 //   cout << correlation(aaa,bbb) << endl;
 //   cout << covariance(aaa,bbb) << endl;
@@ -140,45 +125,41 @@ main(int argc,char **argv)
 //   else if (pid==-1)
 //     cout << 12 << endl;
 //   int err=kill(pid,9);
-//   cout << err << endl;  
-//   cout << errno << endl;  
+//   cout << err << endl;
+//   cout << errno << endl;
 //   exit(0);
-int
-ReadMATFileHeader(VBMatrix &m,string fname)
-{
+int ReadMATFileHeader(VBMatrix &m, string fname) {
   // parse filename (remove bracketed stuff)
-  FILE *fp=fopen(fname.c_str(),"r");
+  FILE *fp = fopen(fname.c_str(), "r");
   // grab the first 124 bytes, copy the header
-  char buf[128],hdr[125];
-  if (fread(buf,1,128,fp)!=128) {
+  char buf[128], hdr[125];
+  if (fread(buf, 1, 128, fp) != 128) {
     fclose(fp);
     return 101;
   }
-  memcpy(hdr,buf,124);
-  hdr[124]='\0';
+  memcpy(hdr, buf, 124);
+  hdr[124] = '\0';
   m.AddHeader(hdr);
   // the next two shorts are the matlab version and the endian indicator
-  if (buf[126]=='M')
-    m.filebyteorder=ENDIAN_BIG;
+  if (buf[126] == 'M')
+    m.filebyteorder = ENDIAN_BIG;
   else
-    m.filebyteorder=ENDIAN_LITTLE;
+    m.filebyteorder = ENDIAN_LITTLE;
   int16 mversion;
-  memcpy(&mversion,buf+124,2);
-  int swapped=0;
-  if (m.filebyteorder!=my_endian())
-    swapped=1;
-  if (swapped)
-    swap(&mversion);
-  m.AddHeader((string)"MATLAB version "+strnum(mversion));
+  memcpy(&mversion, buf + 124, 2);
+  int swapped = 0;
+  if (m.filebyteorder != my_endian()) swapped = 1;
+  if (swapped) swap(&mversion);
+  m.AddHeader((string) "MATLAB version " + strnum(mversion));
   // now build an index of the file by repeatedly grabbing a pair of
   // longs, the second of which is nbytes, and iterating
-  uint32 dtype,dlen,skip;
-  while(1) {
-    if (fread(&dtype,sizeof(long),1,fp)!=1) {
+  uint32 dtype, dlen, skip;
+  while (1) {
+    if (fread(&dtype, sizeof(long), 1, fp) != 1) {
       fclose(fp);
       return 102;
     }
-    if (fread(&dlen,sizeof(long),1,fp)!=1) {
+    if (fread(&dlen, sizeof(long), 1, fp) != 1) {
       fclose(fp);
       return 103;
     }
@@ -187,28 +168,24 @@ ReadMATFileHeader(VBMatrix &m,string fname)
       swap(&dlen);
     }
     // pad to 64-bit (8 byte) boundaries
-    skip=dlen;
-    if (dlen%8) skip+=8-(dlen%8);
-    //printf("dtype %ld dlen %ld skip %ld\n",dtype,dlen,skip);
-    
+    skip = dlen;
+    if (dlen % 8) skip += 8 - (dlen % 8);
+    // printf("dtype %ld dlen %ld skip %ld\n",dtype,dlen,skip);
+
     // quick read the element
     unsigned char flags[8];
-    if (fread(flags,1,8,fp)!=8) {
+    if (fread(flags, 1, 8, fp) != 8) {
       fclose(fp);
       return 104;
     }
-
-
-
   }
   fclose(fp);
   return 0;
 }
 
-
-char helptext[]="\
+char helptext[] =
+    "\
 foo bar baz\n\
   here is the:\n\
   argument structure\n\
-i like help"
-;
+i like help";

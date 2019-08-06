@@ -27,34 +27,33 @@
 #ifndef BBDIALOG_H
 #define BBDIALOG_H
 
+#include <QComboBox>
+#include <QDialog>
+#include <QFormLayout>
+#include <QKeyEvent>
+#include <QLineEdit>
+#include <QListWidget>
 #include <QPushButton>
 #include <QStringList>
-#include <QFormLayout>
-#include <QDialog>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QListWidget>
-#include <QKeyEvent>
-#include "myboxes.h"
 #include "brain_util.h"
+#include "myboxes.h"
 
 using namespace std;
 
-bool setFiles(string rDbName, string rrDbName, string sDbName, string &dbHome);
+bool setFiles(string rDbName, string rrDbName, string sDbName, string& dbHome);
 
 // BBdialog is a tand-alone class that takes care of user interface display
-class BBdialog : public QDialog 
-{
+class BBdialog : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   BBdialog(QWidget* parent = 0);
 
-private:
+ private:
   void buildUI();
   void buildList();
   bool setFiles();
-  int parseRegionName(QString, bool, QString &, QString &);
+  int parseRegionName(QString, bool, QString&, QString&);
   bool chkNameSpace(QString);
   void setNameSpace(string);
   void searchRegion(string, string);
@@ -68,7 +67,7 @@ private:
   void showSynonym();
   bool chkName(string);
   void showRelation();
-  void keyPressEvent(QKeyEvent *);
+  void keyPressEvent(QKeyEvent*);
 
   // data members
   QLineEdit* ui_name;
@@ -87,18 +86,15 @@ private:
   long regionID;
   string regionName, name_space;
 
-private slots:
+ private slots:
   void popupList();
-  void selectName(QListWidgetItem *);
+  void selectName(QListWidgetItem*);
   void changeNS();
-  void toParent(QListWidgetItem *);
-  void toChild(QListWidgetItem *);
-  void toRelated(QListWidgetItem *);
+  void toParent(QListWidgetItem*);
+  void toChild(QListWidgetItem*);
+  void toRelated(QListWidgetItem*);
   void resetUI();
   void about();
-
 };
-
-
 
 #endif
