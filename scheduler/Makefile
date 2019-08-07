@@ -4,7 +4,7 @@
 -include ../make_vars.txt
 include ../make_stuff.txt
 
-LIBS=$(LDFLAGS) $(LIBDIRS) -lvbprefs -lvbutil -lz
+LIBS=$(LDFLAGS) $(LIBDIRS) -lvbprefs -lvbutil -lz -lboost_system
 ALLBINS=voxbo vbsrvd voxq vbq vq
 
 ifeq ($(VB_TARGET),all)

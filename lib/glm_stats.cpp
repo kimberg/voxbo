@@ -561,13 +561,12 @@ int GLMInfo::calc_phase_cube() {
   statcube.CopyHeader(paramtes);
   // convenience
   VB_Vector cc = contrast.contrast;
-  double t, weight, b1, b2;
+  double weight, b1, b2;
   for (int i = 0; i < paramtes.dimx; i++) {
     for (int j = 0; j < paramtes.dimy; j++) {
       for (int k = 0; k < paramtes.dimz; k++) {
         if (paramtes.GetMaskValue(i, j, k) == 0)  // skip empty voxels
           continue;
-        t = 0.0;
         b1 = nan("nan");
         b2 = nan("nan");
         for (size_t m = 0; m < keeperlist.size(); m++) {

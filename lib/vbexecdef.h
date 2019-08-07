@@ -29,9 +29,9 @@
 
 #include <list>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
-#include <tr1/memory>
 #include <vector>
 
 #include <istream>
@@ -46,10 +46,10 @@ using std::list;
 using std::map;
 using std::ostream;
 using std::set;
+using std::shared_ptr;
 using std::string;
 using std::vector;
-using std::tr1::shared_ptr;
-using std::tr1::weak_ptr;
+using std::weak_ptr;
 
 namespace VB {
 /*

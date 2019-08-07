@@ -124,7 +124,7 @@ class VB_Vector {
    * METHODS:                                                           *
    *********************************************************************/
 
-  void init(const size_t length) throw(GenericExcep);
+  void init(const size_t length);
   void init(const bool validFlag, const VB_datatype dType, const VBFF fType);
   void init(const bool validFlag, const VB_datatype dType,
             const string signature);
@@ -133,23 +133,21 @@ class VB_Vector {
    * These private static methods are used to make exception throwing   *
    * easier.                                                            *
    *********************************************************************/
-  void GSLVectorMemcpy(gsl_vector* dest, const gsl_vector* src) const
-      throw(GenericExcep);
+  void GSLVectorMemcpy(gsl_vector* dest, const gsl_vector* src) const;
 
   void checkVectorRange(const size_t index, const int lineNumber,
                         const char* fileName,
-                        const char* prettyFunctionName) const
-      throw(GenericExcep);
+                        const char* prettyFunctionName) const;
 
-  static void checkVectorLengths(
-      const gsl_vector* V1, const gsl_vector* V2, const int lineNumber,
-      const char* fileName, const char* prettyFunctionName) throw(GenericExcep);
+  static void checkVectorLengths(const gsl_vector* V1, const gsl_vector* V2,
+                                 const int lineNumber, const char* fileName,
+                                 const char* prettyFunctionName);
 
-  static void checkVectorLengths(
-      const size_t len1, const size_t len2, const int lineNumber,
-      const char* fileName, const char* prettyFunctionName) throw(GenericExcep);
+  static void checkVectorLengths(const size_t len1, const size_t len2,
+                                 const int lineNumber, const char* fileName,
+                                 const char* prettyFunctionName);
 
-  static void vectorNull(const gsl_vector* v) throw(GenericExcep);
+  static void vectorNull(const gsl_vector* v);
 
   static void checkGSLStatus(const int status, const int lineNumber,
                              const char* fileName,
@@ -170,8 +168,7 @@ class VB_Vector {
   /*********************************************************************
    * This method allocates memory to a gsl_matrix struct.               *
    *********************************************************************/
-  gsl_matrix* initMatrix(const size_t rows, const size_t cols) const
-      throw(GenericExcep);
+  gsl_matrix* initMatrix(const size_t rows, const size_t cols) const;
 
   /*********************************************************************
    * Private static method.                                             *
@@ -685,7 +682,7 @@ class VB_Vector {
    *********************************************************************/
   void getPS(VB_Vector& result) const;  // QQ tested
   void getPS(VB_Vector* result) const;  // QQ tested
-  void getPS() throw();                 // QQ tested
+  void getPS();                         // QQ tested
 
   /*********************************************************************
    * Methods for sinc interpolation.                                    *
@@ -718,37 +715,34 @@ class VB_Vector {
    * argument of type double and returns a double, to each element of   *
    * the VB_Vector.                                                     *
    *********************************************************************/
-  void applyFunction(double (*theFunction)(double)) throw();  // QQ tested
-  void applyFunction(double (*theFunction)(double), VB_Vector& theResult) const
-      throw();  // QQ tested
-  void applyFunction(double (*theFunction)(double), VB_Vector* theResult) const
-      throw();  // QQ tested
+  void applyFunction(double (*theFunction)(double));  // QQ tested
+  void applyFunction(double (*theFunction)(double),
+                     VB_Vector& theResult) const;  // QQ tested
+  void applyFunction(double (*theFunction)(double),
+                     VB_Vector* theResult) const;  // QQ tested
 
   /*********************************************************************
    * Instance method for element-by-element multiply.                   *
    *********************************************************************/
-  void elementByElementMult(const VB_Vector* vec) throw();
-  void elementByElementMult(const VB_Vector& vec) throw();
+  void elementByElementMult(const VB_Vector* vec);
+  void elementByElementMult(const VB_Vector& vec);
 
   /*********************************************************************
    * Static method to multiply complex vectors.                         *
    *********************************************************************/
   static void compMult(const VB_Vector& real1, const VB_Vector& imag1,
                        const VB_Vector& real2, const VB_Vector& imag2,
-                       VB_Vector& realProd,
-                       VB_Vector& imagProd) throw(GenericExcep);
+                       VB_Vector& realProd, VB_Vector& imagProd);
 
   /*********************************************************************
    * Static methods to compute complex FFT and inverse FFT.             *
    *********************************************************************/
   static void complexFFT(const VB_Vector& real, const VB_Vector& imag,
-                         VB_Vector& realFFT,
-                         VB_Vector& imagFFT) throw(GenericExcep);
+                         VB_Vector& realFFT, VB_Vector& imagFFT);
   static void complexIFFT(const VB_Vector& real, const VB_Vector& imag,
-                          VB_Vector& realIFFT,
-                          VB_Vector& imagIFFT) throw(GenericExcep);
+                          VB_Vector& realIFFT, VB_Vector& imagIFFT);
   static void complexIFFTReal(const VB_Vector& real, const VB_Vector& imag,
-                              VB_Vector& realIFFT) throw(GenericExcep);
+                              VB_Vector& realIFFT);
 
   double* begin() const;
   double* end() const;

@@ -8,7 +8,7 @@ CXXFLAGS += -DQT3_SUPPORT $(QTINCDIRS)
 
 PERMUTATION_OBJECTS=../stand_alone/perm.o ../stand_alone/utils.o ../stand_alone/time_series_avg.o ../stand_alone/koshutil.o
 OBJECTS=vbvlsm.o rsrc.o $(PERMUTATION_OBJECTS)
-LIBS = $(LDFLAGS) $(LIBDIRS) $(QTLIBDIRS) $(QTLIBS) -Xlinker -lvbglm -lvbprefs -lvbio -lvbutil -lz $(DLLIB) -lgsl -lgslcblas
+LIBS = $(LDFLAGS) $(LIBDIRS) $(QTLIBDIRS) $(QTLIBS) -Xlinker -lvbglm -lvbprefs -lvbio -lvbutil -lz $(DLLIB) -lgsl -lgslcblas -lboost_system
 
 ALLBINS=vbvlsm
 ifeq ($(VB_TARGET),all)

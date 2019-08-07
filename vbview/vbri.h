@@ -25,7 +25,11 @@
 
 using namespace std;
 
+#include <Q3VBox>
 #include <QMainWindow>
+#include "vbio.h"
+#include "vbutil.h"
+#include "vbview.h"
 
 class VBmask {
  public:

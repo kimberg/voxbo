@@ -31,12 +31,10 @@
 #include <iostream>
 #include <queue>
 #include <sstream>
-#include <tr1/memory>
 
 #include <vbprefs.h>
 
 using namespace std;
-using namespace std::tr1;
 using namespace VB;
 
 set<ExecDef*> VB::Definitions::m_defs;
@@ -58,7 +56,7 @@ void ExecDef::description(const string& d) { m_desc = d; }
 unsigned ExecDef::count() const { return m_count; }
 
 void ExecDef::update_instances() const {
-  for (set<weak_ptr<Exec> >::iterator iter = instances.begin();
+  for (set<weak_ptr<Exec>>::iterator iter = instances.begin();
        iter != instances.end(); ++iter) {
     shared_ptr<Exec> inst = iter->lock();
     if (inst)
@@ -160,8 +158,8 @@ shared_ptr<Exec> BlockDef::declare_with_parent(const shared_ptr<Block> parent) {
   return b;
 }
 
-void transfer_execs(const list<shared_ptr<Exec> >& l1,
-                    list<shared_ptr<Exec> >& l2, shared_ptr<Block> new_parent) {
+void transfer_execs(const list<shared_ptr<Exec>>& l1,
+                    list<shared_ptr<Exec>>& l2, shared_ptr<Block> new_parent) {
   typedef shared_ptr<Exec> ExecPointer;
   typedef pair<ExecPointer, ExecPointer> ExecPair;
   map<ExecPointer, ExecPointer> exec_map;
@@ -227,8 +225,8 @@ bool JobType::anonymous() const {
   return false;
 }
 
-const list<shared_ptr<Exec> >& BlockDef::execs() const { return m_execs; }
-list<shared_ptr<Exec> >& BlockDef::execs() { return m_execs; }
+const list<shared_ptr<Exec>>& BlockDef::execs() const { return m_execs; }
+list<shared_ptr<Exec>>& BlockDef::execs() { return m_execs; }
 
 bool BlockDef::anonymous() const { return m_anonymous; }
 
@@ -682,7 +680,7 @@ void JobType::write(ostream& out) const {
       out << "  " << fm.first << ":output " << fm.second << vb_nl;
     }
 
-    typedef pair<string, map<string, string> > format_kv_pair;
+    typedef pair<string, map<string, string>> format_kv_pair;
     vbforeach(const format_kv_pair& fkv, f.vars) {
       vbforeach(const key_val_pair& kv, fkv.second) {
         out << "  " << fkv.first << ":set " << kv.first << "=" << kv.second

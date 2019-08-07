@@ -38,7 +38,6 @@
 #include <iostream>
 
 #include "vbri.moc.h"
-#include "vbview.h"
 
 // const string headerstyle1="color:red;";
 

@@ -46,6 +46,7 @@ using namespace std;
 #include <fstream>
 #include <iostream>
 #include <string>
+#include "vbutil.h"
 
 int fork_command(VBJobSpec &js, int ind);
 void run_command(VBJobSpec &js, int i);
@@ -147,15 +148,15 @@ int fork_command(VBJobSpec &js, int ind) {
   close(logpipe[1]);  // close the writing end of logpipe
   close(cmdpipe[0]);  // close the reading end of cmdpipe
   // read log and control messages
-  seteuid(getuid());  // be user voxbo if possible
-  setegid(js.voxbogid);
-  seteuid(js.voxbouid);
+  seteuid_nocheck(getuid());  // be user voxbo if possible
+  setegid_nocheck(js.voxbogid);
+  seteuid_nocheck(js.voxbouid);
 
   vector<string> myscript = build_script(js, ind);
   talk2child(js, myscript, logpipe[0], cmdpipe[1]);
 
-  seteuid(getuid());  // be ourselves again
-  setegid(getgid());
+  seteuid_nocheck(getuid());  // be ourselves again
+  setegid_nocheck(getgid());
 
   // wait for child to terminate, get status, parse it
   int status;
@@ -191,10 +192,10 @@ void run_command(VBJobSpec &js, int ind) {
   // if we're root, we can become the right user
 
   struct passwd *userpw = getpwuid(js.uid);
-  seteuid(getuid());
-  setgid(userpw->pw_gid);                       // set our group
+  seteuid_nocheck(getuid());
+  setgid_nocheck(userpw->pw_gid);               // set our group
   initgroups(userpw->pw_name, userpw->pw_gid);  // set supplementary groups
-  setuid(js.uid);                               // now set user to user
+  setuid_nocheck(js.uid);                       // now set user to user
   umask(002);                                   // share with your group!
 
   if (getuid() == 0) {  // don't run jobs as root
@@ -252,13 +253,13 @@ void talk2child(VBJobSpec &js, vector<string> myscript, int &logpipe,
 
   ofstream qlogfile, ulogfile;
   if (ulogfname.size()) {
-    seteuid(getuid());  // be root if we can, then switch to user
-    setegid(usergid);
-    seteuid(js.uid);
+    seteuid_nocheck(getuid());  // be root if we can, then switch to user
+    setegid_nocheck(usergid);
+    seteuid_nocheck(js.uid);
     ulogfile.open(ulogfname.c_str(), ios::app);
-    seteuid(getuid());  // back to user voxbo if possible
-    setegid(save_egid);
-    seteuid(save_euid);
+    seteuid_nocheck(getuid());  // back to user voxbo if possible
+    setegid_nocheck(save_egid);
+    seteuid_nocheck(save_euid);
   }
 
   if (qlogfname.size()) qlogfile.open(qlogfname.c_str(), ios::app);
@@ -279,11 +280,11 @@ void talk2child(VBJobSpec &js, vector<string> myscript, int &logpipe,
     if (killme == 1) {
       fprintf(stderr, "KILLING CHILD PROCESS %d\n", js.childpid);
       // be root again if that's how we started
-      setegid(getgid());
-      seteuid(getuid());
+      setegid_nocheck(getgid());
+      seteuid_nocheck(getuid());
       kill(js.childpid, SIGHUP);
-      setegid(save_egid);  // back to being user voxbo
-      seteuid(save_euid);
+      setegid_nocheck(save_egid);  // back to being user voxbo
+      seteuid_nocheck(save_euid);
       killme = 2;
     }
     // SEND COMMANDS (at least one, if available)
@@ -312,13 +313,13 @@ void talk2child(VBJobSpec &js, vector<string> myscript, int &logpipe,
     // PROCESS THE OUTPUT (as much as we have)
     if (ulogfile) {
       // temporarily become user (effectively)
-      seteuid(getuid());  // be root if we can, then switch to user
-      setegid(usergid);
-      seteuid(js.uid);
+      seteuid_nocheck(getuid());  // be root if we can, then switch to user
+      setegid_nocheck(usergid);
+      seteuid_nocheck(js.uid);
       ulogfile << buf << flush;
-      seteuid(getuid());  // back to user voxbo if possible
-      setegid(save_egid);
-      seteuid(save_euid);
+      seteuid_nocheck(getuid());  // back to user voxbo if possible
+      setegid_nocheck(save_egid);
+      seteuid_nocheck(save_euid);
     }
     if (qlogfile) qlogfile << buf << flush;
     bufset.clear();
@@ -489,7 +490,7 @@ void exec_command(VBJobSpec &js, vector<string> script, int ind) {
   string commandx, scriptx;
 
   // default dir, we'll also check for variable DIR below
-  chdir(js.dirname.c_str());
+  chdir_nocheck(js.dirname.c_str());
 
   // build argument tokenlist
   tokenlist args, tmpa;
@@ -500,7 +501,7 @@ void exec_command(VBJobSpec &js, vector<string> script, int ind) {
   pair<string, string> arg;
   vbforeach(arg, js.arguments) {
     fprintf(stderr, "    %s=%s\n", arg.first.c_str(), arg.second.c_str());
-    if (arg.first == "DIR") chdir(arg.second.c_str());
+    if (arg.first == "DIR") chdir_nocheck(arg.second.c_str());
   }
   // build null argument tokenlist to make sure any declared but un-set
   // variables get replaced with whitespace
@@ -536,7 +537,7 @@ void exec_command(VBJobSpec &js, vector<string> script, int ind) {
 // kinds of crashes.  otherwise we should have recq
 
 void tell_scheduler(string qdir, string hostname, string buf) {
-  chdir(qdir.c_str());
+  chdir_nocheck(qdir.c_str());
   string root = uniquename(hostname);
   string name1 = root + ".vbtmp";
   string name2 = root + ".vbx";
@@ -661,7 +662,7 @@ int runseq(VBPrefs &vbp, VBSequence &seq, uint32 njobs) {
         if (resp == "v") {
           printf(
               "======================BEGIN LOG FILE======================\n");
-          system(
+          system_nocheck(
               str(format("cat %s") % seq.specmap[jnum].logfilename()).c_str());
           printf(
               "=======================END LOG FILE=======================\n");
@@ -671,7 +672,7 @@ int runseq(VBPrefs &vbp, VBSequence &seq, uint32 njobs) {
             editor = getenv("VISUAL");
             if (!editor.size()) editor = getenv("EDITOR");
             if (!editor.size()) editor = "emacs";
-            system(
+            system_nocheck(
                 (str(format("%s %s") % editor % seq.specmap[jnum].logfilename())
                      .c_str()));
           }

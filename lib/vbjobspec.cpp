@@ -589,16 +589,7 @@ void VBJobSpec::ParseJSLine(string str) {
     logdir = args[1];
 }
 
-void VBJobSpec::SetState(JobState s) {
-  state = s;
-  char c = ' ';
-  if (state == XBad) c = 'B';
-  if (state == XGood) c = 'G';
-  if (state == XSignal) c = 'S';
-  if (state == XWarn) c = 'W';
-  if (state == XRetry) c = 'R';
-  if (state == XNone) c = 'N';
-}
+void VBJobSpec::SetState(JobState s) { state = s; }
 
 JobState VBJobSpec::GetState() { return state; }
 

@@ -56,17 +56,19 @@ void print_state(size_t iter, gsl_multifit_fdfsolver *s);
 /* generic functions to do the fitting */
 VB_Vector *curvefit(VB_Vector *x, VB_Vector *y, VB_Vector *sigma,
                     double var3min, double var1, double var2, double var3,
-                    const char *outputFile = '\0', bool printFlag = true);
+                    const string &outputFile, bool printFlag = true);
 /* Wrapper functions based on the generic curvefit() */
 VB_Vector *curvefit(const char *xFilename, const char *yFilename,
                     const char *sigmaFilename, double var3min,
-                    const char *initFile, const char *outputFile);
+                    const char *initFile, const string &outputFile);
 VB_Vector *curvefit(const char *xFilename, const char *yFilename,
                     double inputSigma, double var3min, double var1_init,
-                    double var2_init, double var3_init, const char *outputFile);
+                    double var2_init, double var3_init,
+                    const string &outputFile);
 VB_Vector *curvefit(const char *xFilename, const char *yFilename,
                     const char *sigmaFilename, double var3min, double var1_init,
-                    double var2_init, double var3_init, const char *outputFile);
+                    double var2_init, double var3_init,
+                    const string &outputFile);
 
 /* functions to fit the power spectrum by two parameters (var3 is fixed now) */
 int expb_f12(const gsl_vector *fittingVar, void *params, gsl_vector *f);
@@ -76,30 +78,30 @@ int expb_fdf12(const gsl_vector *fittingVar, void *params, gsl_vector *f,
 void print_state12(size_t iter, gsl_multifit_fdfsolver *s);
 VB_Vector *curvefit12(VB_Vector *xVec, VB_Vector *yVec, VB_Vector *sigmaVec,
                       double var3, double var1_init, double var2_init,
-                      const char *outputFile, bool printFlag);
+                      const string &outputFile, bool printFlag);
 
 /* generic functions to deal with power spectrum files and ignorePS vectors */
 VB_Vector *fitOneOverF(VB_Vector *psVec, VB_Vector *ignorePS, double var3min,
                        double TR = 2000.0, double sigma = 0.1,
                        double var1 = 20.0, double var2 = 2.0, double var3 = 0,
-                       const char *outputFile = '\0', bool printFlag = true);
+                       const string &outputFile = "", bool printFlag = true);
 /* Wrapper functions based on the generic fitOneOverF() */
 VB_Vector *fitOneOverF(VB_Vector *psVec, double var3min, double TR = 2000.0,
                        double sigma = 0.1, double var1 = 20.0,
                        double var2 = 2.0, double var3 = 0,
-                       const char *outputFile = '\0', bool printFlag = true);
+                       const string &outputFile = "", bool printFlag = true);
 VB_Vector *fitOneOverF(const char *psFile, double var3min, double TR = 2000.0,
                        double sigma = 0.1, double var1 = 20.0,
                        double var2 = 2.0, double var3 = 0,
-                       const char *outputFile = '\0', bool printFlag = true);
+                       const string &outputFile = "", bool printFlag = true);
 VB_Vector *fitOneOverF(VB_Vector *psVec, const char *refFunc, double var3min,
                        double TR = 2000.0, double sigma = 0.1,
                        double var1 = 20.0, double var2 = 2.0, double var3 = 0,
-                       const char *outputFile = '\0', bool printFlag = true);
+                       const string &outputFile = "", bool printFlag = true);
 VB_Vector *fitOneOverF(const char *psFile, const char *refFunc, double var3min,
                        double TR = 2000.0, double sigma = 0.1,
                        double var1 = 20.0, double var2 = 2.0, double var3 = 0,
-                       const char *outputFile = '\0', bool printFlag = true);
+                       const string &outputFile = "", bool printFlag = true);
 
 /* Generic function to produce the time domain representation of the 1/f curve
  * given three parameters */

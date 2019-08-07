@@ -261,7 +261,7 @@ int read_head_ge3_3D(Cube *cb) {
             (int)nechoes, nex, (int)tgain, (int)rgain1, (int)rgain2);
     cb->AddHeader(hdr);
     // sprintf(hdr,"im_loc_ras: %c %c",im_loc_ras[0],im_loc_ras[1]);
-    // cb->AddHeader(hdr); sprintf(hdr,"im_loc: %f",im_loc);  cb->AddHeader(hdr);
+    // cb->AddHeader(hdr); sprintf(hdr,"im_loc: %f",im_loc); cb->AddHeader(hdr);
     // sprintf(hdr,"im_ctr: %f %f %f",im_ctr[0],im_ctr[1],im_ctr[2]);
     // cb->AddHeader(hdr); sprintf(hdr,"im_norm: %f %f
     // %f",im_norm[0],im_norm[1],im_norm[2]);  cb->AddHeader(hdr);

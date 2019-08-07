@@ -180,9 +180,9 @@ void QRunSeq::handleTimer() {
               editor = getenv("VISUAL");
               if (!editor.size()) editor = getenv("EDITOR");
               if (!editor.size()) editor = "emacs";
-              system((str(format("%s %s") % editor %
-                          seq.specmap[jnum].logfilename())
-                          .c_str()));
+              system_nocheck((str(format("%s %s") % editor %
+                                  seq.specmap[jnum].logfilename())
+                                  .c_str()));
               _exit(0);
             }
           } else if (dd.disp == "skip") {

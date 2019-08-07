@@ -2125,11 +2125,9 @@ VB_Vector GLMInfo::getCovariate(int x, int y, int z, int paramindex,
 
   int errs = 0;
   int ntimepoints;
-  int nbetas;
   // load KG
   KG.ReadFile(kgname);
   ntimepoints = KG.m;
-  nbetas = KG.n;
   // if not valid, return the empty covariate
   if (!KG.valid()) return covar;
   // fill the covariate with the right row of the KG matrix

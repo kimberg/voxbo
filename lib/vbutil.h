@@ -417,6 +417,16 @@ struct optInfo {
 };  // typedef struct optInfo
 
 /*********************************************************************
+ * Wrappers for ignoring return values.
+ *********************************************************************/
+void setuid_nocheck(uid_t euid);
+void seteuid_nocheck(uid_t euid);
+void setgid_nocheck(gid_t egid);
+void setegid_nocheck(gid_t egid);
+void system_nocheck(const char *cmd);
+void chdir_nocheck(const char *path);
+
+/*********************************************************************
  * Function prototypes for printing VoxBo error messages.             *
  *********************************************************************/
 void printErrorMsg(const VB_ERROR_LEVEL level, string theMsg);

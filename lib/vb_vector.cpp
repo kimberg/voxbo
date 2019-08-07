@@ -56,7 +56,7 @@ void VB_Vector::print() {
     printf("  %010d: %g\n", (int)i, getElement(i));
 }
 
-void VB_Vector::init(const size_t len) throw(GenericExcep) {
+void VB_Vector::init(const size_t len) {
   if (this->valid) gsl_vector_free(this->theVector);
   this->valid = false;
   if (len > 0) {
@@ -80,8 +80,7 @@ void VB_Vector::init(const bool validFlag, const VB_datatype dType,
 /*********************************************************************
  * This method allocates memory to the input gsl_matrix struct.       *
  *********************************************************************/
-gsl_matrix *VB_Vector::initMatrix(const size_t rows, const size_t cols) const
-    throw(GenericExcep) {
+gsl_matrix *VB_Vector::initMatrix(const size_t rows, const size_t cols) const {
   /*********************************************************************
    * Allocating the required memory to m. All elements of m will be     *
    * initialized to 0.                                                  *
@@ -119,14 +118,13 @@ gsl_matrix *VB_Vector::initMatrix(const size_t rows, const size_t cols) const
   return m;
 
 }  // gsl_matrix *VB_Vector::initMatrix(const size_t rows, const size_t cols)
-   // const throw (GenericExcep)
+   // const
 
 /*********************************************************************
  * This private method is used as a wrapper around gsl_vector_memcpy()*
  * to enable throwing an exception (if necessary).                    *
  *********************************************************************/
-void VB_Vector::GSLVectorMemcpy(gsl_vector *dest, const gsl_vector *src) const
-    throw(GenericExcep) {
+void VB_Vector::GSLVectorMemcpy(gsl_vector *dest, const gsl_vector *src) const {
   /*********************************************************************
    * gsl_vector_memcpy() is called to copy src to dest . It's return    *
    * value will be processed by VB_Vector::checkGSLStatus() and if the  *
@@ -138,7 +136,7 @@ void VB_Vector::GSLVectorMemcpy(gsl_vector *dest, const gsl_vector *src) const
                             __FUNCTION__);
 
 }  // void VB_Vector::GSLVectorMemcpy(gsl_vector *dest, const gsl_vector *src)
-   // const throw (GenericExcep)
+   // const
 
 /*********************************************************************
  * This private method throws an exception if the input index is not  *
@@ -146,8 +144,7 @@ void VB_Vector::GSLVectorMemcpy(gsl_vector *dest, const gsl_vector *src) const
  *********************************************************************/
 void VB_Vector::checkVectorRange(const size_t index, const int lineNumber,
                                  const char *fileName,
-                                 const char *prettyFunctionName) const
-    throw(GenericExcep) {
+                                 const char *prettyFunctionName) const {
   /*********************************************************************
    * If the index is out of range of the vector length, then an         *
    * exception is thrown.                                               *
@@ -174,16 +171,14 @@ void VB_Vector::checkVectorRange(const size_t index, const int lineNumber,
   }  // if
 
 }  // void VB_Vector::checkVectorRange(const size_t index, const int lineNumber,
-   // const char *fileName, const char *prettyFunctionName) const throw
-   // (GenericExcep)
-
+   // const char *fileName, const char *prettyFunctionName) const
 /*********************************************************************
  * This private static method throws an exception if the lengths of   *
  * the 2 input gsl_vector structs are not equal.                      *
  *********************************************************************/
-void VB_Vector::checkVectorLengths(
-    const gsl_vector *V1, const gsl_vector *V2, const int lineNumber,
-    const char *fileName, const char *prettyFunctionName) throw(GenericExcep) {
+void VB_Vector::checkVectorLengths(const gsl_vector *V1, const gsl_vector *V2,
+                                   const int lineNumber, const char *fileName,
+                                   const char *prettyFunctionName) {
   /*********************************************************************
    * We now check to see that we don't have a NULL gsl_vector. If either*
    * gsl_vector argument is NULL, then an exception is thrown with an   *
@@ -222,15 +217,15 @@ void VB_Vector::checkVectorLengths(
 
 }  // void VB_Vector::checkVectorLengths(const gsl_vector *V1, const gsl_vector
    // *V2, const int lineNumber, const char *fileName, const char
-   // *prettyFunctionName) throw (GenericExcep)
+   // *prettyFunctionName)
 
 /*********************************************************************
  * This private static method throws an exception if the two input    *
  * size_t variables, len1 and len2, are not equal.                    *
  *********************************************************************/
-void VB_Vector::checkVectorLengths(
-    const size_t len1, const size_t len2, const int lineNumber,
-    const char *fileName, const char *prettyFunctionName) throw(GenericExcep) {
+void VB_Vector::checkVectorLengths(const size_t len1, const size_t len2,
+                                   const int lineNumber, const char *fileName,
+                                   const char *prettyFunctionName) {
   /*********************************************************************
    * If the vectors length do no match, then an exception is thrown.    *
    *********************************************************************/
@@ -257,13 +252,13 @@ void VB_Vector::checkVectorLengths(
 
 }  // void VB_Vector::checkVectorLengths(const size_t len1, const size_t len2,
    // const int lineNumber, const char *fileName, const char
-   // *prettyFunctionName) throw (GenericExcep)
+   // *prettyFunctionName)
 
 /*********************************************************************
  * This private static method throws a GenericExcep if the input      *
  * gsl_vector struct is null.                                         *
  *********************************************************************/
-void VB_Vector::vectorNull(const gsl_vector *v) throw(GenericExcep) {
+void VB_Vector::vectorNull(const gsl_vector *v) {
   /*********************************************************************
    * If the input gsl_vector struct is null, then the exception is      *
    * thrown.                                                            *
@@ -273,7 +268,7 @@ void VB_Vector::vectorNull(const gsl_vector *v) throw(GenericExcep) {
                        "ERROR: Unable to allocate memory for VB_Vector.");
   }  // if
 
-}  // void VB_Vector::vectorNull(const gsl_vector *v) throw (GenericExcep)
+}  // void VB_Vector::vectorNull(const gsl_vector *v)
 
 /*********************************************************************
  * This private static method throws a GenericExcep and catches it    *
@@ -4003,12 +3998,12 @@ void VB_Vector::getPS(VB_Vector *result) const {
  * VB_Vector. This method is derived from VoxBo_Fourier.pro's         *
  * ReturnPS function.                                                 *
  *********************************************************************/
-void VB_Vector::getPS() throw() {
+void VB_Vector::getPS() {
   VB_Vector tempVec(this->getLength());
   this->getPS(tempVec);
   (*this) = tempVec;
 
-}  // void VB_Vector::getPS() throw()
+}  // void VB_Vector::getPS()
 
 /*********************************************************************
  * This method simply reverses the vector entries.                    *
@@ -4817,7 +4812,7 @@ void VB_Vector::normMag(VB_Vector &normalizedVec) const {
  * ------------------                                                 *
  * None.                                                              *
  *********************************************************************/
-void VB_Vector::applyFunction(double (*theFunction)(double)) throw() {
+void VB_Vector::applyFunction(double (*theFunction)(double)) {
   /*********************************************************************
    * The following for loop is used to traverse this instance of        *
    * VB_Vector and apply the input function to each element.            *
@@ -4826,7 +4821,7 @@ void VB_Vector::applyFunction(double (*theFunction)(double)) throw() {
     (*this)[i] = (*theFunction)((*this)[i]);
   }  // for i
 
-}  // void VB_Vector::applyFunction(double (*theFunction)(double)) throw()
+}  // void VB_Vector::applyFunction(double (*theFunction)(double))
 
 /*********************************************************************
  * This method applies the input function (actually a function        *
@@ -4852,7 +4847,7 @@ void VB_Vector::applyFunction(double (*theFunction)(double)) throw() {
  * None.                                                              *
  *********************************************************************/
 void VB_Vector::applyFunction(double (*theFunction)(double),
-                              VB_Vector &theResult) const throw() {
+                              VB_Vector &theResult) const {
   /*********************************************************************
    * Setting theResult equal to this instance of VB_Vector and then     *
    * calling VB_Vector::applyFunction().                                *
@@ -4861,7 +4856,7 @@ void VB_Vector::applyFunction(double (*theFunction)(double),
   theResult.applyFunction(theFunction);
 
 }  // void VB_Vector::applyFunction(double (*theFunction)(double), VB_Vector&
-   // theResult) const throw()
+   // theResult) const
 
 /*********************************************************************
  * This method applies the input function (actually a function        *
@@ -4887,7 +4882,7 @@ void VB_Vector::applyFunction(double (*theFunction)(double),
  * None.                                                              *
  *********************************************************************/
 void VB_Vector::applyFunction(double (*theFunction)(double),
-                              VB_Vector *theResult) const throw() {
+                              VB_Vector *theResult) const {
   /*********************************************************************
    * Setting theResult equal to this instance of VB_Vector and then     *
    * calling VB_Vector::applyFunction().                                *
@@ -4896,7 +4891,7 @@ void VB_Vector::applyFunction(double (*theFunction)(double),
   theResult->applyFunction(theFunction);
 
 }  // void VB_Vector::applyFunction(double (*theFunction)(double), VB_Vector
-   // *theResult) const throw()
+   // *theResult) const
 
 /*********************************************************************
  * This method carries out an element-by-element multiplication       *
@@ -4915,7 +4910,7 @@ void VB_Vector::applyFunction(double (*theFunction)(double),
  * ------------------                                                 *
  * None.                                                              *
  *********************************************************************/
-void VB_Vector::elementByElementMult(const VB_Vector *vec) throw() {
+void VB_Vector::elementByElementMult(const VB_Vector *vec) {
   /*********************************************************************
    * The following try/catch blocks are used to ensure that the vector  *
    * lengths are equal.                                                 *
@@ -4936,7 +4931,7 @@ void VB_Vector::elementByElementMult(const VB_Vector *vec) throw() {
     (*this)[i] *= (*vec)[i];
   }  // for i
 
-}  // void VB_Vector::elementByElementMult(const VB_Vector *vec) throw()
+}  // void VB_Vector::elementByElementMult(const VB_Vector *vec)
 
 /*********************************************************************
  * This method carries out an element-by-element multiplication       *
@@ -4955,14 +4950,14 @@ void VB_Vector::elementByElementMult(const VB_Vector *vec) throw() {
  * ------------------                                                 *
  * None.                                                              *
  *********************************************************************/
-void VB_Vector::elementByElementMult(const VB_Vector &vec) throw() {
+void VB_Vector::elementByElementMult(const VB_Vector &vec) {
   /*********************************************************************
    * Calling VB_Vector::elementByElementMult(const VB_Vector *vec) to   *
    * carry out the element-by-element multiplication.                   *
    *********************************************************************/
   this->elementByElementMult(&vec);
 
-}  // void VB_Vector::elementByElementMult(const VB_Vector& vec) throw()
+}  // void VB_Vector::elementByElementMult(const VB_Vector& vec)
 
 /*********************************************************************
  * This static method multiplies 2 "complex" VB_Vectors: the first    *
@@ -4996,8 +4991,7 @@ void VB_Vector::elementByElementMult(const VB_Vector &vec) throw() {
  *********************************************************************/
 void VB_Vector::compMult(const VB_Vector &real1, const VB_Vector &imag1,
                          const VB_Vector &real2, const VB_Vector &imag2,
-                         VB_Vector &realProd,
-                         VB_Vector &imagProd) throw(GenericExcep) {
+                         VB_Vector &realProd, VB_Vector &imagProd) {
   /*********************************************************************
    * First, we need to ensure that all the vector lengths are equal. If *
    * any of the sizes do not match, then a GenericExcep is thrown.      *
@@ -5064,8 +5058,7 @@ void VB_Vector::compMult(const VB_Vector &real1, const VB_Vector &imag1,
  * GenericExcep                                                       *
  *********************************************************************/
 void VB_Vector::complexFFT(const VB_Vector &real, const VB_Vector &imag,
-                           VB_Vector &realFFT,
-                           VB_Vector &imagIFFT) throw(GenericExcep) {
+                           VB_Vector &realFFT, VB_Vector &imagIFFT) {
   /*********************************************************************
    * Ensuring that the input VB_Vectors real and imag have the same     *
    * size. If they don't have the same size, then a GenericExcep is     *
@@ -5151,8 +5144,7 @@ void VB_Vector::complexFFT(const VB_Vector &real, const VB_Vector &imag,
  * GenericExcep                                                       *
  *********************************************************************/
 void VB_Vector::complexIFFT(const VB_Vector &real, const VB_Vector &imag,
-                            VB_Vector &realIFFT,
-                            VB_Vector &imagIFFT) throw(GenericExcep) {
+                            VB_Vector &realIFFT, VB_Vector &imagIFFT) {
   /*********************************************************************
    * Ensuring that the input VB_Vectors real and imag have the same     *
    * size. If they don't have the same size, then a GenericExcep is     *
@@ -5236,7 +5228,7 @@ void VB_Vector::complexIFFT(const VB_Vector &real, const VB_Vector &imag,
  * GenericExcep                                                       *
  *********************************************************************/
 void VB_Vector::complexIFFTReal(const VB_Vector &real, const VB_Vector &imag,
-                                VB_Vector &realIFFT) throw(GenericExcep) {
+                                VB_Vector &realIFFT) {
   /*********************************************************************
    * Ensuring that the input VB_Vectors real and imag have the same     *
    * size. If they don't have the same size, then a GenericExcep is     *

@@ -1,4 +1,11 @@
 
+#include <map>
+#include <string>
+
+#include "vbjobspec.h"
+
+using namespace std;
+
 void read_queue(string queuedir, map<int, VBSequence> &seqlist);
 int should_refract(VBJobSpec &js);
 
