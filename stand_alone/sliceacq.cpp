@@ -65,8 +65,6 @@ int main(int argc, char* argv[]) {
    * alreadyCorrected - will be set to true if the input 4D data file   *
    *                    has already been corrected.                     *
    * dimT - the maximum value of the time dimension in the 4D data file.*
-   * dimX - the maximum value of the X dimension in the 4D data file.   *
-   * dimY - the maximum value of the Y dimension in the 4D data file.   *
    * dimZ - the maximum value of the Z dimension in the 4D data file.   *
    * sliceTime - used to hold the user specified value of slice time.   *
    * firstSliceTime - time when the first slice was taken in ms.        *
@@ -74,8 +72,6 @@ int main(int argc, char* argv[]) {
   bool redo = false;
   bool alreadyCorrected = false;
   unsigned int dimT = 0;
-  unsigned int dimX = 0;
-  unsigned int dimY = 0;
   unsigned int dimZ = 0;
   double sliceTime = 0.0;
   double firstSliceTime = -1.0;
@@ -283,11 +279,9 @@ int main(int argc, char* argv[]) {
   }  // if
 
   /*********************************************************************
-   * Now assigning dimT, dimX, dimY, and dimZ.                          *
+   * Now assigning dimT, and dimZ.
    *********************************************************************/
   dimT = theTes.dimt;
-  dimX = theTes.dimx;
-  dimY = theTes.dimy;
   dimZ = theTes.dimz;
 
   /*********************************************************************

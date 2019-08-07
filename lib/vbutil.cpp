@@ -676,27 +676,33 @@ string VBRandom_nchars(int n) {
 }
 
 uint32 VBRandom() {
+  // TODO: replace with abseil random function.
   struct stat st;
   int fd;
-  uint32 buf;
+  uint32 buf = 99999;
 
   if (stat("/dev/urandom", &st)) return 0;
   fd = open("/dev/urandom", O_RDONLY);
   if (fd == -1) return 0;
-  read(fd, &buf, sizeof(uint32));
+  if (read(fd, &buf, sizeof(uint32))) {
+    // Ignore result.
+  };
   close(fd);
   return buf;
 }
 
 uint64 VBRandom64() {
+  // TODO: replace with abseil random function.
   struct stat st;
   int fd;
-  uint32 buf;
+  uint64 buf = 99999;
 
   if (stat("/dev/urandom", &st)) return 0;
   fd = open("/dev/urandom", O_RDONLY);
   if (fd == -1) return 0;
-  read(fd, &buf, sizeof(uint64));
+  if (read(fd, &buf, sizeof(uint64))) {
+    // Ignore result.
+  };
   close(fd);
   return buf;
 }
@@ -1343,4 +1349,42 @@ vbrect vbrect::operator&(const vbrect &rr) {
 void vbrect::print() {
   cout << format("x=%d y=%d w=%d h=%d r=%d b=%d\n") % x % y % w % h %
               (x + w - 1) % (y + h - 1);
+}
+
+// Wrappers.
+
+void setuid_nocheck(uid_t euid) {
+  if (setuid(euid)) {
+    // Ignore return value.
+  }
+}
+
+void seteuid_nocheck(uid_t euid) {
+  if (seteuid(euid)) {
+    // Ignore return value.
+  }
+}
+
+void setgid_nocheck(gid_t egid) {
+  if (setgid(egid)) {
+    // Ignore return value.
+  }
+}
+
+void setegid_nocheck(gid_t egid) {
+  if (setegid(egid)) {
+    // Ignore return value.
+  }
+}
+
+void system_nocheck(const char *cmd) {
+  if (system(cmd)) {
+    // Ignore return value.
+  }
+}
+
+void chdir_nocheck(const char *path) {
+  if (chdir(path)) {
+    // Ignore return value.
+  }
 }

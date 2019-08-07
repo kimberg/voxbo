@@ -527,7 +527,8 @@ Matrix dan_slice_vol(CrunchCube *map, const Matrix &mat, int m, int n,
   //        {
   //  	for (int z=0; z<4; z++) {
   //  	  status = slice_short_sinc_threaded(mat,img,m,n,(short
-  //  *)map->data,xdim,ydim,zdim, 					     hold, background);
+  //  *)map->data,xdim,ydim,zdim, 					     hold,
+  //  background);
   //  	}
   //        }
   else if (map->datatype == vb_byte)

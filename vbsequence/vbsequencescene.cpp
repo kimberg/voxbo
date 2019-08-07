@@ -253,7 +253,8 @@ void SequenceScene::loadSequence(VB::Sequence& seq) {
     for (int j = 0; j < num_jobs; ++j)
       if (grid[i][j]) {
         //    	cerr << "added job '" << grid[i][j]->job()->get_name() << "' at
-        //    (" << 		colstart[j] << ", " << rowstart[i] << ")" << endl;
+        //    (" << 		colstart[j] << ", " << rowstart[i] << ")" <<
+        //    endl;
         grid[i][j]->setPos(colstart[j], rowstart[i]);
       }
 

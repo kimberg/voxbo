@@ -418,7 +418,7 @@ int VBMatrix::ReadData(const string &fname, uint32 r1, uint32 rn, uint32 c1,
 // NON-MEMBER FUNCTIONS DEALING WITH MATRICES
 
 int invert(const VBMatrix &src, VBMatrix &dest) {
-  if (!src.m == src.n) throw "invert: matrix must be square";
+  if (src.m != src.n) throw "invert: matrix must be square";
   gsl_matrix *tmp1 = gsl_matrix_alloc(src.m, src.n);
   if (!tmp1) throw "invert: couldn't allocate matrix";
   gsl_matrix *tmp2 = gsl_matrix_alloc(src.m, src.n);

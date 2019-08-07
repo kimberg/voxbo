@@ -282,7 +282,7 @@ void BlockItem::calcBoundingRectSize(QPainter* painter) {
   // find out how much space the name takes up
   if (painter) {
     //	  _textBounds = painter->boundingRect(x,y,w,h,
-    //Qt::AlignHCenter|Qt::AlignVCenter, job()->get_name().c_str());
+    // Qt::AlignHCenter|Qt::AlignVCenter, job()->get_name().c_str());
     _textBounds = painter->boundingRect(
         0, 0, 0, 0, Qt::AlignHCenter | Qt::AlignVCenter, block()->name.c_str());
   } else {
@@ -534,7 +534,7 @@ void JobItem::calcBoundingRectSize(QPainter* painter) {
   int w = _boundingRect.width();
   if (painter) {
     //	  _textBounds = painter->boundingRect(x,y,w,h,
-    //Qt::AlignHCenter|Qt::AlignVCenter, job()->get_name().c_str());
+    // Qt::AlignHCenter|Qt::AlignVCenter, job()->get_name().c_str());
     _textBounds = painter->boundingRect(
         0, 0, 0, 0, Qt::AlignHCenter | Qt::AlignVCenter, job()->name.c_str());
   } else {

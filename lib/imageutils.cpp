@@ -515,9 +515,9 @@ int vbOrient(Cube &inCube, Cube &outCube, string in, string out,
   outCube.voxsize[2] = inCube.voxsize[zfrom];
 
   // based on the initial and desired orientations, we know how to copy the data
-  // from the old cube to the new. In short, we transcibe the voxels from the old
-  // cube (cube) to the new cube (outCube) by modifying the old cube's origin
-  // (initx, inity, initz) and traversing the old cube in the directions
+  // from the old cube to the new. In short, we transcibe the voxels from the
+  // old cube (cube) to the new cube (outCube) by modifying the old cube's
+  // origin (initx, inity, initz) and traversing the old cube in the directions
   // necessary to fetch voxels to populate the new cube in the desired way.
 
   // cout << "xfrom,src,incr: " << xfrom << " " << srcx << " " << xincr << endl;
@@ -977,10 +977,10 @@ void Resample::SetZZ(double zz1, double zzstep, int nzz) {
 // }
 
 int Resample::UseZ(Cube &cb, Cube &refcube, double zsize) {
-  double ourstart, ourend, refstart, refend;
+  double ourstart, refstart, refend;
   // old style: startloc/endloc
   ourstart = strtod(cb.GetHeader("StartLoc:"));
-  ourend = strtod(cb.GetHeader("EndLoc:"));
+  // Unneded: ourend = strtod(cb.GetHeader("EndLoc:"));
   refstart = strtod(cb.GetHeader("StartLoc:"));
   refend = strtod(cb.GetHeader("EndLoc:"));
   // new style: zrange
@@ -994,7 +994,7 @@ int Resample::UseZ(Cube &cb, Cube &refcube, double zsize) {
   if (ourzrange.size()) {
     tokenlist range(ourzrange);
     ourstart = strtod(range[0]);
-    ourend = strtod(range[1]);
+    // Unneeded: ourend = strtod(range[1]);
   }
 
   if (zsize < .001) zsize = refcube.voxsize[2];

@@ -115,7 +115,8 @@ void print_state(size_t iter, gsl_multifit_fdfsolver *s) {
  **************************************************************************************/
 VB_Vector *curvefit(VB_Vector *xVec, VB_Vector *yVec, VB_Vector *sigmaVec,
                     double var3min, double var1_init, double var2_init,
-                    double var3_init, const char *outputFile, bool printFlag) {
+                    double var3_init, const string &outputFile,
+                    bool printFlag) {
   /* fittingVec will include 8 elements: fittingStatus, # of iteration,
    * three fitting parameters' value, three deviation values
    * If status is 1.0, it means fitting is successful. 0 means fitting isn't
@@ -197,7 +198,9 @@ VB_Vector *curvefit(VB_Vector *xVec, VB_Vector *yVec, VB_Vector *sigmaVec,
     status = gsl_multifit_test_delta(s->dx, s->x, 1e-4, 1e-4);
   } while (status == GSL_CONTINUE && iter < 500);
 
-  gsl_multifit_covar(s->J, 0.0, covar);
+  gsl_matrix *J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
+  gsl_multifit_fdfsolver_jac(s, J);
+  gsl_multifit_covar(J, 0.0, covar);
 
 #define FIT(i) gsl_vector_get(s->x, i)
 #define ERR(i) sqrt(gsl_matrix_get(covar, i, i))
@@ -213,8 +216,8 @@ VB_Vector *curvefit(VB_Vector *xVec, VB_Vector *yVec, VB_Vector *sigmaVec,
   }
 
   // Write the fitting result to a file (if output filename is available)
-  if (outputFile != '\0') {
-    FILE *f1 = fopen(outputFile, "w");
+  if (!outputFile.empty()) {
+    FILE *f1 = fopen(outputFile.c_str(), "w");
     fprintf(f1, ";VB98\n");
     fprintf(f1, ";REF1\n");
     fprintf(f1, "; GSL nonlinear least-squares fitting\n");
@@ -319,7 +322,7 @@ void print_state12(size_t iter, gsl_multifit_fdfsolver *s) {
  * the initial value wouldn't be negative and enormously large. */
 VB_Vector *curvefit12(VB_Vector *xVec, VB_Vector *yVec, VB_Vector *sigmaVec,
                       double var3, double var1_init, double var2_init,
-                      const char *outputFile, bool printFlag) {
+                      const string &outputFile, bool printFlag) {
   a2fixed = var3;
   /* fittingVec will include 8 elements: fittingStatus, # of iteration,
    * three fitting parameters' value, three deviation values
@@ -384,7 +387,9 @@ VB_Vector *curvefit12(VB_Vector *xVec, VB_Vector *yVec, VB_Vector *sigmaVec,
     status = gsl_multifit_test_delta(s->dx, s->x, 1e-4, 1e-4);
   } while (status == GSL_CONTINUE && iter < 500);
 
-  gsl_multifit_covar(s->J, 0.0, covar);
+  gsl_matrix *J = gsl_matrix_alloc(s->fdf->n, s->fdf->p);
+  gsl_multifit_fdfsolver_jac(s, J);
+  gsl_multifit_covar(J, 0.0, covar);
 
 #define FIT(i) gsl_vector_get(s->x, i)
 #define ERR(i) sqrt(gsl_matrix_get(covar, i, i))
@@ -400,8 +405,8 @@ VB_Vector *curvefit12(VB_Vector *xVec, VB_Vector *yVec, VB_Vector *sigmaVec,
   }
 
   // Write the fitting result to a file (if output filename is available)
-  if (outputFile != '\0') {
-    FILE *f1 = fopen(outputFile, "w");
+  if (!outputFile.empty()) {
+    FILE *f1 = fopen(outputFile.c_str(), "w");
     fprintf(f1, ";VB98\n");
     fprintf(f1, ";REF1\n");
     fprintf(f1, "; GSL nonlinear least-squares fitting\n");
@@ -441,7 +446,7 @@ VB_Vector *curvefit12(VB_Vector *xVec, VB_Vector *yVec, VB_Vector *sigmaVec,
  ******************************************************************************************/
 VB_Vector *curvefit(const char *xFilename, const char *yFilename,
                     const char *sigmaFilename, double var3min,
-                    const char *initFile, const char *outputFile) {
+                    const char *initFile, const string &outputFile) {
   // Check xFilename format
   VB_Vector *xVec = new VB_Vector();
   string xString(xFilename);
@@ -490,7 +495,7 @@ VB_Vector *curvefit(const char *xFilename, const char *yFilename,
 VB_Vector *curvefit(const char *xFilename, const char *yFilename,
                     double inputSigma, double var3min, double var1_init,
                     double var2_init, double var3_init,
-                    const char *outputFile) {
+                    const string &outputFile) {
   /* Read input file for X and Y values */
   VB_Vector *xVec = new VB_Vector();
   string xString(xFilename);
@@ -522,7 +527,7 @@ VB_Vector *curvefit(const char *xFilename, const char *yFilename,
 VB_Vector *curvefit(const char *xFilename, const char *yFilename,
                     const char *sigmaFilename, double var3min, double var1_init,
                     double var2_init, double var3_init,
-                    const char *outputFile) {
+                    const string &outputFile) {
   // Check xFilename format
   VB_Vector *xVec = new VB_Vector();
   string xString(xFilename);
@@ -564,7 +569,7 @@ VB_Vector *curvefit(const char *xFilename, const char *yFilename,
  ************************************************************************************************/
 VB_Vector *fitOneOverF(VB_Vector *psVecIn, VB_Vector *ignorePSin,
                        double var3min, double TRin, double sigma, double var1,
-                       double var2, double var3, const char *outputFile,
+                       double var2, double var3, const string &outputFile,
                        bool printFlag) {
   int cmpStatus = cmpVec(psVecIn, ignorePSin);
   if (cmpStatus == 2) {
@@ -669,7 +674,7 @@ size_t findNonZero(VB_Vector *inputVec) {
  *******************************************************************************************/
 VB_Vector *fitOneOverF(VB_Vector *psVec, double var3min, double TRin,
                        double sigma, double var1, double var2, double var3,
-                       const char *outputFile, bool printFlag) {
+                       const string &outputFile, bool printFlag) {
   VB_Vector *ignorePSin = new VB_Vector(psVec->getLength());
   ignorePSin->setAll(1.0);
 
@@ -683,7 +688,7 @@ VB_Vector *fitOneOverF(VB_Vector *psVec, double var3min, double TRin,
  *******************************************************************************************/
 VB_Vector *fitOneOverF(const char *psFile, double var3min, double TRin,
                        double sigma, double var1, double var2, double var3,
-                       const char *outputFile, bool printFlag) {
+                       const string &outputFile, bool printFlag) {
   // Check psFile
   VB_Vector *psVec = new VB_Vector();
   string psString(psFile);
@@ -706,7 +711,7 @@ VB_Vector *fitOneOverF(const char *psFile, double var3min, double TRin,
  *******************************************************************************************/
 VB_Vector *fitOneOverF(VB_Vector *psVec, const char *refFunc, double var3min,
                        double TRin, double sigma, double var1, double var2,
-                       double var3, const char *outputFile, bool printFlag) {
+                       double var3, const string &outputFile, bool printFlag) {
   VB_Vector *refLocal = new VB_Vector();
   tokenlist condKey;
   int refStat = getCondVec(refFunc, condKey, refLocal);
@@ -748,7 +753,7 @@ VB_Vector *fitOneOverF(VB_Vector *psVec, const char *refFunc, double var3min,
  *******************************************************************************************/
 VB_Vector *fitOneOverF(const char *psFile, const char *refFunc, double var3min,
                        double TRin, double sigma, double var1, double var2,
-                       double var3, const char *outputFile, bool printFlag) {
+                       double var3, const string &outputFile, bool printFlag) {
   VB_Vector *psVec = new VB_Vector();
   string psString(psFile);
   if (psVec->ReadFile(psString)) {

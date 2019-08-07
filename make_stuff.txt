@@ -31,8 +31,9 @@ GSL_VERSION=$(shell gsl-config --version)
 GSL_PREFIX=$(shell gsl-config --prefix)
 GSL_CFLAGS=$(shell gsl-config --cflags)
 # currently we can get better results hardcoding this a bit
-GSL_CFLAGS=
-GSL_LIBS=-lgsl -lgslcblas -lm
+#GSL_CFLAGS=
+#GSL_LIBS=-lgsl -lgslcblas -lm
+#GSL_LIBS=-lgsl
 
 # build tools
 CXX ?= g++
@@ -57,17 +58,17 @@ SHAREDFLAG=-shared
 ARCH=LINUX
 
 # QT paths, now all for QT4
-QTDIR = /usr/local/qt4
+QTDIR = /usr
 # QTLIBDIR ?= $(QTDIR)/lib:$(QTDIR)/plugins/imageformats
-#QTINCDIR ?= $(QTDIR)/include:$(QTDIR)/include/QtCore:$(QTDIR)/include/QtGui:$(QTDIR)/include/Qt3Support
-QTBINDIR ?= $(QTDIR)/bin
+QTINCDIR = /usr/include/qt4
+### ?= $(QTDIR)/include:$(QTDIR)/include/QtCore:$(QTDIR)/include/QtGui:$(QTDIR)/include/Qt3Support
+QTBINDIR ?= /usr/bin
 MOC = $(QTBINDIR)/moc
 RCC = $(QTBINDIR)/rcc
 
 QTLIBS ?= -lvbwidgets -lQt3Support -lQtNetwork -lQtGui -lQtCore -lXi -lXext -lX11 -lXrender -lfontconfig -lz -lm -ldl -lpng -lpthread -lrt -lfreetype
-QTLIBDIRS=-L$(QTDIR)/lib -L../vbwidgets
-QTBASEINCDIR=$(QTDIR)/include
-QTINCDIRS=-I$(QTBASEINCDIR) -I$(QTBASEINCDIR)/QtCore -I$(QTBASEINCDIR)/QtGui -I$(QTBASEINCDIR)/Qt3Support -I../vbwidgets
+QTLIBDIRS=-L/usr/lib -L../vbwidgets
+QTINCDIRS=-I$(QTINCDIR) -I$(QTINCDIR)/QtCore -I$(QTINCDIR)/QtGui -I$(QTINCDIR)/Qt3Support -I../vbwidgets
 
 # some platform-specific overrides
 

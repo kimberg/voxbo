@@ -767,8 +767,8 @@ int print_dicom_header(string filename) {
   bool f_bigendian = 0;
 
   fseek(ifile, 128, SEEK_SET);
-  fread(dicm, 1, 4, ifile);
-  dicm[4] = '\0';
+  size_t bytes_read = fread(dicm, 1, 4, ifile);
+  dicm[bytes_read] = '\0';
   // if we're not a true dicom file, try acr/nema
   byteorder = my_endian();
   if (strcmp(dicm, "DICM")) {
@@ -845,8 +845,8 @@ int print_dicom_header(string filename) {
         vrs == "ST" || vrs == "TM" || vrs == "UI" || vrs == "LT" ||
         vrs == "AS") {
       unsigned char bb[cnt + 1];
-      fread(bb, 1, cnt, ifile);
-      bb[cnt] = '\0';
+      size_t bytes_read = fread(bb, 1, cnt, ifile);
+      bb[bytes_read] = '\0';
       cout << bb << endl;
       if (group == 0x0002 && element == 0x0010) {
         string ts = (char *)bb;
@@ -854,8 +854,8 @@ int print_dicom_header(string filename) {
       }
     } else if (vrs == "XX" && cnt < 120) {
       unsigned char bb[cnt + 1];
-      fread(bb, 1, cnt, ifile);
-      for (i = 0; i < cnt; i++)
+      size_t bytes_read = fread(bb, 1, cnt, ifile);
+      for (i = 0; i < bytes_read; i++)
         if (((int32)bb[i]) > 31 && ((int32)bb[i]) < 127) cout << bb[i];
       cout << endl;
     } else if ((vrs == "SQ" || vrs == "XX") && cnt == 0xffffffff) {
@@ -888,19 +888,25 @@ int print_dicom_header(string filename) {
       }
     } else if (vrs == "OB") {
       unsigned char bb[cnt + 1];
-      fread(bb, 1, cnt, ifile);
-      bb[cnt] = '\0';
+      size_t bytes_read = fread(bb, 1, cnt, ifile);
+      bb[bytes_read] = '\0';
       cout << endl;
     } else if (vrs == "UL") {
       cout << cnt << " ";
       uint32 tmp;
-      fread(&tmp, sizeof(int32), 1, ifile);
+      size_t bytes_read = fread(&tmp, sizeof(int32), 1, ifile);
+      if (bytes_read < sizeof(int32)) {
+        // TODO: Do something.
+      }
       if (byteorder != my_endian()) swap(&tmp, 1);
       cout << tmp << endl;
     } else if (vrs == "US") {
       uint16 tmp;
       for (i = 0; i < (cnt / sizeof(uint16)); i++) {
-        fread(&tmp, sizeof(uint16), 1, ifile);
+        size_t bytes_read = fread(&tmp, sizeof(uint16), 1, ifile);
+        if (bytes_read < sizeof(uint16)) {
+          // TODO: Do something.
+        }
         if (byteorder != my_endian()) swap((int16 *)&tmp, 1);
         cout << tmp << " ";
       }
@@ -1364,14 +1370,18 @@ int anonymize_dicom_header(string infile, string out1, string out2,
       // restore original mode, owner, and group if possible FIXME this is
       // UNIX-specific
       chmod(out1.c_str(), st.st_mode);
-      chown(out1.c_str(), st.st_uid, st.st_gid);
+      if (chown(out1.c_str(), st.st_uid, st.st_gid)) {
+        // Ignore errors.
+      }
     }
     if (ofile2) {
       if (rename(out2tmp.c_str(), out2.c_str())) return 181;
       // restore original mode, owner, and group if possible FIXME this is
       // UNIX-specific
       chmod(out2.c_str(), st.st_mode);
-      chown(out2.c_str(), st.st_uid, st.st_gid);
+      if (chown(out2.c_str(), st.st_uid, st.st_gid)) {
+        // Ignore errors.
+      }
     }
   } else {
     if (ofile1) unlink(out1tmp.c_str());

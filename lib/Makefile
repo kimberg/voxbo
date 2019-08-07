@@ -52,7 +52,7 @@ libvbio.a: $(IOOBJECTS) $(FFOBJECTS)
 	ranlib libvbio.a
 
 libvbio.so: $(IOOBJECTS) $(FFOBJECTS) libvbprefs.so libvbutil.so
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lz -lgsl -lpng -lvbprefs -lvbutil -lboost_system
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lz -lgsl -lpng -lvbprefs -lboost_system
 
 libvbutil.a: $(UTILOBJECTS)
 	ar rc libvbutil.a $^
@@ -66,14 +66,14 @@ libvbprefs.a: $(VBPOBJECTS)
 	ranlib libvbprefs.a
 
 libvbprefs.so: $(VBPOBJECTS) libvbutil.so
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lvbutil -lboost_system
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lboost_system
 
 libvbscripts.a: $(SCRIPTOBJECTS)
 	ar rc libvbscripts.a $^
 	ranlib libvbscripts.a
 
 libvbscripts.so: $(SCRIPTOBJECTS) libvbprefs.so libvbutil.so
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lvbprefs -lvbutil
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lvbprefs
 
 libvbglm.a: $(GLMOBJECTS)
 	ar rc libvbglm.a $^
@@ -81,7 +81,7 @@ libvbglm.a: $(GLMOBJECTS)
 
 libvbglm.so: $(GLMOBJECTS) libvbio.so libvbutil.so libvbprefs.so
 #	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lgsl -lvbio -lvbutil -lvbscripts -lvbprefs
-	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lgsl -lvbio -lvbutil -lvbprefs -lboost_system
+	g++ -shared -Wl,-soname,$@ -o $@ $(LDFLAGS) -L. $^ -lc -lgsl -lvbio -lvbprefs -lboost_system
 
 # and now for the building blocks
 

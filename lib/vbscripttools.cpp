@@ -144,7 +144,7 @@ ostream& VB::operator<<(ostream& out, vb_indent indent) {
   // try to insert the ostream into the indent map
   // ::NOTE:: the following line should work.  bug in the stl implementation???
   //	pair<map<ostream*, vb_indentation_info>::iterator, bool>
-  //iter_status_pair = indent_map.insert(const_cast<ostream*>(&out));
+  // iter_status_pair = indent_map.insert(const_cast<ostream*>(&out));
 
   pair<map<ostream*, vb_indentation_info>::iterator, bool> iter_status_pair =
       indent_map.insert(

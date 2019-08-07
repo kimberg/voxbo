@@ -195,18 +195,19 @@ int send_file(int s, string fname) {
     return 102;
   }
 
-  int bytestosend = filesize;
-  int packetsize;
+  size_t bytestosend = filesize;
+  size_t packetsize;
   while (bytestosend > 0) {
     packetsize = (F_BUFSIZE > bytestosend ? bytestosend : F_BUFSIZE);
     // read a chunk
-    fread(buf, 1, packetsize, fp);
+    size_t bytes_read = fread(buf, 1, packetsize, fp);
     // send it
-    if (safe_send(s, buf, packetsize, 10.0)) {
+    if (safe_send(s, buf, bytes_read, 10.0)) {
       fclose(fp);
       return 103;
     }
-    bytestosend -= packetsize;
+    if (bytes_read < packetsize) break;
+    bytestosend -= bytes_read;
   }
   if (safe_recv(s, buf, F_BUFSIZE, 10.0) < 0) return 55;
   buf[4] = '\0';
