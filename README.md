@@ -10,9 +10,3 @@ that I could use the image viewer (vbview). Although I did some minor
 cleanup of the rest of the codebase, to make things compile with
 current libraries and with fewer warnings, I wouldn't recommend anyone
 use it for serious work in its current state.
-
-Here are three bullet points:
-
-* one
-* two
-* three
